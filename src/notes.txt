@@ -1,0 +1,35 @@
+RPG nordique : IDK <-> Island of the Dead Kings
+
+
+    Idées
+|> Découvrir la mythologie nordique.
+|> 
+
+ 
+    Mondes
+0 - Asgard      : Royaume des Ases   [Odin]  ok
+1 - Vanaheim    : Royaume des Vanes  [Njord] ok
+2 - Alfheim     : Terre des Elfes    [Freyr] ok
+3 - Midgard     : Royaume des Hommes         ok
+4 - Niflheim    : Monde de Glaces            ok
+5 - Jotunheim   : Royaume des géants [Thrym] ok
+6 - Nidavellir  : Royaume des Nains          ok
+7 - Muspellheim : Monde du feu       [Surt]
+8 - Helheim     : Monde des morts    [Hel]
+
+ 
+    Agencement : 
+2     0     7
+↑     ↑     ↑
+1 <-> 3 <-> 6
+↓     ↓     ↓
+5     4     8
+
+
+    Oppositions:
+7 <-> 4 (feu / glace)
+0 <-> 8 (mort sacrée / profane)
+2 <-> 6 (lumière / ténèbre)
+1 <-> 5 (création / destruction)
+
+    

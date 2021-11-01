@@ -1,0 +1,49 @@
+#! /usr/bin/env python3
+from sys import argv
+import xmltodict
+
+
+def convert_to_string(filename, doors, misc):
+    output_filename, extension = filename.split('.')
+    char_list = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ "
+
+    with open(filename, "r") as file:
+        data = file.read()
+
+    if extension == "tmx":
+        data = xmltodict.parse(data)["map"]["layer"]["data"]["#text"].splitlines()
+        data = [[int(char_id) - 1 for char_id in line.split(",") if char_id] for line in data]
+    elif extension == "csv":
+        data = data.splitlines()
+        data = [[int(char_id) for char_id in line.split(",") if char_id] for line in data]
+    
+    doors_coords = []
+    misc_coords = []
+    output = r""
+    for line_index, line in enumerate(data):
+        for char_index, char_id in enumerate(line):
+            output += char_list[char_id]
+
+            if char_list[char_id] in doors:
+                doors_coords.append(f"\t({char_index}, {line_index}, , 0, 0),")
+            
+            if char_list[char_id] in misc:
+                misc_coords.append(f"# {char_list[char_id]} : ({char_index}, {line_index})")
+
+        output += "\n"
+
+    doors_coords = "\n".join(doors_coords)
+    misc_coords = "\n".join(misc_coords)
+
+    with open(f"{output_filename}.py", "w") as file:
+        file.write(f"{output_filename} = (r\"\"\"\n{output[:-1]}\"\"\",\n{doors_coords}\n)\n\n{misc_coords}")
+
+
+filename, doors, misc = argv[1], "", ""
+for arg in argv[2:]:
+    if arg.startswith("door"):
+        doors = arg.split("=", 1)[1]
+    elif arg.startswith("misc"):
+        misc = arg.split("=", 1)[1]
+
+convert_to_string(filename, doors, misc)
