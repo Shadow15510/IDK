@@ -48,8 +48,7 @@ def point_of_interest(data, stat):
     coords = x, y
 
     # Asgard
-    if current_map == 0:
-        pass
+    if current_map == 0: return asgard_po(coords)
 
     # Vanaheim
     elif current_map == 1:
@@ -89,6 +88,8 @@ def routine(data, stat):
 
 def sleep(data, stat):
     stat[4] = 360
+    stat[0] += 5
+    if stat[0] > 100: stat[0] = 100
 
 def display_stat(data, stat):
     # stat = [PV, pièces d'or, arme, armure, ticks, nom]
@@ -121,8 +122,8 @@ def inventory(data, stat):
     shields = ("<aucune>", "rondache", "pavois", "cote de maille", "broigne", "harnois")
 
     print("<*>  Inventaire  <*>")
-    print("Arme :\n{}".format(weapons[stat[2]]))
-    print("Armure :\n{}".format(shields[stat[3]]))
+    print("  Arme :\n{}".format(weapons[stat[2]]))
+    print("  Armure :\n{}".format(shields[stat[3]]))
     print()
     print("<*>              <*>")
     input()

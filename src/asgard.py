@@ -97,8 +97,14 @@ asgard = (r"""
 )
 
 
-# ? : (120, 26)
-# ? : ( 51, 55)
+def asgard_po(coords):
+    if coords == (120, 26): return [0, "De hautes montagnes vous entourent de toutes part. Taillées dans la roche enneigee, les marches de l'escalier qui mene a Valaskjalf se decoupent nettement. La grande demeure d'Odin et son toit d'argent domine les environs."]
+    elif coords == (51, 55): return [0, "Tout autour de vous s'etend un riche jardin soigneusement entretenu. Dans l'alignement de l'allee nord, une fontaine complete l'ensemble. Une douce odeur de verdure emplit vos narines, l'ambiance est calme."] 
+
+    return [0, "Il n'y a rien a voir ici."]
+
+def asgard_pnj(coords):
+    return [0, "Hmm ?"]
 # * : ( 34, 7)
 # * : ( 29, 13)
 # * : ( 19, 20)
