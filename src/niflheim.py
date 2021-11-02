@@ -78,22 +78,22 @@ niflheim = (r"""
 	(109, 66, 3, 24, 90), # Midgard
 
 # Maisons
-	(90, 15, ,0, 0), # Manoir au Nord
-	(6 , 24, ,0, 0), # Tour de guet
-	(91, 33, ,0, 0), # Mesnie à côté du quai
-	(57, 59, ,0, 0), # Palais des Glaces
+	(90, 15, 29, 0, 0), # Manoir au Nord
+	(6 , 24, 30, 0, 0), # Tour de guet
+	(91, 33, 31, 0, 0), # Mesnie à côté du quai
+	(57, 59, 32, 0, 0), # Palais des Glaces
 )
 
-# * : (104; 30)
-# ? : (113; 37)
 # * : (105; 46)
-# * : (120; 49)
 # * : (22; 50)
 # * : (15; 54)
 # * : (25; 61)
 # * : (121; 68)
 
-def niflheim_pnj(data, stat):
+def niflheim_po(coords):
+	if coords == (113, 37): return [0, ""]
+
+def niflheim_npc(data, stat):
 	coords = data[2], data[3]
 
 	if coords == (120, 49) or coords == (104, 30):

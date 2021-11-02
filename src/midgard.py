@@ -113,96 +113,13 @@ midgard = (r"""
     (61, 69, 28, 25, 14), # Mesnie fortifiée (2/2)
 )
 
-
-h_25 = (r"""
-|==|-|=======================|=========|
-|==|-|=======================|=========|
-|  /-\  |                    |         |
-| |___| |       ______       |         |
-|       |      |______|      |         |
-|       |                    |         |
-|       |                    |         |
-|       |--|  |--------|  |--|  |------|
-|                                      |
-|       ---|  |--------|  |--|  |------|
-|       |                    |         |
-|       |                    |         |
-|       |                    |         |
-|       |                    |         |
-|       |==============================|
-|       |=|\/|=|\/|=|\/|=|\/|=|\/|=|\/||
-|\/|^|\/|                               """,
-    (4, 16, 3, 42, 49))
-
-
-h_26 = (r"""
-    Auberge des Eddas
-|---------|------------------|
-|         |                  |
-|         |==============[]==|
-|         |                  |
-|         |    _    _    _   |
-|         |   |_|  |_|  |_|* |
-|             |_|* |_|* |_|  |
-|             |_|* |_|  |_|* |
-|         |                  |
-|         |------------------|
-|         |                   
-|---|^|---|                   """,
-    (5, 12, 3, 76, 51))
-
-
-h_27 = (r"""                  
-|-----------------| 
-|[====]  |  [====]| 
-|[====] /_\ [====]| 
-|                 | 
-|       + +       | 
-|       | |=======| 
-|       | |       | 
-|       | |       | 
-|       | +       | 
-|=======|         | 
-|       | +       | 
-| |-?   | |    _  | 
-| |_|   + |   |_| | 
-|         |   |_| | 
-|       + |   |_| | 
-|       | |   |_| | 
-|=======|^|=======| """,
-    (9, 16, 3, 44, 65))
-
-
-h_28 = (r"""
-                       |__|                       
-                       |__|                       
-|------------|      |--|__|--|      |------------|
-| [===][===] |      | /"  "\ |      | [===][===] |
-| [===][===] |      | |____| |      | [===][===] |
-|            |------|        |------|            |
-|                          *                     |
-|                                                |
-|             ______          ______             |
-|            |\/||\/|        |\/||\/|            |
-|            |      |        |      |            |
-|____________|      |        |      |____________|
-|\/|=|\/|=|\/|      |        |      |\/|=|\/|=|\/|
-                    |__+  +__|                    
-                    |\/|^^|\/|                    """,
-    (24, 14, 3, 60, 69),
-    (25, 14, 3, 61, 69))
-# * : (27, 6)
-
-
 def midgard_po(coords):
     if coords == (29, 9): return [0, "Du haut des falaises, vous regardez vers le nord. La mer s'etale, infinie. Le vent porte des embruns a votre visage. 30 metres plus bas, les vagues se dechainent contre le calcaire de la roche dans un fracas assourdissant."]
     elif coords == (53, 24): return [0, "Vous regardez la clairiere autour de vous, l'endroit est agreable. Une douce chaleur traine dans l'air sec. Au dela des grands pins qui vous entourent, vous parvenez a voir quelques sommets de montanges."]
     elif coords == (66, 45): return [0, "Les imposantes colonnes du palais de Midgard vous entourent. Un peu au sud, le bourg est actif : marchands de toutes sortent deambulent, entoures d'une population dense et bruyante."]
     elif coords == (52, 79): return [0, "Tournant le dos a l'epais mur qui delimite la propriete, vous observez le manoir. Le corps du batiment etait clairement une ancienne ferme a laquelle deux tours on ete rajoute a posteriori. L'ensemble garde un aspect massif et froid. Neanmoins, le reste de la propriete a fait l'objet d'un certain soin, en particulier le jardin en 4 parties dans lequel un vieux jardinier s'affaire."]
 
-
-
-def midgard_pnj(data, stat):
+def midgard_npc(data, stat):
     coords = data[2], data[3]
 
     if coords == (67, 46): return {
@@ -230,7 +147,51 @@ def midgard_pnj(data, stat):
         }
 
 
-def h26_pnj(data, stat):
+
+
+
+
+h_25 = (r"""
+|==|-|=======================|=========|
+|==|-|=======================|=========|
+|  /-\  |                    |         |
+| |___| |       ______       |         |
+|       |      |______|      |         |
+|       |                    |         |
+|       |                    |         |
+|       |--|  |--------|  |--|  |------|
+|                                      |
+|       ---|  |--------|  |--|  |------|
+|       |                    |         |
+|       |                    |         |
+|       |                    |         |
+|       |                    |         |
+|       |==============================|
+|       |=|\/|=|\/|=|\/|=|\/|=|\/|=|\/||
+|\/|^|\/|                               """,
+    (4, 16, 3, 42, 49))
+
+
+
+
+
+h_26 = (r"""
+    Auberge des Eddas
+|---------|------------------|
+|         |                  |
+|         |==============[]==|
+|         |                  |
+|         |    _    _    _   |
+|         |   |_|  |_|  |_|* |
+|             |_|* |_|* |_|  |
+|             |_|* |_|  |_|* |
+|         |                  |
+|         |------------------|
+|         |                   
+|---|^|---|                   """,
+    (5, 12, 3, 76, 51))
+
+def h26_npc(data, stat):
     # * : (17, 7)
     # * : (22, 7)
     # * : (17, 8)
@@ -256,8 +217,51 @@ def h26_pnj(data, stat):
             stat[4] = 360
             return [-2, "Suivez-moi, je vais vous montrer votre chambre", 0, (0, 10), (1, -10)]
 
-
-
     return [0, "Ui hips ?"]
 
 
+
+
+
+h_27 = (r"""                  
+|-----------------| 
+|[====]  |  [====]| 
+|[====] /_\ [====]| 
+|                 | 
+|       + +       | 
+|       | |=======| 
+|       | |       | 
+|       | |       | 
+|       | +       | 
+|=======|         | 
+|       | +       | 
+| |-?   | |    _  | 
+| |_|   + |   |_| | 
+|         |   |_| | 
+|       + |   |_| | 
+|       | |   |_| | 
+|=======|^|=======| """,
+    (9, 16, 3, 44, 65))
+
+
+
+
+
+h_28 = (r"""
+                       |__|                       
+                       |__|                       
+|------------|      |--|__|--|      |------------|
+| [===][===] |      | /"  "\ |      | [===][===] |
+| [===][===] |      | |____| |      | [===][===] |
+|            |------|        |------|            |
+|                          *                     |
+|                                                |
+|             ______          ______             |
+|            |\/||\/|        |\/||\/|            |
+|            |      |        |      |            |
+|____________|      |        |      |____________|
+|\/|=|\/|=|\/|      |        |      |\/|=|\/|=|\/|
+                    |__+  +__|                    
+                    |\/|^^|\/|                    """,
+    (24, 14, 3, 60, 69),
+    (25, 14, 3, 61, 69)) # * : (27, 6)

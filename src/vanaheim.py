@@ -60,8 +60,10 @@ vanaheim = (r"""
 )
 
 # * : (31; 12)
-# ? : (42; 20)
 # * : (52; 22)
-# ? : (26; 29)
 # * : (52; 30)
 # * : (45; 39)
+
+def vanaheim_po(coords):
+    if coords == (42, 20): return [0, ""]
+    elif coords == (26, 29): return [0, ""]

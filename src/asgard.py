@@ -102,6 +102,35 @@ asgard = (r"""
     ( 11, 69, 20, 0, 0), # Alfheimr (2/2)
 )
 
+def asgard_npc(data, stat):
+    coords = data[2], data[3]
+    pass
+    # * : ( 34, 7)
+    # * : ( 29, 13)
+    # * : ( 19, 20)
+    # * : (121, 21)
+    # * : ( 28, 26)
+    # * : (117, 32)
+    # * : ( 46, 35)
+    # * : ( 57, 38)
+    # * : ( 82, 38)
+    # * : ( 22, 39)
+    # * : (  8, 44)
+    # * : ( 58, 50)
+    # * : ( 83, 51)
+    # * : ( 32, 59)
+    # * : (104, 63)
+    # * : ( 46, 65)
+    # * : ( 16, 71)
+    # * : (138, 71)
+
+def asgard_po(coords):
+    if coords == (120, 26): return [0, "De hautes montagnes vous entourent de toutes part. Taillées dans la roche enneigee, les marches de l'escalier qui mene a Valaskjalf se decoupent nettement. La grande demeure d'Odin et son toit d'argent domine les environs."]
+    elif coords == (51, 55): return [0, "Tout autour de vous s'etend un riche jardin soigneusement entretenu. Dans l'alignement de l'allee nord, une fontaine complete l'ensemble. Une douce odeur de verdure emplit vos narines, l'ambiance est calme."] 
+
+
+
+
 
 h_9 = (r"""
           |----------|                   
@@ -119,6 +148,9 @@ h_9 = (r"""
              |   |                       
              ||^||                       """,
     (15, 13, 0, 30, 11)) # * : (19, 4)
+
+
+
 
 
 h_10 = (r"""
@@ -150,6 +182,9 @@ h_10 = (r"""
     (30, 23, 0, 116, 14)) # * : (25, 17)
 
 
+
+
+
 h_11 = (r"""
           |----------------------------|         
           |             _              |         
@@ -172,6 +207,9 @@ h_11 = (r"""
 |=+<>+=+<>+=+<>+=+<>+==| |==+<>+=+<>+=+<>+=+<>+=|
                        |^|                       """,
     (24, 19, 0, 70, 19)) # * : (34, 7)
+
+
+
 
 
 h_12 = (r"""
@@ -199,6 +237,9 @@ h_12 = (r"""
     (25, 19, 0, 26, 31)) # * : (19, 4)
 
 
+
+
+
 h_13 = (r"""
                                     ||   
 |-----------------------------------||--|
@@ -216,6 +257,9 @@ h_13 = (r"""
 |==================| |==================|
                    |^|                   """,
     (20, 14, 0, 110, 34)) # * : (21, 8)
+
+
+
 
 
 h_14 = (r"""
@@ -238,6 +282,9 @@ h_14 = (r"""
     (15, 14, 0, 64, 36)) # * : (26, 2)
 
 
+
+
+
 h_15 = (r"""
           #########           
         ## [=====] ##         
@@ -255,6 +302,9 @@ h_15 = (r"""
              | |              
              |^|              """,
     (14, 14, 0, 120, 41)) # * : (10, 6)
+
+
+
 
 
 h_16 = (r"""
@@ -289,32 +339,3 @@ h_16 = (r"""
                       (_)  |   |  (_)                       
                       |=|  |/^\|  |=|                       """,
     (29, 29, 0, 13, 43)) # * : (50, 14)
-
-
-def asgard_pnj(data, stat):
-    coords = data[2], data[3]
-    pass
-    # * : ( 34, 7)
-    # * : ( 29, 13)
-    # * : ( 19, 20)
-    # * : (121, 21)
-    # * : ( 28, 26)
-    # * : (117, 32)
-    # * : ( 46, 35)
-    # * : ( 57, 38)
-    # * : ( 82, 38)
-    # * : ( 22, 39)
-    # * : (  8, 44)
-    # * : ( 58, 50)
-    # * : ( 83, 51)
-    # * : ( 32, 59)
-    # * : (104, 63)
-    # * : ( 46, 65)
-    # * : ( 16, 71)
-    # * : (138, 71)
-
-
-def asgard_po(coords):
-    if coords == (120, 26): return [0, "De hautes montagnes vous entourent de toutes part. Taillées dans la roche enneigee, les marches de l'escalier qui mene a Valaskjalf se decoupent nettement. La grande demeure d'Odin et son toit d'argent domine les environs."]
-    elif coords == (51, 55): return [0, "Tout autour de vous s'etend un riche jardin soigneusement entretenu. Dans l'alignement de l'allee nord, une fontaine complete l'ensemble. Une douce odeur de verdure emplit vos narines, l'ambiance est calme."] 
-

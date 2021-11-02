@@ -85,5 +85,7 @@ alfheim = (r"""
 # * : (11; 4)
 # * : (46; 6)
 # * : (23; 17)
-# ? : (34; 20)
 # * : (27; 54)
+
+def alfheim_po(coords):
+	if coords == (34, 20): return [0, ""]
