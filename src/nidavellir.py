@@ -76,14 +76,14 @@ nidavellir = (r"""
     /      /      \   /      /    \ /  \/    \ /  \   /\                               /      /     """,
 # Autres mondes (Nidavellir = 6)
 	(93, 8, 3, 77, 62), # Midgard
-      (9, 57, 7, 0, 0),  # Muspelheim
+      (9, 57, 7, 92, 2),  # Muspellheim
       (39, 19, 8, 0, 0), # Helheim
 
 # Maisons
-	(69, 26, , 0, 0),
+	(69, 26, , 0, 0), # Auberge
 	(7, 31, , 0, 0),
 	(35, 38, , 0, 0),
-	(22, 42, , 0, 0),
+	(22, 42, , 0, 0), # Armurerie
 	(23, 51, , 0, 0),
 
 

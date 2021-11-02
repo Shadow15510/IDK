@@ -134,7 +134,7 @@ jotunheim = (r"""
 	(60, 50, ,0, 0), # Palais de Thrym
 	(64, 85, ,0, 0), # Manoir du sud (1/2)
 	(65, 85, ,0, 0), # Manoir du sud (2/2)
-	(23, 88, ,0, 0),
+	(23, 88, ,0, 0), # Auberge
 )
 
 # * : (25; 10)

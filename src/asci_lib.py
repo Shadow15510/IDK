@@ -1,4 +1,4 @@
-# Asci (version 1.5.0)
+# Asci (version 1.5.1)
 
 class Screen:
     def __init__(self, screen_width=21, screen_height=6):
@@ -50,7 +50,7 @@ class Screen:
 
 
 class Asci:
-    def __init__(self, maps, events_mapping, keys_mapping, routine=None, screen_width=21, screen_height=6):
+    def __init__(self, maps, events_mapping, keys_mapping, screen_width=21, screen_height=6):
         # Load maps
         self.maps = [Map(*i) for i in maps]
 
@@ -58,7 +58,6 @@ class Asci:
         self.legend = list(events_mapping.keys())
         self._game_events_mapping = [events_mapping[i] for i in self.legend]
         self._game_keys_mapping = {key: keys_mapping[key] for key in keys_mapping if not key in (1, 2, 3, 5, 9)}
-        self._game_routine = routine
 
         # Screen initialisation
         self.screen = Screen(screen_width, screen_height)
@@ -102,12 +101,12 @@ class Asci:
 
         return -1
 
-    def _keyboard(self, key):
+    def _keyboard(self, key, exit_key):
         # Interaction while moving
         if key in (1, 3, 5, 2):
             cell_test = self._cell_test(key)
             
-            # Enter house
+            # Passage point
             if cell_test == len(self.legend) - 2: # or (self.data[1] and cell_test < 0):
                 self.data[1], self.data[2], self.data[3] = self._get_map(key)
                 self.screen.set_world(self.maps[self.data[1]].map_data)
@@ -129,22 +128,22 @@ class Asci:
             self._game_keys_mapping[key](self.data, self.stat)
 
         # Quit
-        elif key == 9:
+        elif key == exit_key:
             self.screen.clear()
 
     def _interaction(self, direction, cell_content):
         x, y = self._looked_case(direction)
-        fake_data = [self.data[0], self.data[1], x, y]
+        copy_data = [self.data[0], self.data[1], x, y]
 
         # Get the event
-        event = self._game_events_mapping[cell_content](fake_data, self.stat)
+        event = self._game_events_mapping[cell_content](copy_data, self.stat)
         event = read_event(self.data[0], event)
 
         # data modification
-        self.data[0] = fake_data[0]
-        self.data[1] = fake_data[1]
-        if fake_data[2] != x: self.data[2] = fake_data[2]
-        if fake_data[3] != y: self.data[3] = fake_data[3]
+        self.data[0] = copy_data[0]
+        self.data[1] = copy_data[1]
+        if copy_data[2] != x: self.data[2] = copy_data[2]
+        if copy_data[3] != y: self.data[3] = copy_data[3]
 
         # XP and stat modification
         self.data[0] += event.xp_earned
@@ -166,7 +165,7 @@ class Asci:
 
         return current_map, self.data[2], self.data[3]
 
-    def mainloop(self, end_game, stat=None, data=[0, 0, 0, 0], player="@", door="^", walkable=" ", exit_key=9):
+    def mainloop(self, end_game, stat=None, data=[0, 0, 0, 0], routine=None, player="@", door="^", walkable=" ", exit_key=9):
         # Load save ; data = [XP, map_id, x, y]
         self.data = data[:]
         if not stat or type(stat) != list: self.stat = [100]
@@ -190,9 +189,10 @@ class Asci:
             if not key: key = key_buffer
             else: key_buffer = key
 
-            self._keyboard(key)
+            self._keyboard(key, exit_key)
             
-            if self._game_routine: self._game_routine(self.data, self.stat)
+            # Launching the game routine
+            if routine: routine(self.data, self.stat)
 
         if self.stat[0] <= 0: self.stat[0] = 100
         return self.stat, self.data

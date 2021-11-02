@@ -11,7 +11,7 @@ RPG nordique : IDK <-> Island of the Dead Kings
 1 - Vanaheim    : Royaume des Vanes  [Njord] ok
 2 - Alfheim     : Terre des Elfes    [Freyr] ok
 3 - Midgard     : Royaume des Hommes         ok
-4 - Niflheim    : Monde de Glaces            ok
+4 - Niflheim    : Monde de Glace             ok
 5 - Jotunheim   : Royaume des géants [Thrym] ok
 6 - Nidavellir  : Royaume des Nains          ok
 7 - Muspellheim : Monde du feu       [Surt]
