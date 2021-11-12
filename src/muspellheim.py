@@ -124,8 +124,8 @@ muspellheim = (r"""
 
 # Maisons
 	(87, 14, 45, 0, 0), # Auberge
-	(47, 53, 46, 0, 0),
-	(67, 89, 47, 0, 0), # Armurerie
+	(47, 53, 46, 0, 0), # Armurerie
+	(67, 89, 47, 0, 0),
 	(68, 89, 48, 0, 0),
 )
 
@@ -137,5 +137,8 @@ muspellheim = (r"""
 # * : (29, 113)
 
 def muspellheim_po(coords):
-    if coords == (66, 8): return [0, ""]
-elif coords == (64, 97): return [0, ""]
+    if coords == (66, 8): return [0, "La mer s'etendait, calme. Bosquets et maisons peuplaient la cote, dont plusieurs petite tentes."]
+    elif coords == (64, 97): return [0, "La cloture de la propriete etait ouvragee, le manoir aussi. Constitue d'un corps de ferme rehabilite et entoure de deux tours decoratives, l'ensemble conservait un air propre et entretenu. Le jardin taille en temoigne."]
+
+def muspellheim_npc(data, stat):
+    pass

@@ -78,10 +78,10 @@ niflheim = (r"""
 	(109, 66, 3, 24, 90), # Midgard
 
 # Maisons
-	(90, 15, 29, 0, 0), # Manoir au Nord
-	(6 , 24, 30, 0, 0), # Tour de guet
-	(91, 33, 31, 0, 0), # Mesnie à côté du quai
-	(57, 59, 32, 0, 0), # Palais des Glaces
+	(90, 15, 29, 24, 19), # Manoir au Nord
+	( 6, 24, 30,  9,  9), # Tour de guet
+	(91, 33, 31,  1, 14), # Mesnie à côté du quai
+	(57, 59, 32, 19, 14), # Palais des Glaces
 )
 
 # * : (105; 46)
@@ -91,7 +91,7 @@ niflheim = (r"""
 # * : (121; 68)
 
 def niflheim_po(coords):
-	if coords == (113, 37): return [0, ""]
+	if coords == (113, 37): return [0, "Des tours de guets parsement la cote, plus loin, a l'ouest, une chaine de petites montagnes s'etend, coupant Niflheim en deux. Mais la partie est du monde est plus habitee et plus animee que la partie ouest qui reste majoritairement consitituee de forets."]
 
 def niflheim_npc(data, stat):
 	coords = data[2], data[3]
@@ -115,3 +115,104 @@ def niflheim_npc(data, stat):
 		elif data[0] == stat[6][1] + 2:
 			stat[6] = (-1, -1)
 			return [0, "Reviens quand tu voudras traverser."]
+
+
+
+
+
+h_29 = (r"""
+                                                  
+|=================|           |==================|
+|                 |           |                  |
+|                 |===========|                  |
+|        __    *                       __        |
+|       |  |                          |  |       |
+|       |__|      [O]       [O]       |__|       |
+|       |  |      |_|       |_|       |  |       |
+|       |__|                          |__|       |
+|                                                |
+|                 [O]       [O]                  |
+|        __       |_|       |_|        __        |
+|       |  |                          |  |       |
+|       |__|                          |__|       |
+|       |  |      [O]       [O]       |  |       |
+|       |__|      |_|       |_|       |__|       |
+|                                                |
+|                 |====| |====|                  |
+|=================|    | |    |==================|
+                       |^|                        """,
+	(24, 19, 4, 90, 15)) # * : (15, 4)
+
+def h_29_npc(data, stat):
+	pass
+
+
+
+
+
+h_30 = (r"""
+|===||=============|
+|  /__\            |
+|  |==|      *+--+ |
+|             |  | |
+|            *|  | |
+|             |  | |
+|             +--+ |
+|                  |
+|                  |
+|=======|^|========|""",
+	(9, 9, 4, 6, 24),
+) # * : (13, 2) * : (13, 4)
+
+def h_30_npc(data, stat):
+	pass
+
+
+
+
+
+h_31 = (r"""
+|=========|                   
+| [-=-==] |                   
+| [===--] |                   
+|         |                   
+|  *      |==================|
+|                            |
+|                __     __   |
+|               |  |   |  |  |
+|              *|__|   |__|  |
+|               |  |   |  |  |
+|               |__|   |__|  |
+|               |  |   |  |  |
+|               |__|   |__|  |
+|                            |
+|^|==========================|""",
+	(1, 14, 4, 91, 33)) # * : (3, 4) * : (15, 8)
+
+def h_31_npc(data, stat):
+	pass
+
+
+
+
+
+h_32 = (r"""
+|======================================|
+|                                      |
+|                                      |
+|                 ~~~~                 |
+|      __       ~~(~~)~~       __      |
+|     |  |     ~(______)~     |  |*    |
+|     |__|    (__________)   *|__|     |
+|     |  |                    |  |     |
+|     |__|                    |__|     |
+|                                      |
+|                                      |
+|                                      |
+|  \__/      \__/      \__/      \__/  |
+|==|  |======|  |=|  |=|  |======|  |==|
+   |  |      |  | |^=| |  |      |  |   """,
+	(19, 14, 4, 57, 59)) # * : (34, 5) * : (29, 6)
+
+def h_32_npc(data, stat):
+	pass

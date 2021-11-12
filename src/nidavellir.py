@@ -105,5 +105,8 @@ nidavellir = (r"""
 # * : (77, 61)
 
 def nidavellir_po(coords):
-      if coords == (65, 7): return [0, ""]
-elif coords == (66, 58): return [0, ""]
+      if coords == (65, 7): return [0, "La mer etendait ses rouleaux sur le sable noir. Au sud s'etend le rocheux royaume de Nidavellir. Le monde des nains a pour seul maison les montagnes. D'ancienne legendes racontent que certaines communiquent entre elles par des passages oublies."]
+      elif coords == (66, 58): return [0, "Coupee en deux par le fleuve, la chaine de montagne semble s'etendre a l'infini. De toute part le meme paysage rocailleux. Le terrain est si inhospitalier que les nains eux-meme restent dans leurs mines."]
+
+def nidavellir_npc(data, stat):
+      pass
