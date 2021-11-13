@@ -121,6 +121,7 @@ def midgard_po(coords):
 
 def midgard_npc(data, stat):
     coords = data[2], data[3]
+    xp = data[0]
 
     if coords == (67, 46): return {
             "base": [0, "Oui ?..."]
@@ -130,9 +131,8 @@ def midgard_npc(data, stat):
             "base": [0, "Vous cherchez quelqu'un ?"]
         }
 
-    elif coords == (66, 56): return {
-            "base": [0, "Laissez-moi dormir !"]
-        }
+    elif coords == (66, 56):
+        return [0, "Hein ?"]
 
     elif coords == (8, 59): return {
             "base": [0, "Regardez la mer. Et si vous voyez un bateau, prevenez moi !"]
@@ -142,7 +142,11 @@ def midgard_npc(data, stat):
             "base": [0, "Besoin de quelque chose ?"]
         }
 
-    elif coords == (68, 71): return {
+    elif coords == (68, 71):
+        if xp == 0:
+            return [5, 5, 10, 5, 20], "Frinir", 0
+
+        else: return {
             "base": [0, "Frinir, jardinier de Madame."]
         }
 
@@ -161,7 +165,7 @@ h_25 = (r"""
 |       |                    |         |
 |       |--|  |--------|  |--|  |------|
 |                                      |
-|       ---|  |--------|  |--|  |------|
+|       |--|  |--------|  |--|  |------|
 |       |                    |         |
 |       |                    |         |
 |       |                    |         |
@@ -203,22 +207,24 @@ def h_26_npc(data, stat):
 
     # Rosahil Green
     if coords == (27, 6):
-        if stat[4] >= 1260 and stat[4] <= 300: return [0, "Je suis desolee, nous sommes fermes. Revenez plus tard !"]
+        if stat[4] >= 1320 and stat[4] <= 340: return [0, "Je suis desolee, nous sommes fermes. Revenez plus tard !"]
 
         if stat[6][1] == -1:
             stat[6] = stat[4], data[0]
-            return [0, "Rosahil Green, tenanciere de cette auberge. Vous desirez quelque chose ?\n1.Manger [5 PO]\n2.Dormir [10 PO]", 2]
+            return [0, "Rosahil Green, tenanciere de cette auberge. Vous desirez quelque chose ?\n1.De quoi manger s'il vous plait. [-5 PO]\n2.Je voudrais une chambre pour la nuit. [-10 PO]", 2]
         
         elif data[0] == stat[6][1] + 1:
-            if stat[1] < 5: return [-1, "Reviens quand tu auras assez de pieces d'or."]
             stat[6] = (-1, -1)
+            if stat[1] < 5: return [-1, "Reviens quand tu auras assez de pieces d'or."]
             return [-1, "Et voila pour vous !", 0, (0, 5), (1, -5)]
         
         elif data[0] == stat[6][1] + 2:
-            if stat[1] < 10: return [-2, "Je suis desolee, tu n'as pas assez !"]
             stat[6] = (-1, -1)
-            stat[4] = 360
-            return [-2, "Suivez-moi, je vais vous montrer votre chambre", 0, (0, 10), (1, -10)]
+            if stat[1] < 10: return [-2, "Je suis desolee, tu n'as pas assez !"]
+            elif 360 < stat[4] < 1140: return [-2, "Il est trop tot, reviens vers 19h."]
+            else:
+                stat[4] = 360
+                return [-2, "Suivez-moi, je vais vous montrer votre chambre. [VOUS SUIVEZ ROSAHIL DANS L'AUBERGE, LA NUIT PASSA.]", 0, (0, 10), (1, -10)]
 
     return [0, "Ui hips ?"]
 

@@ -140,4 +140,27 @@ h_22 = (r"""
     (20, 19, 1, 52, 35)) # * : (36, 3) * : (2, 8)
 
 def h_22_npc(data, stat):
-    pass
+    coords = data[2], data[3]
+    xp = data[0]
+
+    # Freyja
+    if coords == (36, 3):
+        if not (360 <= stat[4] <= 1200):
+            return [0, "Revenez plus tard s'il vous plait."]
+
+        if xp == 1:
+            stat[8].append((0, 1))
+            return [1, "Hum. [FREYJA REGARDE LA HACHE] Odin me propose la paix... Mais ca ne se passera pas comme ca. [ELLE VOUS REND LA HACHE]. Allez voir Odin, et rendez-lui sa hache. En remerciement de vos services, je vous apprend le sort de Soin. [FREYJA DESSINA DU DOIGT DES RUNES VIOLETTE DANS L'AIR. LES LETTRES LUMINEUSES BRILLERENT UN INSTANT AVANT DE S'ESTOMPER PROGRESSIVEMENT.]"]
+
+        else: return {
+            "base": [0, "Bonjour, je suis Freyja, deesse de la beaute et de l'erotisme."]
+        }
+
+    # Freyr
+    elif coords == (2, 8):
+        if (not 360 <= stat[4] <= 1200):
+            return [0, "Hein ? Quoi ? Ca va pas non ? Qu'est-ce qu'il vous a pris de me reveiller comme ca ?"]
+
+        else: return {
+            "base": [0, "Freyr, dieu de la vie. Bienvenue a Vanaheim"]
+        }

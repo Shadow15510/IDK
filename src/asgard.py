@@ -125,7 +125,7 @@ def asgard_npc(data, stat):
     pass
 
 def asgard_po(coords):
-    if coords == (120, 26): return [0, "De hautes montagnes vous entourent de toutes part. Taillées dans la roche enneigee, les marches de l'escalier qui mene a Valaskjalf se decoupent nettement. La grande demeure d'Odin et son toit d'argent domine les environs."]
+    if coords == (120, 26): return [0, "De hautes montagnes vous entourent de toutes part. Taillees dans la roche enneigee, les marches de l'escalier qui mene a Valaskjalf se decoupent nettement. La grande demeure d'Odin et son toit d'argent domine les environs."]
     elif coords == (51, 55): return [0, "Tout autour de vous s'etend un riche jardin soigneusement entretenu. Dans l'alignement de l'allee nord, une fontaine complete l'ensemble. Une douce odeur de verdure emplit vos narines, l'ambiance est calme."] 
 
 
@@ -171,7 +171,7 @@ h_10 = (r"""
    |                       /____\                  \    |   
    |     /               *                         |    |   
    |     |                                         |    |   
-   |     |                        ?                |    |   
+   |     |                                         |    |   
    |     |================/      \=================|    |   
    |                                                    |   
    |                                                    |   
@@ -183,10 +183,23 @@ h_10 = (r"""
    |__|      |__|      |__|      |__|      |__|      |__|   
    /__\      /__\      /__\__^^__/__\      /__\      /__\   """,
     (29, 23, 0, 116, 14),
-    (30, 23, 0, 116, 14)) # * : (25, 17)
+    (30, 23, 0, 116, 14)) # * : (25, 11)
 
 def h_10_npc(data, stat):
-    pass
+    coords = data[2], data[3]
+    xp = data[0]
+
+    print(coords)
+    if coords == (25, 11):
+        if xp == 0:
+            stat[3][0] = 5
+            return [1, "Je suis Odin, Roi des Ases. Commencons par une premiere quete simple. Nous, les Ases, avons quelques differents avec les Vanes. Vous irez donc porter cette hache a Freyja. Elle comprendra. [ODIN VOUS DONNE UNE HACHE]"]
+        
+        else: return {
+            "base": [0, "Je suis Odin, Roi des Ases, dieux de la Guerre."],
+            1: [0, "Deja revenu !?"],
+            2: [0, "C'est une declaration de guerre ! [ODIN SE LEVA, FURIEUX]"],
+        }
 
 
 
