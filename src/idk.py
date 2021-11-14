@@ -63,9 +63,30 @@ def npc(data, stat):
 
     elif type(event) == tuple:
         issue = fight(stat, event[0], event[1])
+
         if issue == 0:
             stat[1] += event[2]
-            return [1, "Vous avez gagne le combat. [+{}PO]".format(event[2])]
+            if sum(stat[2][:-1]) >= 200: return [1, "Vous avez gagne le combat. [+{}PO]".format(event[2])]
+            
+            print_text("Vous avez gagne le combat. [+{}PO]".format(event[2]))
+            data[0] += 1
+            choice = 0
+            while not choice:
+                print("<o> Amelioration  <o>")
+                print(" |1. Vitesse       |")
+                print(" |2. Agilite       |")
+                print(" |3. Attaque       |")
+                print(" |4. Defense       |")
+                print("<o> ============= <o>")
+                choice = get_input()
+                if (choice < 0 or choice > 4) and stat[2][choice - 1] >= 50: choice = 0
+
+            print_text("Vous gagnez 2 points {}".format(("de vitesse", "d'agilite", "d'attaque", "de defense")[choice - 1]))
+            stat[2][choice - 1] += 2
+            if stat[2][choice -1] > 50: stat[2][choice - 1] = 50
+            
+            return None
+
         elif issue == 1: return [0, "Vous etes mort."]
         elif issue == 2: return [0, "Vous avez fuit."]
     
@@ -111,76 +132,91 @@ def fight(stat, opponent_stat, opponent_name):
 
     def player_turn():
         end = False
-        print_text("Tour de {}".format(stat[5]))
+        msg = "Tour de {}".format(stat[5])
+        
         if choice == 1:
-            damage = 2 * stat_test(player_stat, 2)[2] - opponent_stat[3]
+            damage = stat_test(player_stat, 2)[1] - opponent_stat[3]
             if damage < 0: damage = 0
             
             if damage == 0:
-                print_text("{} bloque l'attaque.".format(opponent_name))
+                msg += "\n{} bloque l'attaque.".format(opponent_name)
             elif stat_test(opponent_stat[:-1], 1)[0]:
-                print_text("{} esquive le coup.".format(opponent_name))
+                msg += "\n{} esquive le coup.".format(opponent_name)
             else:
                 opponent_stat[4] -= damage
-                print_text("{0} perd {1} PV.".format(opponent_name, damage))
+                msg += "\n{0} perd {1} PV.".format(opponent_name, damage)
 
         elif choice == 2:
             if len(stat[8]) == 0:
-                print_text("Vous ne connaissez pas de sort.")
+                msg += "\nVous ne connaissez pas de sort."
             else:
                 spell_data = ("Soin", "Flammes", "Givre", "Etincelles", "Fatigue")
                 spell_level = ("I", "II", "III", "IV", "V")
 
                 spell_choice = 0
                 while not spell_choice:
+                    print("\n" * 6 + "Sort(s) connu(s) :")
                     count = 0
                     for spell_id, level in stat[8]:
-                        print("{0}. {1} {2}".format(count + 1, spell_data[spell_id], spell_level[level]))
+                        print("{0}. {1} {2}".format(count + 1, spell_data[spell_id], spell_level[level - 1]))
                         count += 1
                     spell_choice = get_input()
                     if spell_choice < 0 or spell_choice > 3: spell_choice = 0
 
                 spell_choice -= 1
-                spell_name, level = spell_data[stat[8][spell_choice][0]], stat[8][spell_choice][1] + 1
+                name, level = spell_data[stat[8][spell_choice][0]], stat[8][spell_choice][1]
 
                 if stat[2][4] >= level * 10:
-                    print_text("Vous lancez {0} de niveau {1} [-{2} PM].".format(name, spell_level[level - 1]))
+                    msg += "\nVous lancez {0} de niveau {1} [-{2} PM].".format(name, spell_level[level - 1], level * 10)
                     stat[2][4] -= level * 10
+                    pts = 12 * level + randint(-5, 5)
 
                     if stat[8][spell_choice][0] == 0:
-                        stat[0] += 12 * level
+                        stat[0] += pts
+                        msg += "\nVous gagnez {} PV".format(pts)
+                    
                     elif stat[8][spell_choice][0] == 1:
-                        opponent_stat[4] -= 12 * level
+                        opponent_stat[4] -= pts
+                        msg += "\n{0} perd {1} PV".format(opponent_name, pts)
+                    
                     elif stat[8][spell_choice][0] == 2:
-                        opponent_stat[4] -= 12 * level
+                        opponent_stat[4] -= pts
+                        msg += "\n{0} perd {1} PV".format(opponent_name, pts)
+                    
                     elif stat[8][spell_choice][0] == 3:
-                        opponent_stat[4] -= 12 * level
+                        opponent_stat[4] -= pts
+                        msg += "\n{0} perd {1} PV".format(opponent_name, pts)
+                    
                     elif stat[8][spell_choice][0] == 4:
-                        opponent_stat[0] -= 12 * level
+                        opponent_stat[0] -= pts
+                        msg += "\n{0} perd {1} points de vitesse".format(opponent_name, 12 * level)
 
                 else:
-                    print_text("Vous ne parvenez pas a lancer le sort.")
+                    msg += "\nVous ne parvenez pas a lancer le sort."
 
         elif choice == 3:
             if stat_test(player_stat, 1)[0]:
                 end = True
             else:
-                print_text("Votre tentative de fuite echoue.")
+                msg += "\nVotre tentative de fuite echoue."
 
+        print_text(msg)
         return end
 
     def opponent_turn():
-        print_text("Tour de {}".format(opponent_name))
-        damage = 2 * stat_test(opponent_stat, 2)[2] - player_stat[3]
+        msg = "Tour de {}".format(opponent_name)
+        damage = stat_test(opponent_stat, 2)[1] - player_stat[3]
         if damage < 0: damage = 0
 
         if damage == 0:
-            print_text("{} bloque l'attaque.".format(stat[5]))
+            msg += "\n{} bloque l'attaque.".format(stat[5])
         elif stat_test(player_stat, 1)[0]:
-            print_text("{} esquive le coup.".format(stat[5]))
+            msg += "\n{} esquive le coup.".format(stat[5])
         else:
             stat[0] -= damage
-            print_text("{0} perd {1} PV.".format(stat[5], damage))
+            msg += "\n{0} perd {1} PV.".format(stat[5], damage)
+
+        print_text(msg)
 
     # opponent_stat = [vitesse, agilité, attaque, défense, vie]
     # player_stat = [vitesse, agilité, attaque, défense]
@@ -226,19 +262,21 @@ def fight(stat, opponent_stat, opponent_name):
         if player > opponent:
             end = player_turn()
             if end: return 2
-
-            if opponent_stat[4] > 0: opponent_turn()
-            else: return 0
+            if opponent_stat[4] <= 0: return 0
+            opponent_turn()
+        
         else:
             opponent_turn()
-            if stat[0] > 0: end = player_turn()
-            else: return 1
+            if stat[0] <= 0: return 1 
+            end = player_turn()
+
+        if opponent_stat[4] <= 0: return 0
+        if stat[0] <= 0: return 1
 
     return 2
 
 
 def misc_stat(data, stat):
-    # stat = [0 - PV, 1 - pièces d'or, 2 - [vitesse, agilité, attaque, defense, magie], 3 - [arme, armure], 4 - ticks, 5 - nom, 6 - (temps, xp), 7 - classe, 8 - sorts connus : (id, level)]
     if data[1] < 9: place = ("Asgard", "Vanaheim", "Alfheim", "Midgard", "Niflheim", "Jotunheim", "Nidavellir", "Muspellheim", "Helheim")[data[1]]
     else: place =  "interieur"
     money, ticks, player_class = stat[1], stat[4], stat[7]
@@ -300,7 +338,6 @@ def inventory(data, stat):
 
 
 def sleep(data, stat):
-
     if 360 < stat[4] < 1140:
         print_text("Vous ne pouvez pas dormir de jour.")
         return
@@ -341,6 +378,7 @@ keys = {4: display_stat, 7: spell, 8:misc_stat, 6: inventory, 9: sleep}
 
 # Main function
 def idk(stat=None, data=None):
+    # stat = [0 - PV, 1 - pièces d'or, 2 - [vitesse, agilité, attaque, defense, magie], 3 - [arme, armure], 4 - ticks, 5 - nom, 6 - (temps, xp), 7 - classe, 8 - sorts connus : (id, level), 9 - sous-quête en cours]
     if not stat:
         name = ""
         while len(name) == 0 or len(name) > 13:
@@ -359,11 +397,13 @@ def idk(stat=None, data=None):
         elif player_class == 3:
             stat = [5, 5, 5, 10, 5]
         elif player_class == 4:
-            stat = [5, 5, 5, 5, 10]
+            stat = [5, 5, 5, 5, 20]
         elif player_class == 5:
             stat = [10, 5, 5, 5, 5]
 
-        stat = [100, 10, stat, [0, 0], 360, name, (-1, -1), player_class - 1, []]
+        stat = [100, 10, stat, [0, 0], 360, name, (-1, -1), player_class - 1, [], 0]
+        if player_class == 4:
+            stat[8].append((1, 1))
         data = [0, 3, 44, 66]
 
         print_text("Au alentour du Ve siecle, quelque part en Scandinavie. La bataille prenait place dans un champ saccage, et la nuit etait tombe depuis quelques heures lorsque l'assaut debuta.")
@@ -394,9 +434,6 @@ def center(string, total_length, symbol):
 
 
 def stat_test(stat, test_id):
-    avg = sum(stat) / len(stat)
-
-    score = stat[test_id] + randint(0, ceil(avg / 2))
-    return score >= avg, score / avg, score
-
+    score = (80 + randint(-20, 20)) * stat[test_id] / 50
+    return randint(1, 100) <= score, floor(score)
 

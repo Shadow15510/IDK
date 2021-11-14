@@ -84,7 +84,7 @@ midgard = (r"""
 ~~~~~~~~~      ###     ###   /|\    #####  /|\                                            ~~~~~~~~~~
 ~~~~~~~~       /|\    #####          ###       ###     ###            ###                  ~~~~~~~~~
 ~~~~~~~~              #####     ###  /|\      #####   #####          #####  ###       |--|--|--|~~~~
-~~~~~~~~~        ###   ###     #####          #####    ###            ###  #####               |~~~~
+~~~~~~~~~        ###   ###     #####          #####    ###            ###  #####              *|~~~~
 ~~~~~~~~~~      #####  /|\     #####   ###     ###     /|\            /|\   ###                |~~~~
 ~~~~~~~~~~~     #####           ###   #####    /|\                          /|\       |--|--|--|~~~~
 ~~~~~~~~~~~~~    ###    _       /|\   #####         ###          ###                     ~~~~~~~~~~~
@@ -120,35 +120,37 @@ def midgard_po(coords):
     elif coords == (52, 79): return [0, "Tournant le dos a l'epais mur qui delimite la propriete, vous observez le manoir. Le corps du batiment etait clairement une ancienne ferme a laquelle deux tours on ete rajoute a posteriori. L'ensemble garde un aspect massif et froid. Neanmoins, le reste de la propriete a fait l'objet d'un certain soin, en particulier le jardin en 4 parties dans lequel un vieux jardinier s'affaire."]
 
 def midgard_npc(data, stat):
+    # (67, 46)
+    # (39, 49)
+    # (66, 56)
+    # (51, 60)
+    # (68, 71)
     coords = data[2], data[3]
     xp = data[0]
 
-    if coords == (67, 46): return {
-            "base": [0, "Oui ?..."]
-        }
-
-    elif coords == (39, 49): return {
-            "base": [0, "Vous cherchez quelqu'un ?"]
-        }
-
-    elif coords == (66, 56):
-        return [0, "Hein ?"]
-
-    elif coords == (8, 59): return {
-            "base": [0, "Regardez la mer. Et si vous voyez un bateau, prevenez moi !"]
-        }
-
-    elif coords == (51, 60): return {
-            "base": [0, "Besoin de quelque chose ?"]
-        }
-
-    elif coords == (68, 71):
-        if xp == 0:
-            return [5, 5, 10, 5, 20], "Frinir", 0
+    if coords == (8, 59):
+        if stat[9] == 1: return {
+                7: [0, "En clair, j'aimerais que tu elimines Gardim. La paye sera bonne."],
+                8: [1, "C'est un grand service que tu m'a rendu l'ami, je ne l'oublierai pas ! [+10PO]", 0, (1, 10), (9, -1)]
+            }
 
         else: return {
-            "base": [0, "Frinir, jardinier de Madame."]
-        }
+                "base": [0, "Laard, je suis marin de mon etat."],
+                4: [0, "Laard, marin. Vous cherchez un engagement ?\n1. Hmm ? Proposez toujours ?\n2. Désolé, j'ai d'autres affaires a regler.", 2],
+                    5: [2, "Voila, il y a quelques temps j'ai embarque dans un navire. Malheureusement, Njord ne nous a pas ete favorable : la tempete nous a surpris. La situation a bord est devenue tendue, nous nous sommes mutines. En represailles, Gardim, le capitaine, a fait passer quelques matelots par dessus bord. J'ai jure de les venger, mais je ne connais rien aux armes. Tu peux t'en charger pour moi ?", 0, (9, 1)],
+                    6: [-2, "Je comprends."],
+            }
+
+    elif coords == (94, 85):
+        if stat[9] == 1:
+            if xp < 7: 
+                return [0, "Gardim, capitaine du Mantree [IL DESIGNA UN DRAKKAR]"]
+            elif xp == 7:
+                return [5, 2, 7, 7, 30], "Gardim", 3
+            else: return {
+                    "base": [0, "[A VOS PIEDS S'ETEND LE CORPS FROID DE GARDIM.]"]
+                }
+
 
 
 
@@ -207,7 +209,7 @@ def h_26_npc(data, stat):
 
     # Rosahil Green
     if coords == (27, 6):
-        if stat[4] >= 1320 and stat[4] <= 340: return [0, "Je suis desolee, nous sommes fermes. Revenez plus tard !"]
+        if stat[4] >= 1320 or stat[4] <= 340: return [0, "Je suis desolee, nous sommes fermes. Revenez plus tard !"]
 
         if stat[6][1] == -1:
             stat[6] = stat[4], data[0]
@@ -216,7 +218,7 @@ def h_26_npc(data, stat):
         elif data[0] == stat[6][1] + 1:
             stat[6] = (-1, -1)
             if stat[1] < 5: return [-1, "Reviens quand tu auras assez de pieces d'or."]
-            return [-1, "Et voila pour vous !", 0, (0, 5), (1, -5)]
+            return [-1, "Et voila pour vous ! [ROSAHIL POSA UNE ASSIETTE DE RAGOUT CHAUD DEVANT VOUS.]", 0, (0, 5), (1, -5)]
         
         elif data[0] == stat[6][1] + 2:
             stat[6] = (-1, -1)
@@ -226,7 +228,7 @@ def h_26_npc(data, stat):
                 stat[4] = 360
                 return [-2, "Suivez-moi, je vais vous montrer votre chambre. [VOUS SUIVEZ ROSAHIL DANS L'AUBERGE, LA NUIT PASSA.]", 0, (0, 10), (1, -10)]
 
-    return [0, "Ui hips ?"]
+    else: return [0, "Ui hips ?"]
 
 
 

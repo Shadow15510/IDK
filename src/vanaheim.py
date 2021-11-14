@@ -27,7 +27,7 @@ vanaheim = (r"""
   \ /      \ /\ /         ###   / \ '    /<>\   `      /|\  /  \        /  
    \        /  \          /|\   |_| .    |__|     .'       /    \   /\ /   
     \ /\   /    \              ` ``'         ###   ,  _   /      \ /  \    
-     /  \ /      \ /\             _         ##### ', /-\          /    \   
+     /  \ /      \ /\             _         ##### ', /o\          /    \   
     /    \        /  \         . / \         ### ,   |_|        /\      \ /
    /      \ /\   /    \          |_|         /|\ ,  * `        /  \      / 
            /  \ /      \       ,.     _            ',` ''     /    \   /\  
@@ -65,7 +65,12 @@ vanaheim = (r"""
 # * : (45; 39)
 
 def vanaheim_npc(data, stat):
-    pass
+    coords = data[2], data[3]
+    xp = data[0]
+
+    if coords == (31, 12): return {
+            "base": [0, "Riethas, simple paysan. Que Nerthus vous garde !"],
+        }
 
 def vanaheim_po(coords):
     if coords == (42, 20): return [0, "Vous vous trouvez sur le bord d'une large place verdoyante et bien entretenue. Entoure de montagnes, Vanaheim semble hors d'atteinte du temps. Quelques maisons et arbres completent le decor."]
@@ -111,7 +116,7 @@ def h_21_npc(data, stat):
             stat[4] = 360
             return [-3, "Votre chambre est a l'etage.\n[LA NUIT PASSE]", 0, (0, 10), (1, -10)]
 
-    return [0, "Je grois qu'j'ais trop buurrps."]
+    return [0, "Ch'rois hips qu'j'ais hips trop buu'hips."]
 
 
 
@@ -144,22 +149,30 @@ def h_22_npc(data, stat):
     xp = data[0]
 
     # Freyja
-    if coords == (36, 3):
+    if coords == (2, 8):
         if not (360 <= stat[4] <= 1200):
-            return [0, "Revenez plus tard s'il vous plait."]
-
-        if xp == 1:
-            stat[8].append((0, 1))
-            return [1, "Hum. [FREYJA REGARDE LA HACHE] Odin me propose la paix... Mais ca ne se passera pas comme ca. [ELLE VOUS REND LA HACHE]. Allez voir Odin, et rendez-lui sa hache. En remerciement de vos services, je vous apprend le sort de Soin. [FREYJA DESSINA DU DOIGT DES RUNES VIOLETTE DANS L'AIR. LES LETTRES LUMINEUSES BRILLERENT UN INSTANT AVANT DE S'ESTOMPER PROGRESSIVEMENT.]"]
+            return [0, "Revenez plus tard s'il vous plait : il fait nuit."]
 
         else: return {
-            "base": [0, "Bonjour, je suis Freyja, deesse de la beaute et de l'erotisme."]
+            "base": [0, "Bonjour, je suis Freyja, deesse de la beaute et de l'erotisme."],
+            1: [1, "Hum. [FREYJA REGARDE LA DAGUE] Odin me propose la paix... Mais cela ne se passera pas comme ca. [ELLE VOUS REND LA DAGUE]. Rendez sa dague a Odin. Avant que vous ne partiez pour Asgard, allez voir Freyr, il est dans la piece adjacente."],
+
         }
 
     # Freyr
-    elif coords == (2, 8):
+    elif coords == (36, 3):
         if (not 360 <= stat[4] <= 1200):
             return [0, "Hein ? Quoi ? Ca va pas non ? Qu'est-ce qu'il vous a pris de me reveiller comme ca ?"]
+
+        if xp == 2:
+            check = True
+            for spell_id, spell_level in stat[8]:
+                if spell_id == 0: check = False
+            if check:
+                stat[8].append((0, 1))
+                return [1, "Chez les Vanes, nous rendons hommage aux messagers, en guise de remerciement, je vais vous apprendre le sort de Soin [FREYR DESSINA DANS L'AIR DES RUNES VIOLETTE QUI TOURNOYERENT UN INSTANT AVANT DE S'ESTOMPER PEU A PEU.]"]
+            else:
+                return [1, "Chez les Vanes, nous rendons hommage aux messagers, voici quelques pieces d'or, faites en bon usage !", 0, (1, 5)]
 
         else: return {
             "base": [0, "Freyr, dieu de la vie. Bienvenue a Vanaheim"]

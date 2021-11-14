@@ -42,8 +42,8 @@ asgard = (r"""
 #####  |o|o|o|o|o|o|    ###                  |   | ~~~~~~~~~~~~~                                ~~~~~~      /-\ |_|   #####          ~~~~ /\     /    
 ##### /_____________\  #####   ###   ###                    ~~~~~~~~~~~~                        ~~~~~~~~               |^|  _      ~~~~~ /  \     /\  
 ####  |_/   \_/   \_|   ###   ##### #####              ###       ~~~~~~~~~~~~~~~~                 ~~~~~~~~~                /o\    ~~~~  /    \   /  \ 
- ||   |_|   |^|   |_|   /-\    ###   ###      ###     #####                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             |_|   ~~~~  /      \ /    \
-   ##   *                      /-\   /-\     #####     ###                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~              ~~~~            /     /
+ ||   |_|   |^|   |_|   /-\    ###   ###      ###     #####                  ~~~~~~~~~~~~~~|  |~~~~~~~~~~~~~~~             |_|   ~~~~  /      \ /    \
+   ##   *                      /-\   /-\     #####     ###                          ~~~~~~~|  |~~~~~~~~~~~~~~~~~~              ~~~~            /     /
   ####             ###                        ###      /-\                                            ~~~~~~~~~~~~~          ~~~~~           /\     / 
  ######           #####    ###    ###   ###   /-\             ###     ___________                         ~~~~~~~~~~        ~~~~~~          /  \   /  
  ######            ###    #####  ##### #####      ~~~        #####   /Thrymrheimr\                             ~~~~~~~~~~~~~~~~~~       /\ /    \ /   
@@ -150,7 +150,12 @@ h_9 = (r"""
     (15, 13, 0, 30, 11)) # * : (19, 4)
 
 def h_9_npc(data, stat):
-    pass
+    coords = data[2], data[3]
+    xp = data[0]
+
+    if coords == (19, 4): return {
+            "base": [0, "Forseti, fils de Baldr et Nanna, dieu de la Justice. Tu as besoin de moi ?"]
+        }
 
 
 
@@ -192,13 +197,13 @@ def h_10_npc(data, stat):
     print(coords)
     if coords == (25, 11):
         if xp == 0:
-            stat[3][0] = 5
-            return [1, "Je suis Odin, Roi des Ases. Commencons par une premiere quete simple. Nous, les Ases, avons quelques differents avec les Vanes. Vous irez donc porter cette hache a Freyja. Elle comprendra. [ODIN VOUS DONNE UNE HACHE]"]
-        
+            stat[3][0] = 1
+            return [1, "Je suis Odin, Roi des Ases. Actuellement nous avons quelques differents avec les Vanes. Vous irez donc porter cette dague a Freyja, a Vanaheim. Elle comprendra. [ODIN VOUS DONNE UNE DAGUE]"]
+
         else: return {
             "base": [0, "Je suis Odin, Roi des Ases, dieux de la Guerre."],
             1: [0, "Deja revenu !?"],
-            2: [0, "C'est une declaration de guerre ! [ODIN SE LEVA, FURIEUX]"],
+            3: [1, "Bien. Tu peux garder la dague, une guerre se prepare, ce serait bete de mourrir deux fois quand meme ? [UN SOURIRE PASSA SUR LES LEVRES D'ODIN] Jadis Freyja m'enseigna la magie et l'astrologie. [ODIN SE FIT PENSIF]. Je te ferais savoir mes instructions en temps voulu. Je crois qu'il te reste quelques mondes a decouvrir."]
         }
 
 
