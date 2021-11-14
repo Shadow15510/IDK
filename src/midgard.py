@@ -102,7 +102,7 @@ midgard = (r"""
 # Autres mondes (Migard = 3)
     (72, 6, 0, 126, 71),  # Asgard
     (77, 62, 6, 93, 8),   # Nidavellir
-    (24, 90, 4, 109, 66), # Niflheim
+    (24, 90, 4, 78, 19),  # Niflheim
     (10, 58, 1, 54, 29),  # Vanaheim
 
 # Maisons
@@ -131,7 +131,7 @@ def midgard_npc(data, stat):
     if coords == (8, 59):
         if stat[9] == 1: return {
                 7: [0, "En clair, j'aimerais que tu elimines Gardim. La paye sera bonne."],
-                8: [1, "C'est un grand service que tu m'a rendu l'ami, je ne l'oublierai pas ! [+10PO]", 0, (1, 10), (9, -1)]
+                8: [1, "C'est un grand service que tu m'a rendu l'ami, je ne l'oublierai pas ! [+10 PO] Un courrier est passe, je crois qu'Odin requiert ta presence au plus vite.", 0, (1, 10), (9, -1)]
             }
 
         else: return {
@@ -151,6 +151,13 @@ def midgard_npc(data, stat):
                     "base": [0, "[A VOS PIEDS S'ETEND LE CORPS FROID DE GARDIM.]"]
                 }
 
+    elif coords == (51, 60):
+        return {
+                0: [0, "Vous cherchez quelque chose ?\n1. Oui : Asgard.\n2. Je cherche Vanaheim.\n3. Non, tout va bien, merci.", 3],
+                    1: [-1, "Vous devriez essayer au nord, en passant par la foret, a l'est."],
+                    2: [-2, "Hum, vous avez regardez du cote de la petite maison tout a l'ouest ? Un bon ami a moi, Laard est souvent a cote."],
+                    3: [-3, "Dans ce cas... Bonne journee !"],
+            }
 
 
 
@@ -206,6 +213,7 @@ def h_26_npc(data, stat):
     # * : (17, 8)
     # * : (27, 8)
     coords = data[2], data[3]
+    xp = data[0]
 
     # Rosahil Green
     if coords == (27, 6):
@@ -228,6 +236,22 @@ def h_26_npc(data, stat):
                 stat[4] = 360
                 return [-2, "Suivez-moi, je vais vous montrer votre chambre. [VOUS SUIVEZ ROSAHIL DANS L'AUBERGE, LA NUIT PASSA.]", 0, (0, 10), (1, -10)]
 
+    elif coords == (17, 7):
+        if stat[9] == 2: return {
+                7: [0, "Aller, file !"],
+                8: [1, "Merci de ton aide, voila quelques pieces. [+5 PO], un messager est passe, Odin te demande.", 0, (1, 5)],
+            }
+
+        else: return {
+                "base": [0, "Ui hips ?"]
+                4: [0, "Hey toi ! J'ai besoin de toi.\n1. Vous devez vous tromper, bonne journee.\n2. Je vous ecoute.", 2],
+                    5: [-1, "Tu ne sais pas ce que tu rates l'ami."],
+                    6: [1, "Bien. Tu vas aller au sud ouest, au fond d'un bois, il y a trois maisons. Je sais que l'une d'elle mene a Niflheim. Trouve un esprit du nom d'Asufaih et donne-lui ce mot. [L'HOMME VOUS DONNE UNE LETTRE CACHETEE D'UN SCEAU DE CIRE NOIRE.].", 0, (9, 2)],
+            }
+
+
+
+    
     else: return [0, "Ui hips ?"]
 
 

@@ -10,7 +10,7 @@ from niflheim import *
 from jotunheim import *
 from nidavellir import *
 from muspellheim import *
-from helheim import *
+from svartalfheim import *
 
 
 maps = (
@@ -22,16 +22,16 @@ maps = (
     jotunheim,
     nidavellir,
     muspellheim,
-    helheim,
+    svartalfheim,
     h_9, h_10, h_11, h_12, h_13, h_14, h_15, h_16, h_17, h_18, h_19, h_20,
     h_21, h_22,
     h_23, h_24,
     h_25, h_26, h_27, h_28,
-    h_29, h_30, h_31, h_32,)
-#     h_33, h_34, h_35, h_36, h_37, h_38, h_39,
-#     h_40, h_41, h_42, h_43, h_44,
-#     h_45, h_46, h_47, h_48,
-#     h_49, h_50)
+    h_29, h_30,)
+#   h_31, h_32, h_33, h_34, h_35, h_36,
+#   h_37, h_38, h_39, h_40, h_41,
+#   h_42, h_43, h_44,
+#   h_45, h_46, h_47, h_48)
 
 # Asci functions
 def npc(data, stat):
@@ -44,16 +44,16 @@ def npc(data, stat):
     jotunheim_npc,
     nidavellir_npc,
     muspellheim_npc,
-    helheim_npc,
+    svartalfheim_npc,
     h_9_npc, h_10_npc, h_11_npc, h_12_npc, h_13_npc, h_14_npc, h_15_npc, h_16_npc, h_17_npc, h_18_npc, h_19_npc, h_20_npc,
     h_21_npc, h_22_npc,
     h_23_npc, h_24_npc,
     h_25_npc, h_26_npc, h_27_npc, h_28_npc,
-    h_29_npc, h_30_npc, h_31_npc, h_32_npc,)
-#     h_33_npc, h_34_npc, h_35_npc, h_36_npc, h_37_npc, h_38_npc, h_39_npc,
-#     h_40_npc, h_41_npc, h_42_npc, h_43_npc, h_44_npc,
-#     h_45_npc, h_46_npc, h_47_npc, h_48_npc,
-#     h_49_npc, h_50_npc,)
+    h_29_npc, h_30_npc,)
+#   h_31_npc, h_32_npc, h_33_npc, h_34_npc, h_35_npc, h_36_npc,
+#   h_37_npc, h_38_npc, h_39_npc, h_40_npc, h_41_npc,
+#   h_42_npc, h_43_npc, h_44_npc,
+#   h_45_npc, h_46_npc, h_47_npc, h_48_npc)
 
 
     event = npc_data[data[1]](data, stat)
@@ -104,7 +104,7 @@ def point_of_interest(data, stat):
         jotunheim_po,
         nidavellir_po,
         muspellheim_po,
-        helheim_po
+        svartalfheim_po
     )
 
     coords = data[2], data[3]
@@ -277,7 +277,7 @@ def fight(stat, opponent_stat, opponent_name):
 
 
 def misc_stat(data, stat):
-    if data[1] < 9: place = ("Asgard", "Vanaheim", "Alfheim", "Midgard", "Niflheim", "Jotunheim", "Nidavellir", "Muspellheim", "Helheim")[data[1]]
+    if data[1] < 9: place = ("Asgard", "Vanaheim", "Alfheim", "Midgard", "Niflheim", "Jotunheim", "Nidavellir", "Muspellheim", "Svartalfheim")[data[1]]
     else: place =  "interieur"
     money, ticks, player_class = stat[1], stat[4], stat[7]
     
