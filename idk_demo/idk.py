@@ -338,12 +338,23 @@ def sleep(data, stat):
         print_text("Vous ne pouvez pas dormir de jour.")
         return
 
-    stat[4] = 360
+    sleep_hours = 0
+    while not sleep_hours:
+        print("Combien d'heure\nvoulez-vous dormir ?")
+        sleep_hours = input(">")
+        try: sleep_hours = int(sleep_hours) % 24
+        except: sleep_hours = 0
+        if sleep_hours < 0: sleep_hours = 0
+
+    stat[4] += sleep_hours * 60
+    stat[0] += sleep_hours
+    stat[2][4] += sleep_hours // 2
+
 
     # If the player is at home
     if data[1] == 27:
-        if stat[0] < 100: stat[0] += 10
-        stat[2][4] += 2
+        if stat[0] < 100: stat[0] += 5 * sleep_hours
+        stat[2][4] += sleep_hours // 2
 
     print_text("Vous vous reposez.")
 
