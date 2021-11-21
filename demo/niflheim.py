@@ -92,13 +92,7 @@ def niflheim_po(coords):
     if coords == (88, 32): return [0, "Entoure de pierre tombales, de nombreux chemins serpentent. De lourd nuages fonces entretiennent une atmosphere pesante et une brume noiratres flotte dans l'air. Dans la penombre ambiante, une haute maison se detache, masse plus sombre encore que le reste, percee de fines fenetres et encadree de deux tours."]
 
 def niflheim_npc(data, stat):
-    coords = data[2], data[3]
-    xp = data[0]
-
-    if coords == (57, 31):
-        if stat[9] == 2: return {
-                7: [1, "Oui ? [VOUS LUI DONNEZ LA LETTRE, L'ESPRIT VOUS REGARDA SANS PARAITRE ETONNE ET S'EN EMPARA.] Notre... Ami commun vous envoie de loin. [SUR CES MOTS L'ESPRIT SE RETOURNA ET TRAVERSA LE SOL DE TERRE]"],
-        }
+    pass
 
 
 

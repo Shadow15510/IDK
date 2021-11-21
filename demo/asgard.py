@@ -194,16 +194,7 @@ def h_10_npc(data, stat):
     coords = data[2], data[3]
     xp = data[0]
 
-    if coords == (25, 11):
-        if xp == 0:
-            stat[3][0] = 1
-            return [1, "Je suis Odin, Roi des Ases. Actuellement nous avons quelques differents avec les Vanes. Vous irez donc porter cette dague a Freyja, a Vanaheim. Elle comprendra. [ODIN VOUS DONNE UNE DAGUE]"]
-
-        else: return {
-            "base": [0, "Je suis Odin, Roi des Ases, dieux de la Guerre."],
-            1: [0, "Deja revenu !?"],
-            3: [1, "Bon travail. Tu peux garder la dague, une guerre se prepare, ce serait bete de mourrir deux fois quand meme ? [UN SOURIRE PASSA SUR LES LEVRES D'ODIN] Jadis Freyja m'enseigna la magie et l'astrologie. [ODIN SE FIT PENSIF. IL SE RETROURNA VERS VOUS BRUTALEMENT] Je te ferais savoir mes instructions en temps voulu. Je crois qu'il te reste quelques mondes a decouvrir."]
-        }
+    return [0, "Je suis Odin, Roi des Ases, dieux de la Guerre."],
 
 
 

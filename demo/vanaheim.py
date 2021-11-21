@@ -150,36 +150,8 @@ def h_22_npc(data, stat):
 
     # Freyja
     if coords == (2, 8):
-        if not (360 <= stat[4] <= 1200):
-            return [0, "Revenez plus tard s'il vous plait : il fait nuit."]
-
-        else: return {
-            "base": [0, "Bonjour, je suis Freyja, deesse de la beaute et de l'erotisme."],
-            1: [1, "Hum. [FREYJA REGARDE LA DAGUE] Odin me propose la paix... Mais cela ne se passera pas comme ca. [ELLE VOUS REND LA DAGUE]. Rendez sa dague a Odin. Avant que vous ne partiez pour Asgard, allez voir Freyr, il est dans la piece adjacente, il te renverra directement a Asgard."],
-
-        }
+        return [0, "Bonjour, je suis Freyja, deesse de la beaute et de l'erotisme."]
 
     # Freyr
     elif coords == (36, 3):
-        if (not 360 <= stat[4] <= 1200):
-            return [0, "Hein ? Quoi ? Ca va pas non ? Qu'est-ce qu'il vous a pris de me reveiller comme ca ?"]
-
-        if xp == 2:
-            check = True
-            for spell_id, spell_level in stat[7]:
-                if spell_id == 0: check = False
-
-            data[1] = 0
-            data[2], data[3] = 126, 71
-            
-            if check:
-                stat[7].append((0, 1))
-                return [1, "Chez les Vanes, nous rendons hommage aux messagers, en guise de remerciement, je vais vous apprendre le sort de Soin [FREYR DESSINA DANS L'AIR DES RUNES VIOLETTE QUI TOURNOYERENT UN INSTANT AVANT DE S'ESTOMPER PEU A PEU.]\n[UNE LOURDE TORPEUR S'ABATTIT SUR VOUS. VOUS VOUS SENTEZ LEGER. LE DUR CHOC CONTRE LE SOL VOUS REVEILLA.]"]
-            else:
-                return [1, "Chez les Vanes, nous rendons hommage aux messagers, voici quelques pieces d'or, faites en bon usage ! [UNE LOURDE TORPEUR S'ABATTIT SUR VOUS. VOUS VOUS SENTEZ LEGER. LE DUR CHOC CONTRE LE SOL VOUS REVEILLA.]", 0, (1, 5)]
-
-
-
-        else: return {
-            "base": [0, "Freyr, dieu de la vie. Bienvenue a Vanaheim"]
-        }
+        return [0, "Freyr, dieu de la vie. Bienvenue a Vanaheim"]

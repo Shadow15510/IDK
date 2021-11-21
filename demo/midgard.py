@@ -129,27 +129,7 @@ def midgard_npc(data, stat):
     xp = data[0]
 
     if coords == (8, 59):
-        if stat[8] == 1: return {
-                7: [0, "En clair, j'aimerais que tu elimines Gardim. La paye sera bonne."],
-                8: [1, "C'est un grand service que tu m'a rendu l'ami, je ne l'oublierai pas ! [+5 PO] Un courrier est passe, je crois qu'Odin requiert ta presence au plus vite.", 0, (1, 5), (8, -1)]
-            }
-
-        else: return {
-                "base": [0, "Laard, je suis marin de mon etat."],
-                4: [0, "Laard, marin. Vous cherchez un engagement ?\n1. Hmm ? Proposez toujours ?\n2. Désolé, j'ai d'autres affaires a regler.", 2],
-                    5: [2, "Voila, il y a quelques temps j'ai embarque dans un navire. Malheureusement, Njord ne nous a pas ete favorable et la tempete fut rude. La situation a bord est devenue tendue, nous nous sommes mutines. En represailles, Gardim, le capitaine, a fait passer quelques matelots par dessus bord. J'ai jure de les venger, mais je ne connais rien aux armes. Tu peux t'en charger pour moi ?", 0, (8, 1)],
-                    6: [-2, "Je comprends."],
-            }
-
-    elif coords == (94, 85):
-        if stat[8] == 1:
-            if xp < 7: 
-                return [0, "Gardim, capitaine du Mantree [IL DESIGNA UN DRAKKAR]"]
-            elif xp == 7:
-                return [5, 2, 7, 7, 30], "Gardim", 3
-            else: return {
-                    "base": [0, "[A VOS PIEDS S'ETEND LE CORPS FROID DE GARDIM.]"]
-                }
+        return [0, "Laard, je suis marin de mon etat."]
 
     elif coords == (51, 60):
         return {
@@ -236,22 +216,6 @@ def h_26_npc(data, stat):
                 stat[4] = 360
                 return [-2, "Suivez-moi, je vais vous montrer votre chambre. [VOUS SUIVEZ ROSAHIL DANS L'AUBERGE, LA NUIT PASSA.]", 0, (0, 10), (1, -10)]
 
-    elif coords == (17, 7):
-        if stat[8] == 2: return {
-                7: [0, "Aller, file !"],
-                8: [1, "Merci de ton aide, voila quelques pieces. [+10 PO], un messager est passe, Odin te demande.", 0, (1, 10), (8, -2)],
-            }
-
-        else: return {
-                "base": [0, "Ui hips ?"],
-                4: [0, "Hey toi ! J'ai besoin de toi.\n1. Je ne crois pas, bonne journee.\n2. Je vous ecoute.", 2],
-                    5: [-1, "Tu ne sais pas ce que tu rates l'ami."],
-                    6: [1, "Bien. Tu vas aller au sud ouest, au fond d'un bois, il y a trois maisons. Je sais que l'une d'elle mene a Niflheim. Trouve un esprit du nom d'Asufaih et donne-lui ce mot. [L'HOMME VOUS DONNE UNE LETTRE CACHETEE D'UN SCEAU DE CIRE NOIRE.].", 0, (8, 2)],
-            }
-
-
-
-    
     else: return [0, "Ui hips ?"]
 
 
