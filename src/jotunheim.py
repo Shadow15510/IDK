@@ -154,7 +154,7 @@ jotunheim = (r"""
 def jotunheim_po(coords):
     if coords == (60, 57): return [0, "Un bruit de fontaine monte a vos oreilles. A travers les arbres, l'immense palais de Thrym se dresse. Les enormes colonnes qui entourent le batiments sont a elles seules des symboles de demesures. Aux alentours se dresse quelques maisons tout aussi imposantes et enorme, mais moins travaillee."]
     elif coords == (23, 70): return [0, "Face a la mer, sur une langue de terre, le phare se dresse, eclairant puissemment le large pour signaler l'estuaire."]
-    elif coords == (60, 86): return [0, "Un imposant manoir se tient devant vous, flanque de deux tours surmontes de domes en ardoise brillantes, l'ensemble est perce de multiples et larges ouvertures. Le parc autour se compose de quelques arbres et est delimite au nord par le fleuve."]
+    elif coords == (60, 86): return [0, "Un imposant manoir se tient devant vous, flanque de deux tours surmontees de domes en ardoise brillantes, l'ensemble est perce de multiples et larges ouvertures. Le parc autour se compose de quelques arbres et est delimite au nord par le fleuve."]
 
 def jotunheim_npc(data, stat):
     pass
@@ -323,7 +323,16 @@ h_35 = (r"""
     (25, 19, 5, 0, 0)) # * : (17, 5)
 
 def h_35_npc(data, stat):
-    pass
+    coords = data[2], data[3]
+    xp = data[0]
+
+    if coords == (17, 5):
+        if xp == 14: return [8, 8, 5, 5, 80], "Gullveig", 15, 1
+        elif xp == 15: return [0, "[VOUS REGARDEZ LA DEPOUILLE DESARTICULEE DE LA MAGICIENNE, ODIN SERA CONTENT.]"]
+        else: return {
+                "base": [0, "Gullveig, magicienne Vane, pour te servir."],
+            }
+        
 
 
 

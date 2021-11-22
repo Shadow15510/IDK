@@ -24,11 +24,11 @@ midgard = (r"""
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~        /\    #### ##||       ## #### ##|| ####   ## ####   ##  ~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~             /  \    ## ####        ||  ## ####  #### ##|| #### ##||   ~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~ ~~~~~     /    \   || ####    ?       || ####   ## ####   ## ####    ~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 ##                 ## ## || ####   || ####     ~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~   ~~~~          /\ ||                 ||####    ## ##     ##      ~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~       _/  \    /\          ##   ####    ||####    ||  ##  ~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    ~    /     \  /  \        ####   ##  ##   ####       #### ~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~    /    /\  /    \  ' .  #### ##|| ####   ##   ##   #### ~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 ##                 ##    || ####   || ####     ~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~   ~~~~          /\ ||                 ||        ## ##     ##      ~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~       _/  \    /\          ##           ||####    ||  ##  ~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    ~    /     \  /  \        ####       ##   ####       #### ~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~    /    /\  /    \  ' .  #### ##   ####   ##   ##   #### ~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~    ~~~              /  \               ## ####  #### ##||  ####   ## ~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~   /\   /\  /    \        .     || ####   ## ####   #### ##|| ~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~      /  \ /  \    /\                   ##    || ####    ## #### ~~~~~~~~~
@@ -123,11 +123,11 @@ def midgard_npc(data, stat):
     # (67, 46)
     # (39, 49)
     # (66, 56)
-    # (51, 60)
     # (68, 71)
     coords = data[2], data[3]
     xp = data[0]
 
+    # Laard
     if coords == (8, 59):
         if stat[8] == 1: return {
                 7: [0, "En clair, j'aimerais que tu elimines Gardim. La paye sera bonne."],
@@ -146,7 +146,7 @@ def midgard_npc(data, stat):
             if xp < 7: 
                 return [0, "Gardim, capitaine du Mantree [IL DESIGNA UN DRAKKAR]"]
             elif xp == 7:
-                return [5, 2, 7, 7, 30], "Gardim", 3
+                return [5, 2, 7, 7, 30], "Gardim", 3, 1
             else: return {
                     "base": [0, "[A VOS PIEDS S'ETEND LE CORPS FROID DE GARDIM.]"]
                 }
@@ -158,6 +158,17 @@ def midgard_npc(data, stat):
                     2: [-2, "Hum, vous avez regarde du cote de la petite maison tout a l'ouest ? Un bon ami a moi, Laard est souvent a cote."],
                     3: [-3, "Dans ce cas... Bonne journee !"],
             }
+
+    # Lithy
+    elif coords == (66, 56):
+        return {
+            "base": [0, "Bonjour, je suis Lithy."],
+            27: [0, "Les morts au combat sont repartis entre les Ases et les Vanes. Tot ou tard tu devras choisir ton camp et renier l'autre.\n1. Sur quel critere les morts sont-ils repartis ?\n2. Freyr m'a dit que je derangeais... ?", 2],
+                28: [-1, "Les combattans morts lors d'attaques reviennent en general a Odin alors que ceux qui sont morts pour defendre leurs biens sont plutot l'apanage des Vanes."],
+            29: [0, "Votre position vous situe entre Ases et Vanes, a la veille d'une guerre comme celle-ci, les Vanes comme les Ases redoutent les informateurs caches. Vous allez devoir afficher clairement votre camp.\n1. Je suis oblige de choisir ?\n2. Comment je peux choisir ?", 2],
+                30: [-1, "Oui, ne serait-ce que parce qu'Odin n'acceptera jamais le doute : il vous fera tuer."],
+                31: [0, "Allez voir Freyja ou Odin. C'est aussi simple. Et ne vous retournez pas."]
+        }
 
 
 
@@ -246,7 +257,7 @@ def h_26_npc(data, stat):
                 "base": [0, "Ui hips ?"],
                 4: [0, "Hey toi ! J'ai besoin de toi.\n1. Je ne crois pas, bonne journee.\n2. Je vous ecoute.", 2],
                     5: [-1, "Tu ne sais pas ce que tu rates l'ami."],
-                    6: [1, "Bien. Tu vas aller au sud ouest, au fond d'un bois, il y a trois maisons. Je sais que l'une d'elle mene a Niflheim. Trouve un esprit du nom d'Asufaih et donne-lui ce mot. [L'HOMME VOUS DONNE UNE LETTRE CACHETEE D'UN SCEAU DE CIRE NOIRE.].", 0, (8, 2)],
+                    6: [1, "Bien. Tu vas aller au sud ouest, au fond d'un bois, il y a trois maisons. Je sais que l'une d'elle mene a Niflheim. Trouve un esprit du nom d'Asufaith et donne-lui ce mot. [L'HOMME VOUS DONNE UNE LETTRE CACHETEE D'UN SCEAU DE CIRE NOIRE.].", 0, (8, 2)],
             }
 
 

@@ -66,10 +66,10 @@ def npc(data, stat):
 
         if issue == 0:
             stat[1] += event[2]
-            if sum(stat[2][:-1]) >= 200: return [1, "Vous avez gagne le combat. [+{}PO]".format(event[2])]
+            if sum(stat[2][:-1]) >= 200: return [event[3], "Vous avez gagne le combat. [+{}PO]".format(event[2])]
             
             print_text("Vous avez gagne le combat. [+{}PO]".format(event[2]))
-            data[0] += 1
+            data[0] += event[3]
             choice = 0
             while not choice:
                 print("<o> Amelioration  <o>")
@@ -341,20 +341,18 @@ def sleep(data, stat):
     sleep_hours = 0
     while not sleep_hours:
         print("Combien d'heure\nvoulez-vous dormir ?")
-        sleep_hours = input(">")
-        try: sleep_hours = int(sleep_hours) % 24
-        except: sleep_hours = 0
+        sleep_hours = get_input() % 25
         if sleep_hours < 0: sleep_hours = 0
 
     stat[4] += sleep_hours * 60
-    stat[0] += sleep_hours
-    stat[2][4] += sleep_hours // 2
+    if stat[0] < 100: stat[0] += sleep_hours
+    if stat[2][4] < 50: stat[2][4] += sleep_hours // 2
 
 
     # If the player is at home
     if data[1] == 27:
         if stat[0] < 100: stat[0] += 5 * sleep_hours
-        stat[2][4] += sleep_hours // 2
+        if stat[2][4] < 50: stat[2][4] += sleep_hours // 2
 
     print_text("Vous vous reposez.")
 
@@ -408,10 +406,15 @@ def idk(stat=None, data=None):
         elif player_class == 5:
             stat = [10, 5, 5, 5, 5]
 
-        stat = [100, 1000, stat, [0, 0], 360, name, player_class - 1, [], 0, -1]
+        stat = [100, 10, stat, [0, 0], 360, name, player_class - 1, [], 0, -1]
         if player_class == 4:
             stat[7].append((1, 1))
         data = [0, 3, 44, 66]
+
+        print_text("Au alentour du Ve siecle, quelque part en Scandinavie. La bataille prenait place dans un champ saccage, et la nuit etait tombee depuis quelques heures lorsque l'assaut debuta.")
+        print_text("Hache levee, a la seule lueur de la pleine lune, {0} et sa division se jeterent sur le camp adverse, mais, pris a revers, le combat tourna vite a la defaveur des assaillants qui furent reduit sans autres difficultes.".format(name))
+        print_text("Blesse a plusieurs endroit, {0} se trainait sur le sol, tentant de se refugier dans la nuit lorsqu'une forme humaine portant un espadon dans le dos et une lourde armure d'argent s'arreta devant lui. La Valkyrie prit {0} dans ses bras. Une lueur aveuglante le forca a fermer les yeux et Vahalla lui apparu.".format(name))
+        print_text("Mais Odin avait d'autres plan pour {0} qu'une retraite parmi les meilleurs guerriers, et il le renvoya dans le vaste monde avec cet ultimatum : si il trouve la voie jusqu'a Asgard et le Valaskjalf, Odin conscent a le garder a son service, sinon il sera condamne a errer dans le monde sans jamais trouver le repos.".format(name))
 
     else:
         stat.append(-1)

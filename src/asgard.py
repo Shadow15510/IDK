@@ -37,7 +37,7 @@ asgard = (r"""
  ######   /o\   ~~~                           *       /-\   /Noatun\           |   |~~              ###                      |_|     _     ~~/\ /     
   ####    |_|    ~~~~~~~~~~~~~~~~~                          |_/^^\_|     ###   |   |~~~~~~         #####              #####         /o\   ~~/  \      
    ||               ~~~~~~~~~~~~~~~~~~~~~~   |   |                      #####      |   ~~~~~        ###     ###     #########       |_|  ~~/    \   /\
- ##     ___________                  ~~~~~~~~|   |       *               ###      *      ~~~~~      /-\    ##### _  #Landivi#            ~/      \ /  
+ ##     ___________                  ~~~~~~~~|   |       *               ###      *      ~~~~~      /-\    ##### _  #Landvidi#           ~/      \ /  
 ####   /Breidablik \  *                     ~|   |~~~~                   /-\                ~~~~~~          ### /o\ #########          ~~~        /   
 #####  |o|o|o|o|o|o|    ###                  |   | ~~~~~~~~~~~~~                                ~~~~~~      /-\ |_|   #####          ~~~~ /\     /    
 ##### /_____________\  #####   ###   ###                    ~~~~~~~~~~~~                        ~~~~~~~~               |^|  _      ~~~~~ /  \     /\  
@@ -122,7 +122,39 @@ def asgard_npc(data, stat):
     # * : ( 46, 65)
     # * : ( 16, 71)
     # * : (138, 71)
-    pass
+    if coords == (34, 7):
+        if stat[8] == 4:
+            if xp == 20: return [5, 3, 10, 12, 70], "Hargduf", 10, 1
+            elif xp == 21: return [0, "[VOUS REGARDEZ LE CADAVRE D'HARGDUF. UNE FLAQUE DE SANG NOIR S'ETEND DEJA SOUS LUI.]"]
+    elif coords == (121, 21):
+        if stat[8] == 3: return {
+            21: [0, "Alors ?"],
+            25: [1, "Je savais que je pouvais compter sur toi ! Cela n'a rien a voir, mais j'ai entendu dire que Freyr cherche un certains {}, tu le connais ? [+15 PO]".format(stat[5]), 0, (1, 15), (8, -3)]
+        }
+        
+        else: return {
+            "base": [0, "Daric, je peux vous aider ?"],
+            16: [0, "J'ai besoin d'un coup de main.\n1. Je vous ecoute.\n2. Desole.", 2],
+                17: [2, "Cela fait plusieurs fois deja qu'Egel, mon voisin, s'introduit dans mon jardin. Je n'arrive pas a lui faire entendre raison.\n1. Qu'attendez-vous de moi ?\n2. Cela ne m'interesse pas, bonne journee.", 2],
+                    19: [2, "On m'a dit que le dieu de la Justice pouvait m'aider, mais il ne m'ecoutera jamais. Tu peux interceder en ma faveur ?", 0, (8, 3)],
+                    20: [-4, "Dans ce cas..."],
+                18: [-2, "Cela ne fait rien."],
+        }
+
+    elif coords == (117, 32):
+        if stat[8] == 4: return {
+
+        }
+
+        else: return {
+            "base": [0, "Bonjour, je suis Theldis."],
+            16: [0, "C'est un peu delicat... J'ai un different avec quelqu'un qui m'a fait une offense. Depuis je prie Vidar de me venir en aide, mais il ne semble pas tres concerne. Tu peux aller le voir pour moi ?\n1. Euh, non ?\n2. Je vais voir ce que je peux faire.", 2],
+                17: [-1, "Je pense que tu devrais prier aussi. Pour que Vidar continue ne m'entendre pas !"],
+                18: [1, "Ooh, merci beaucoup ! On peut le trouver autour de Landvidi", 0, (8, 4)],
+            19: [0, "Alors ?"],
+            22: [4, "Je savais que je pouvais te faire confiance. Je n'ai pas d'argent a te donner, mais si cela peut t'aider : plusieurs dieux ont le don de voyance, et meme certains mages. Gullveig en fait partie. Avant que j'oublie, Freyr te demande.", 0, (8, -4)]
+        }
+
 
 def asgard_po(coords):
     if coords == (120, 26): return [0, "De hautes montagnes vous entourent de toutes part. Taillees dans la roche enneigee, les marches de l'escalier qui mene a Valaskjalf se decoupent nettement. La grande demeure d'Odin et son toit d'argent domine les environs."]
@@ -153,7 +185,16 @@ def h_9_npc(data, stat):
     coords = data[2], data[3]
     xp = data[0]
 
-    if coords == (19, 4): return {
+    if coords == (19, 4):
+        if stat[8] == 3: return {
+            "base": [0, "Forseti, fils de Baldr et Nanna, dieu de la Justice. Tu as besoin de moi ?"],
+            21: [0, "Oui, je suis bien Forseti, dieu de la Justice. Hum, je conscent a aider Daric. Mais en echange, j'ai une faveur a te demander. La guerre qui couve n'est pas fondee, il faut l'empecher. Je ne te demande rien de plus.\n1. D'accord mais comment faire ?\n2. Je ferais mon possible.\n3. J'ai d'autres engagements a tenir.", 3],
+                22: [-1, "Eh bien, c'est la que commence ton travail je pense. Plusieurs dieux ont le don de voyance ou peuvent t'apprendre des choses."],
+                23: [2, "Merci ! Tu pourras dire a Daric que je m'occupe de son affaire de suite."],
+                24: [1, "Je comprends, mais permet-moi d'insister. Tu n'a aucune dette envers Odin."],
+        }
+
+        else: return {
             "base": [0, "Forseti, fils de Baldr et Nanna, dieu de la Justice. Tu as besoin de moi ?"]
         }
 
@@ -202,7 +243,22 @@ def h_10_npc(data, stat):
         else: return {
             "base": [0, "Je suis Odin, Roi des Ases, dieux de la Guerre."],
             1: [0, "Deja revenu !?"],
-            3: [1, "Bon travail. Tu peux garder la dague, une guerre se prepare, ce serait bete de mourrir deux fois quand meme ? [UN SOURIRE PASSA SUR LES LEVRES D'ODIN] Jadis Freyja m'enseigna la magie et l'astrologie. [ODIN SE FIT PENSIF. IL SE RETROURNA VERS VOUS BRUTALEMENT] Je te ferais savoir mes instructions en temps voulu. Je crois qu'il te reste quelques mondes a decouvrir."]
+            3: [1, "Bon travail. Tu peux garder la dague, une guerre se prepare, ce serait bete de mourrir deux fois quand meme ? [UN SOURIRE PASSA SUR LES LEVRES D'ODIN] Jadis Freyja m'enseigna la magie et l'astrologie. [ODIN SE FIT PENSIF. IL SE RETROURNA VERS VOUS BRUTALEMENT] Je te ferais savoir mes instructions en temps voulu. Je crois qu'il te reste quelques mondes a decouvrir."],
+            4: [3, "Deja revenu ?\n1. Euh, non, pas encore.\n2. Oui !", 2],
+                8: [-4, "Reviens quand tu auras fini."],
+
+            9: [0, "Bien. Les Vanes ont refuse ma treve, je vais frapper ! Et pour cela j'ai besoin de toi.\n1. Certainement pas !\n2. J'en suis.", 2],
+                10: [-1, "[LE REGARD D'ODIN CHANGEA. VOUS FAITES UN PAS EN ARRIERE, MAIS IL EST TROP TARD : ODIN SE JETTE SUR VOUS ET VOUS DEPECE A MAINS NUES.]", 0, (0, -stat[0] * 2)],
+                11: [0, "{}, tu vas trouver Gullveig, et tu vas la tuer.\n1. Pourquoi faire ?\n2. Je pars sur-le-champ.".format(stat[5]), 2],
+                    12: [2, "Gullveig est une magicienne creee par les Vanes pour semer la decadence parmi nos rangs. Elle distille son poison dans les veines de mes guerriers, c'est une epine dans notre pied. Trouve-la, ou qu'elle se cache, et debarasse-nous de cette maudite creature."],
+                    13: [1, "C'est ce que je voulais entendre."],
+                14: [0, "Mes espions m'ont indique sa presence vers Jotunheim"],
+
+            15: [1, "Morte !? Je ne te crois pas, mes informateurs l'ont vue, et elle va tres bien ! Mais cela ne fait rien : c'est symbolique. Je veux frapper les Vanes et maintenant ils veulent un tribut pour Gullveig. J'ai besoin de m'entretenir avec les Ases. Je te donne quartier libre jusqu'a la fin de nos discussions."],
+
+            31: [0, "[A VOTRE ENTREE ODIN SE RETOURNA BRUTALEMENT] Ah ! {} ! Tu as fait le bon choix !\n1. Hum, je n'ai pas encore accepte.\n2. Je suis des votres !".format(stat[5]), 2],
+                32: [-1, "Decide-toi vite ! Cette guerre ne t'attendra pas..."],
+                33: [2, "Ca, c'est un choix strategique !"]
         }
 
 
@@ -340,8 +396,19 @@ h_15 = (r"""
     (14, 14, 0, 120, 41)) # * : (10, 6)
 
 def h_15_npc(data, stat):
-    pass
+    coords = data[2], data[3]
 
+    if coords == (10, 6):
+        if stat[8] == 4: return {
+            "base": [0, "Vidar, dieu de la vengeance et du silence. Besoin de faire taire quelqu'un ?"],
+            19: [1, "Hum, j'accepte de réaliser votre vengeance, mais j'ai une condition : vous devrez vous charger d'une autre vengeance. Allez dans les montagnes au nord-est, trouvez Hargduf, c'est un orc, vous ne pouvez pas le louper. Eliminez-le."],
+            20: [0, "Si tu veux que justice soit faite, va tuer cet orc."],
+            21: [1, "Bon travail."]
+        }
+        else: return {
+            "base": [0, "Les taillis croissent\nEt l'herbe haute\nDans la foret du pays de Vidarr\nEt la, le fils intrepide\nDescendra de cheval\nPour venger son pere."],
+
+        }
 
 
 
