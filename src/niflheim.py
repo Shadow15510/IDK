@@ -97,7 +97,8 @@ def niflheim_npc(data, stat):
 
     if coords == (57, 31):
         if stat[8] == 2: return {
-                7: [1, "Oui ? [VOUS LUI DONNEZ LA LETTRE, L'ESPRIT VOUS REGARDA SANS PARAITRE ETONNE ET S'EN EMPARA.] Notre... Ami commun vous envoie de loin. [SUR CES MOTS L'ESPRIT SE RETOURNA ET TRAVERSA LE SOL DE TERRE, VOUS LAISSANT DESEMPARE.]"],
+            "base": [0, "[VOUS REGARDEZ LE SOL SANS COMPRENDRE.]"],
+                7: [1, "Asufaith, besoin de quelque chose ? [VOUS LUI DONNEZ LA LETTRE, L'ESPRIT VOUS REGARDA SANS PARAITRE ETONNE ET S'EN EMPARA.] Notre... Ami commun vous envoie de loin. [SUR CES MOTS L'ESPRIT SE RETOURNA ET TRAVERSA LE SOL DE TERRE, VOUS LAISSANT DESEMPARE.]"],
         }
 
 

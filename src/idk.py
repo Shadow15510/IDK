@@ -35,6 +35,8 @@ maps = (
 
 # Asci functions
 def npc(data, stat):
+    from random import choice
+    
     npc_data = (
     asgard_npc,
     vanaheim_npc,
@@ -59,7 +61,8 @@ def npc(data, stat):
     event = npc_data[data[1]](data, stat)
 
     if not event:
-        return [0, "Hmm ?"]
+        msg = ("Hmm ?", "Besoin de quelque chose ?", "Vous cherchez quelqu'un ?", "Vous etes... ?", "Oui ?")
+        return [0, choice(msg)]
 
     elif type(event) == tuple:
         issue = fight(stat, event[0], event[1])
