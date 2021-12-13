@@ -189,9 +189,9 @@ def h_9_npc(data, stat):
         if stat[8] == 3: return {
             "base": [0, "Forseti, fils de Baldr et Nanna, dieu de la Justice. Tu as besoin de moi ?"],
             21: [0, "Oui, je suis bien Forseti, dieu de la Justice. Hum, je conscent a aider Daric. Mais en echange, j'ai une faveur a te demander. La guerre qui couve n'est pas fondee, il faut l'empecher. Je ne te demande rien de plus.\n1. D'accord mais comment faire ?\n2. Je ferais mon possible.\n3. J'ai d'autres engagements a tenir.", 3],
-                22: [-1, "Eh bien, c'est la que commence ton travail je pense. Plusieurs dieux ont le don de voyance ou peuvent t'apprendre des choses."],
+                22: [-1, "Eh bien, c'est la que commence ton travail je pense."],
                 23: [2, "Merci ! Tu pourras dire a Daric que je m'occupe de son affaire de suite."],
-                24: [1, "Je comprends, mais permet-moi d'insister. Tu n'a aucune dette envers Odin."],
+                24: [1, "Je comprends."],
         }
 
         else: return {
@@ -258,7 +258,13 @@ def h_10_npc(data, stat):
 
             31: [0, "[A VOTRE ENTREE ODIN SE RETOURNA BRUTALEMENT] Ah ! {} ! Tu as fait le bon choix !\n1. Hum, je n'ai pas encore accepte.\n2. Je suis des votres !".format(stat[5]), 2],
                 32: [-1, "Decide-toi vite ! Cette guerre ne t'attendra pas..."],
-                33: [2, "Ca, c'est un choix strategique !"]
+                33: [2, "Ca, c'est un choix strategique !"],
+
+            90: [0, "Tient donc ! Cela fait longtemps que je n'avais pas vu ta face, traitre !\n1. Freyja m'a demande de vous transmettre ce message.\n2. Espece de vieux barbu borgne !", 2],
+                91: [3, "[ODIN VOUS ARRACHA LE PARCHEMIN DES DOIGTS.] Ah ! Une treve ? Hum. Soit."],
+                92: [-2, "Que croyais-tu ? [ODIN S'AVANCE VERS VOUS CALMEMENT.] C'est moi qui t'ai redonne la vie... Et je peux la reprendre. [UN FROID IMMENSE EMPLIT VOTRE POITRINE, VOUS NE PARVENEZ PLUS A RESPIRER, VOUS VOUS EFFONDREZ, FACE CONTRE TERRE, MORT.]", 0, (1, -(2 * stat[0]))],
+            
+            100: [2, "[VOUS TENDEZ LA TETE A ODIN.] Les conseils de Mimir ne vous auront pas servit tres longtemps... [ODIN PRIT LA TETE DANS SES MAINS, UNE INTENSE LUMIERE LES PARCOURUS ET LORSQUE LA LUMINOSITE REVIENT A UN NIVEAU SOUTENABLE, LA TETE AVAIT RETROUVE LA VIE.]"]
         }
 
 

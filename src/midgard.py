@@ -127,6 +127,12 @@ def midgard_npc(data, stat):
     coords = data[2], data[3]
     xp = data[0]
 
+    if coords == (67, 46):
+        return {
+            "base": ["Hmm ?"],
+            96: [2, "[ODIN ET FREYJA S'AVANCERENT SOUS LES COLONNES ET CRACHERENT DANS UNE CUVE. UNE EPAISSE FUMMEE S'ELEVA DE CETTE DERNIERE ET LAISSA APPARAITRE UN CORPS EN DISPARAISSANT, 'KVASIR' DIT FREYJA EN MONTRANT LE NOUVEAU DIEU. EN GUISE D'ACCORD DE PAIX, LES ASES DONNERENT MIMIR ET HOENIR TANDIS QUE LES VANES CEDERNT NJORD, FREYR ET KVASIR. FRYEYJA SE PENCHA VERS VOUS.] {}, je te rejoint a Vanaheim.".format(stat[5])]
+        }
+
     # Laard
     if coords == (8, 59):
         if stat[8] == 1: return {
@@ -169,6 +175,30 @@ def midgard_npc(data, stat):
                 30: [-1, "Oui, ne serait-ce que parce qu'Odin n'acceptera jamais le doute : il vous fera tuer."],
                 31: [0, "Allez voir Freyja ou Odin. C'est aussi simple. Et ne vous retournez pas."]
         }
+
+    elif coords == (68, 71):
+        return {
+            "base": "Hmm ?",
+            42: [0, "Occupez-vous de l'interieur, je me charge du parc !"],
+            44: [0, "[UTARG SE RETOURNA VERS VOUS, SA DIVSION DERRIERE LUI.] Allez voir Freyja pour lui annoncer la nouvelle. Mes hommes, et moi restons ici en garnison. Avant que vous ne partiez... J'ai trouve des runes graves dans la parois. [UTARG VOUS TENDIT UN CROQUIS DES RUNES]"]
+        }
+
+    # Charrette
+    elif coords == (39, 49):
+        if stat[9] == -1 or data[0] == stat[9]:
+            stat[9] = data[0]
+            return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Vanaheim\n2. Asgard\n3. Nidavellir\n4. Niflheim", 4]
+
+        else:
+            destinations = ("Vanaheim", "Asgard", "Nidavellir", "Niflheim")
+            dest_coords = ((1, 54, 29), (0, 126, 71), (6, 93, 8), (4, 78, 19))
+            for i in range(1, 5):
+                if data[0] == stat[9] + i:
+                    stat[9] = -1
+                    if stat[1] < 5: return [-i, "Je ne travaille pas gratuitement."]
+                    else:
+                        data[1], data[2], data[3] = dest_coords[i - 1][0], dest_coords[i - 1][1], dest_coords[i - 1][2]
+                        return [-i, "C'est parti pour {} !".format(destinations[i - 1]), 0, (1, -5)]  
 
 
 
@@ -259,9 +289,6 @@ def h_26_npc(data, stat):
                     5: [-1, "Tu ne sais pas ce que tu rates l'ami."],
                     6: [1, "Bien. Tu vas aller au sud ouest, au fond d'un bois, il y a trois maisons. Je sais que l'une d'elle mene a Niflheim. Trouve un esprit du nom d'Asufaith et donne-lui ce mot. [L'HOMME VOUS DONNE UNE LETTRE CACHETEE D'UN SCEAU DE CIRE NOIRE.].", 0, (8, 2)],
             }
-
-
-
     
     else: return [0, "Ui hips ?"]
 
@@ -316,4 +343,7 @@ h_28 = (r"""
     (25, 14, 3, 61, 69)) # * : (27, 6)
 
 def h_28_npc(data, stat):
-    pass
+    coords == data[2], data[3]
+
+    if coords == (27, 6):
+        if xp == 42: return [10, 10, 10, 10, 100], "Soldat Ase", 10, 2

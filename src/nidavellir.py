@@ -109,7 +109,14 @@ def nidavellir_po(coords):
     elif coords == (66, 58): return [0, "Coupee en deux par le fleuve, la chaine de montagne semble s'etendre a l'infini. De toute part le meme paysage rocailleux. Le terrain est si inhospitalier que les nains eux-meme restent dans leurs mines."]
 
 def nidavellir_npc(data, stat):
-    pass
+    coords = data[2], data[3]
+
+    if coords == (25, 31):
+        return {
+            "base": [0, "Skirnir, messager de Freyr..."],
+            68: [0, "Skirnir, messager de Freyr...\n1. J'ai un message pour vous", 1],
+            69: [1, "[VOUS TENDEZ LE PARCHEMIN MODIFIE A SKIRNIR] Je vais de ce pas transmettre ce message aux Ases. Nous allons attirer les Ases dans un piege dans une tour de guet de Svartalfheim. Il ne doit pas y avoir beaucoup de soldats Ases present. Tu rendras directement compte a Freyja. Avant que tu ne partes, achetes-toi un equimement digne de ce nom. [+30 PO]", 0, (1, 30)],
+        }
 
 
 

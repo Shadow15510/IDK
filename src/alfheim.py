@@ -121,7 +121,20 @@ h_23 = (r"""
 	(25, 19, 2, 34, 16)) # * : (23, 5)
 
 def h_23_npc(data, stat):
-	pass
+    coords = data[2], data[3]
+
+    if coords == (23, 5):
+        return {
+            "base": [0, "Bonjour... ?"],
+            44: [0, "Je suis Sagriel, alfe claire. Je peux t'aider ?\n1. Oui, je voulais connaitre la signification de ces runes.\n2. Non, rien, excusez-moi...", 2],
+                45: [1, "[VOUS TENDEZ LE CROQUIS D'UTARG À SAGRIEL] Hum, ces runes sont celles d'Odin. Il s'interesse de tres pres a cela. Je peux vous les traduire contre un service.\n1. Lequel ?\n2. Je trouverais quelqu'un d'autre.", 2],
+                46: [-2, "Eh bien revenez quand vous vous serez decide alors..."],
+
+            47: [3, "J'ai besoin d'une potion d'eternelle jeunesse, Gullveig en vend pour 10 pieces d'or. [+10 PO]", 0, (1, 10)],
+            48: [-4, "A bientot alors."],
+
+            54: [2, "Si j'en crois ce qui est note, cela veut dire : 'kvasir'."]
+        }
 
 
 

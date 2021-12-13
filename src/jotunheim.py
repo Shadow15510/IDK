@@ -43,7 +43,7 @@ jotunheim = (r"""
      /\ /    \    \  /\ /      \        /      \                          ______      /      \  / \  /  \_   /     \   /\   ~
     /  \      \    \/  \               /________\                        /      \    /________\ |_| /     \ /       \ /  \_ ~
    /    \    _     /    \              |        |    _______________    /________\   |<o>  <o>|    /       \         /     \ 
-  / /\   \  / \   /      \             | o o o o|   /               \   | []  [] |   |   _    |     /\       /\     / /\    \
+  / /\   \  / \   /      \             | o o o o|   /    Utgard     \   | []  [] |   |   _    |     /\       /\     / /\    \
    /  \     |_|                   *    |________|  / ()  ()   ()  () \  |        |   |__|^|___|    /  \_    /  \_    /  \_   
   /    \  /\                                      /___________________\ |________|                /  _  \  /     \  /     \  
  /      \/  \                  ______             |_/   \_/   \_/   \_|                          /  / \  \/  /\   \/       \ 
@@ -76,9 +76,9 @@ jotunheim = (r"""
 ~~~~~  ~~~~~~~~             /-\          |   |               ~~~~~~~~~~~~~~~~~  |    ##  ##  ###       |--| ##   ####   ##   
 ~~~~  ~~~~~~~~~~~~~~~~~                 *|___|        ~~~~~~~~~~~~~~~~          |   #### || #####   ##     ####  |--|  ####  
 ~~~~~~~~~~~~~~~~~~~~~~~~~~                        ~~~~~~~~~~~~~       ##    ##  |    ##     #####  ####   ###### |--| ###### 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      ~~~~~~~~~~~~~~~~~~~    ##       ####  #### |    ||      ###  ###### ########    ########
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  |     ####   ##  /\    /\  |        ### |_| ######## ######      ###### 
-~~~~~~~~~~~~~~~~~~~~      # ~~~~~~~~~~~              |      /\   ####           |  ##   #####     ######   ####        ####  
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     |~~~~~~~~~~~~~~~~~~~    ##       ####  #### |    ||      ###  ###### ########    ########
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|  |~~~~~~~~~~~~~~  |     ####   ##  /\    /\  |        ### |_| ######## ######      ###### 
+~~~~~~~~~~~~~~~~~~~~      # ~~~~~|  |~~              |      /\   ####           |  ##   #####     ######   ####        ####  
 ~~~~~~~~~~~~~~           ###              #       |==|   ()       /\   ()       | ####  #####      ####    |--|  ##    |--|  
 ~~~~~~~~~               #####            ###      |     /__\    __    /__\      |  ##    ###       |--|    |--| ####   |--|  
 ~~~~~~      #            ###     #      #####     |     |  |___/()\___|  |      |  ||    |_|       |--|        ######        
@@ -131,7 +131,7 @@ jotunheim = (r"""
 	(29, 11, 31, 19, 14),
 	(88, 25, 32, 14, 24),
 	(89, 45, 33, 30, 24),
-	(60, 50, 34, 34, 29), # Palais de Thrym
+	(60, 50, 34, 34, 29), # Utgard
 	(64, 85, 35, 24, 19), # Manoir du sud (1/2)
 	(65, 85, 35, 25, 19), # Manoir du sud (2/2)
 	(23, 88, 36, 19, 14), # Auberge
@@ -157,7 +157,15 @@ def jotunheim_po(coords):
     elif coords == (60, 86): return [0, "Un imposant manoir se tient devant vous, flanque de deux tours surmontees de domes en ardoise brillantes, l'ensemble est perce de multiples et larges ouvertures. Le parc autour se compose de quelques arbres et est delimite au nord par le fleuve."]
 
 def jotunheim_npc(data, stat):
-    pass
+    coords = data[2], data[3]
+
+    # Utarg
+    if coords == (34, 56): return {
+        "base": [0, "Utarg, pour vous servir."],
+        36: [0, "Utarg, vous me cherchiez ?\n1. Oui, Thrym m'a demande de vous donner ceci [VOUS LUI DONNEZ LA LETTRE].\n2. Quelles sont les relations entre les Geants et les Ases ?", 2],
+            37: [3, "[UTARG LIT LE BILLET.] Hum. Thrym me demande de detacher une garnison et de me rendre a Vanaheim. On se retrouve a l'auberge."],
+            38: [-2, "Plusieurs differents ont eloignes les Ases des Geants : meutres, enlevements, traitrises... Ce serait long a expliquer."]
+    }
 
 
 
@@ -292,7 +300,16 @@ h_34 = (r"""
     (34, 29, 5, 60, 50)) # * : (26, 6)
 
 def h_34_npc(data, stat):
-    pass
+    coords = data[2], data[3]
+
+    if coords == (26, 6):
+        if not (360 <= stat[4] <= 1200):
+            return [0, "Reviens quand il fera jour s'il te plait."]
+        else: return {
+            "base": [0, "Thyrm, roi des Geants. Bienvenue a Utgard."],
+            34: [0, "Bonjour, je suis Thyrm, bienvenue a Utgard.\n1. Freyja m'a charge de vous dire qu'Odin a declare la guerre aux Vanes.", 1],
+            35: [1, "De part le mariage entre Gerd et Freyr, nos liens avec les Vanes sont forts. Par respect pour eux et en souvenir de notre histoire mouvemente avec les Ases, j'accepte d'aider Freyja et les siens. [THRYM SAISIT UNE LETTRE ET GRIFONNA QUELQUES MOTS AVANT DE VOUS LA TENDRE.] En sortant dirige-toi vers Westri, vers la jetee, tu trouveras Utarg. Donne-lui ce mot."]
+        }
 
 
 
@@ -331,6 +348,12 @@ def h_35_npc(data, stat):
         elif xp == 15: return [0, "[VOUS REGARDEZ LA DEPOUILLE DESARTICULEE DE LA MAGICIENNE, ODIN SERA CONTENT.]"]
         else: return {
                 "base": [0, "Gullveig, magicienne Vane, pour te servir."],
+                44: [0, "Gullveig, magicienne Vane, besoin de quelque chose ?\n1. Pouvez-vous dechiffre ces runes pour moi ?\n2. Non, excusez-moi.", 2],
+                    45: [11, "Bien sur. [GULLVEIG REGARDA LE CROQUIS DES RUNES] Hum... je ne suis pas sure de ce que cela veut dire, si je traduit dans notre alphabet cela donne 'kvasir'."],
+                    46: [-2, "Reviens quand tu veux !"],
+                50: [0, "Ah {} ! Besoin de quelque chose ?\n1.C'est Sagriel qui m'envoie, elle a besoin d'une potion d'eternelle jeunesse.\n2. Non, rien, merci.".format(stat[5]), 2],
+                    51: [3, "Oui, bien sur ! [GULLVEIG VOUS TEND UNE FIOLE REMPLIE D'UN LIQUIDE AMBRE.]", 0, (1, -10)],
+                    52: [-2, "Reviens quand tu veux !"],
             }
         
 

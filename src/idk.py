@@ -61,7 +61,7 @@ def npc(data, stat):
     event = npc_data[data[1]](data, stat)
 
     if not event:
-        msg = ("Hmm ?", "Besoin de quelque chose ?", "Vous cherchez quelqu'un ?", "Vous etes... ?", "Oui ?")
+        msg = ("Hmm ?", "Besoin de quelque chose ?", "Vous cherchez quelqu'un ?", "Vous etes... ?", "Oui ?", "He ! Regarde ou tu vas.")
         return [0, choice(msg)]
 
     elif type(event) == tuple:
@@ -277,6 +277,7 @@ def fight(stat, opponent_stat, opponent_name):
 
 def misc_stat(data, stat):
     if data[1] < 9: place = ("Asgard", "Vanaheim", "Alfheim", "Midgard", "Niflheim", "Jotunheim", "Nidavellir", "Muspellheim", "Svartalfheim")[data[1]]
+    elif data[1] == 27: place = "chez vous"
     else: place =  "interieur"
     money, ticks, player_class = stat[1], stat[4], stat[6]
     
@@ -382,7 +383,7 @@ def spell(data, stat):
 
 
 events = {"*": npc, "?": point_of_interest}
-keys = {4: display_stat, 7: spell, 8:misc_stat, 6: inventory, 9: sleep}
+keys = {4: display_stat, 7: spell, 8: misc_stat, 6: inventory, 9: sleep}
 
 # Main function
 def idk(stat=None, data=None):
@@ -416,7 +417,7 @@ def idk(stat=None, data=None):
 
         print_text("Au alentour du Ve siecle, quelque part en Scandinavie. La bataille prenait place dans un champ saccage, et la nuit etait tombee depuis quelques heures lorsque l'assaut debuta.")
         print_text("Hache levee, a la seule lueur de la pleine lune, {0} et sa division se jeterent sur le camp adverse, mais, pris a revers, le combat tourna vite a la defaveur des assaillants qui furent reduit sans autres difficultes.".format(name))
-        print_text("Blesse a plusieurs endroit, {0} se trainait sur le sol, tentant de se refugier dans la nuit lorsqu'une forme humaine portant un espadon dans le dos et une lourde armure d'argent s'arreta devant lui. La Valkyrie prit {0} dans ses bras. Une lueur aveuglante le forca a fermer les yeux et Vahalla lui apparu.".format(name))
+        print_text("Blesse a plusieurs endroit, {0} se trainait sur le sol, tentant de se refugier dans la nuit lorsqu'une forme humaine portant un espadon dans le dos et une lourde armure d'argent s'arreta devant lui. La Valkyrie degaina son espadon et acheva {0} avant de l'emporter dans ses bras.".format(name))
         print_text("Mais Odin avait d'autres plan pour {0} qu'une retraite parmi les meilleurs guerriers, et il le renvoya dans le vaste monde avec cet ultimatum : si il trouve la voie jusqu'a Asgard et le Valaskjalf, Odin conscent a le garder a son service, sinon il sera condamne a errer dans le monde sans jamais trouver le repos.".format(name))
 
     else:
@@ -433,15 +434,21 @@ def idk(stat=None, data=None):
 
         # Player's class check
         if not (0 <= stat[6] <= 5):
-            raise ValueError("unknown player's class")
+            raise ValueError("classe du joueur inconnue")
+
+        if len(stat[5]) > 13:
+            raise ValueError("nom du joueur invalide")
 
     idk_game = Asci(maps, events, keys)
-    stat, data = idk_game.mainloop(100, stat, data, routine=routine, door="^_", walkable=".,`' ", exit_key="q")
+    stat, data = idk_game.mainloop(102, stat, data, routine=routine, door="^_", walkable=".,`' ", exit_key="q")
 
-    print("idk({0}, {1})".format(stat[:-1], data))
+    if data[0] == 102:
+        print_text("Ainsi s'acheva la premiere guerre du monde.")
+    else:
+        print("idk({0}, {1})".format(stat[:-1], data))
 
 
-# Misc function
+# Misc functions
 def get_input():
     string = input(">")
     try:

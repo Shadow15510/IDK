@@ -165,7 +165,17 @@ h_46 = (r"""
 ) # * : (13, 2) * : (13, 4)
 
 def h_46_npc(data, stat):
-	pass
+	coords = data[2], data[3]
+
+	if coords == (13, 2):
+		if data[0] in (70, 72): return [15, 20, 30, 30, 100], "Soldat Ase", 10, 2
+		elif data[0] == 74: return [0, "[LA DEPOUILLE SANGLANTE DU SOLDAT EST AFFALLEE SUR LE BANC. UNE MARE DE SANG COAGULE DEJA A SES PIEDS.]"]
+
+	if coords == (13, 4):
+		if data[0] in (70, 72): return [15, 20, 30, 30, 100], "Soldat Ase", 10, 2
+		elif data[0] == 74: return [0, "[DES MORCEAUX DE CORPS JONCHENT LE SOL ET LA TABLE.]"]
+
+
 
 
 
