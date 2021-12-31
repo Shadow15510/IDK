@@ -35,6 +35,8 @@ maps = (
 
 # Asci functions
 def npc(data, stat):
+    from random import choice
+    
     npc_data = (
     asgard_npc,
     vanaheim_npc,
@@ -59,17 +61,18 @@ def npc(data, stat):
     event = npc_data[data[1]](data, stat)
 
     if not event:
-        return [0, "Hmm ?"]
+        msg = ("Hmm ?", "Besoin de quelque chose ?", "Vous cherchez quelqu'un ?", "Vous etes... ?", "Oui ?", "He ! Regarde ou tu vas.")
+        return [0, choice(msg)]
 
     elif type(event) == tuple:
         issue = fight(stat, event[0], event[1])
 
         if issue == 0:
             stat[1] += event[2]
-            if sum(stat[2][:-1]) >= 200: return [1, "Vous avez gagne le combat. [+{}PO]".format(event[2])]
+            if sum(stat[2][:-1]) >= 200: return [event[3], "Vous avez gagne le combat. [+{}PO]".format(event[2])]
             
             print_text("Vous avez gagne le combat. [+{}PO]".format(event[2]))
-            data[0] += 1
+            data[0] += event[3]
             choice = 0
             while not choice:
                 print("<o> Amelioration  <o>")
@@ -121,6 +124,9 @@ def routine(data, stat):
     # Mana regeneration
     if stat[2][4] < stat[0] // 2 and not (stat[4] % 60):
         stat[2][4] += 1
+
+    if data[0] >= 48 and stat[8] == 2:
+        stat[8] = 0
 
 
 # Game mecanics
@@ -218,8 +224,6 @@ def fight(stat, opponent_stat, opponent_name):
     # player_stat = [vitesse, agilité, attaque, défense]
     player_stat = [stat[2][0], stat[2][1], stat[2][2] + stat[3][0] * 5, stat[2][3] + stat[3][1] * 5]
 
-    player = opponent = 0
-
     end = False
     while not end:
         choice = 0
@@ -250,9 +254,14 @@ def fight(stat, opponent_stat, opponent_name):
                 choice = 0
 
         # Who start
-        while player == opponent:
-            player = stat_test(player_stat, 0)[1]
-            opponent = stat_test(opponent_stat[:-1], 0)[1]
+        player = opponent = False
+        while player == False and opponent == False:
+            player = stat_test(player_stat, 0)[0]
+            opponent = stat_test(opponent_stat[:-1], 0)[0]
+
+            if player == True and opponent == True:
+                if player_stat[0] < opponent_stat[0]: opponent = False
+                else: player = False
 
         # Fight
         if player > opponent:
@@ -274,6 +283,7 @@ def fight(stat, opponent_stat, opponent_name):
 
 def misc_stat(data, stat):
     if data[1] < 9: place = ("Asgard", "Vanaheim", "Alfheim", "Midgard", "Niflheim", "Jotunheim", "Nidavellir", "Muspellheim", "Svartalfheim")[data[1]]
+    elif data[1] == 27: place = "chez vous"
     else: place =  "interieur"
     money, ticks, player_class = stat[1], stat[4], stat[6]
     
@@ -334,29 +344,23 @@ def inventory(data, stat):
 
 
 def sleep(data, stat):
-    if 360 < stat[4] < 1140:
-        print_text("Vous ne pouvez pas dormir de jour.")
-        return
-
     sleep_hours = 0
     while not sleep_hours:
-        print("Combien d'heure\nvoulez-vous dormir ?")
-        sleep_hours = input(">")
-        try: sleep_hours = int(sleep_hours) % 24
-        except: sleep_hours = 0
+        print("Combien d'heures\nvoulez-vous dormir ?")
+        sleep_hours = get_input() % 25
         if sleep_hours < 0: sleep_hours = 0
 
     stat[4] += sleep_hours * 60
-    stat[0] += sleep_hours
-    stat[2][4] += sleep_hours // 2
+    if stat[0] < 100: stat[0] += sleep_hours
+    if stat[2][4] < 50: stat[2][4] += sleep_hours // 2
 
 
     # If the player is at home
     if data[1] == 27:
         if stat[0] < 100: stat[0] += 5 * sleep_hours
-        stat[2][4] += sleep_hours // 2
+        if stat[2][4] < 50: stat[2][4] += sleep_hours // 2
 
-    print_text("Vous vous reposez.")
+    print_text("Vous vous reposez {0} heure{1}.".format(sleep_hours, ("", "s")[sleep_hours > 1]))
 
 
 def spell(data, stat):
@@ -380,8 +384,16 @@ def spell(data, stat):
     input()
 
 
+def quick_save(data, stat):
+    data_copy = data[:]
+    data_copy[2] += 10
+    data_copy[3] += 3
+    print("idk({0}, {1})".format(stat[:-1], data_copy))
+    input()
+
+
 events = {"*": npc, "?": point_of_interest}
-keys = {4: display_stat, 7: spell, 8:misc_stat, 6: inventory, 9: sleep}
+keys = {4: display_stat, 7: spell, 8: misc_stat, 6: inventory, 9: sleep, "s": quick_save}
 
 # Main function
 def idk(stat=None, data=None):
@@ -427,15 +439,18 @@ def idk(stat=None, data=None):
 
         # Player's class check
         if not (0 <= stat[6] <= 5):
-            raise ValueError("unknown player's class")
+            raise ValueError("classe du joueur inconnue")
+
+        if len(stat[5]) > 13:
+            raise ValueError("nom du joueur trop long")
 
     idk_game = Asci(maps, events, keys)
-    stat, data = idk_game.mainloop(100, stat, data, routine=routine, door="^_", walkable=".,`' ", exit_key="q")
+    stat, data = idk_game.mainloop(102, stat, data, routine=routine, door="^_", walkable=".,`' ", exit_key="q")
 
     print("idk({0}, {1})".format(stat[:-1], data))
 
 
-# Misc function
+# Misc functions
 def get_input():
     string = input(">")
     try:

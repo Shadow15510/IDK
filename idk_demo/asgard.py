@@ -37,7 +37,7 @@ asgard = (r"""
  ######   /o\   ~~~                           *       /-\   /Noatun\           |   |~~              ###                      |_|     _     ~~/\ /     
   ####    |_|    ~~~~~~~~~~~~~~~~~                          |_/^^\_|     ###   |   |~~~~~~         #####              #####         /o\   ~~/  \      
    ||               ~~~~~~~~~~~~~~~~~~~~~~   |   |                      #####      |   ~~~~~        ###     ###     #########       |_|  ~~/    \   /\
- ##     ___________                  ~~~~~~~~|   |       *               ###      *      ~~~~~      /-\    ##### _  #Landivi#            ~/      \ /  
+ ##     ___________                  ~~~~~~~~|   |       *               ###      *      ~~~~~      /-\    ##### _  #Landvidi#           ~/      \ /  
 ####   /Breidablik \  *                     ~|   |~~~~                   /-\                ~~~~~~          ### /o\ #########          ~~~        /   
 #####  |o|o|o|o|o|o|    ###                  |   | ~~~~~~~~~~~~~                                ~~~~~~      /-\ |_|   #####          ~~~~ /\     /    
 ##### /_____________\  #####   ###   ###                    ~~~~~~~~~~~~                        ~~~~~~~~               |^|  _      ~~~~~ /  \     /\  
@@ -124,6 +124,7 @@ def asgard_npc(data, stat):
     # * : (138, 71)
     pass
 
+
 def asgard_po(coords):
     if coords == (120, 26): return [0, "De hautes montagnes vous entourent de toutes part. Taillees dans la roche enneigee, les marches de l'escalier qui mene a Valaskjalf se decoupent nettement. La grande demeure d'Odin et son toit d'argent domine les environs."]
     elif coords == (51, 55): return [0, "Tout autour de vous s'etend un riche jardin soigneusement entretenu. Dans l'alignement de l'allee nord, une fontaine complete l'ensemble. Une douce odeur de verdure emplit vos narines, l'ambiance est calme."] 
@@ -150,12 +151,7 @@ h_9 = (r"""
     (15, 13, 0, 30, 11)) # * : (19, 4)
 
 def h_9_npc(data, stat):
-    coords = data[2], data[3]
-    xp = data[0]
-
-    if coords == (19, 4): return {
-            "base": [0, "Forseti, fils de Baldr et Nanna, dieu de la Justice. Tu as besoin de moi ?"]
-        }
+    pass
 
 
 
@@ -191,10 +187,7 @@ h_10 = (r"""
     (30, 23, 0, 116, 14)) # * : (25, 11)
 
 def h_10_npc(data, stat):
-    coords = data[2], data[3]
-    xp = data[0]
-
-    return [0, "Je suis Odin, Roi des Ases, dieux de la Guerre."],
+    pass
 
 
 
@@ -332,7 +325,6 @@ h_15 = (r"""
 
 def h_15_npc(data, stat):
     pass
-
 
 
 

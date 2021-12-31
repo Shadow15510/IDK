@@ -88,10 +88,26 @@ alfheim = (r"""
 # * : (27; 54)
 
 def alfheim_po(coords):
-	if coords == (34, 20): return [0, "Quelques arbres au sud vous masque la vue. Au nord, l'imposant palais des Elfes et ses quatres colonnes finement travaillee s'offre a vous. La lourde porte a deux battants en bois massif et fer forge vous fait face. Au sud est, les bruits d'un bourg en pleine activite montent a vos oreilles."]
+	if coords == (34, 20): return [0, "Quelques arbres au sud vous masque la vue. Au nord, l'imposant palais des Elfes et ses quatres colonnes finement travaillee s'offrent a vous. La lourde porte a deux battants en bois massif et fer forge vous fait face. Au sud est, les bruits d'un bourg en pleine activite montent a vos oreilles."]
 
 def alfheim_npc(data, stat):
-    pass
+    coords = data[2], data[3]
+
+    if coords == (23, 17):
+        if stat[9] == -1 or data[0] == stat[9]:
+            stat[9] = data[0]
+            return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Midgard\n2. Asgard\n3. Vanaheim\n4. Svartalfheim", 4]
+
+        else:
+            destinations = ("Midgard", "Asgard", "Vanaheim", "Svartalfheim")
+            dest_coords = ((3, 10, 58), (0, 126, 71), (1, 28, 13), (8, 109, 66))
+            for i in range(1, 5):
+                if data[0] == stat[9] + i:
+                    stat[9] = -1
+                    if stat[1] < 5: return [-i, "Je ne travaille pas gratuitement."]
+                    else:
+                        data[1], data[2], data[3] = dest_coords[i - 1][0], dest_coords[i - 1][1], dest_coords[i - 1][2]
+                        return [-i, "C'est parti pour {} !".format(destinations[i - 1]), 0, (1, -5), (4, 60)] 
 
 
 
@@ -121,7 +137,7 @@ h_23 = (r"""
 	(25, 19, 2, 34, 16)) # * : (23, 5)
 
 def h_23_npc(data, stat):
-	pass
+    pass
 
 
 

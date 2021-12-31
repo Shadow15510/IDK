@@ -24,11 +24,11 @@ midgard = (r"""
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~        /\    #### ##||       ## #### ##|| ####   ## ####   ##  ~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~             /  \    ## ####        ||  ## ####  #### ##|| #### ##||   ~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~ ~~~~~     /    \   || ####    ?       || ####   ## ####   ## ####    ~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 ##                 ## ## || ####   || ####     ~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~   ~~~~          /\ ||                 ||####    ## ##     ##      ~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~       _/  \    /\          ##   ####    ||####    ||  ##  ~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    ~    /     \  /  \        ####   ##  ##   ####       #### ~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~    /    /\  /    \  ' .  #### ##|| ####   ##   ##   #### ~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 ##                 ##    || ####   || ####     ~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~   ~~~~          /\ ||                 ||        ## ##     ##      ~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~       _/  \    /\          ##           ||####    ||  ##  ~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    ~    /     \  /  \        ####       ##   ####       #### ~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~    /    /\  /    \  ' .  #### ##   ####   ##   ##   #### ~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~    ~~~              /  \               ## ####  #### ##||  ####   ## ~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~   /\   /\  /    \        .     || ####   ## ####   #### ##|| ~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~      /  \ /  \    /\                   ##    || ####    ## #### ~~~~~~~~~
@@ -123,21 +123,25 @@ def midgard_npc(data, stat):
     # (67, 46)
     # (39, 49)
     # (66, 56)
-    # (51, 60)
     # (68, 71)
     coords = data[2], data[3]
-    xp = data[0]
 
-    if coords == (8, 59):
-        return [0, "Laard, je suis marin de mon etat."]
+    # Charrette
+    if coords == (39, 49):
+        if stat[9] == -1 or data[0] == stat[9]:
+            stat[9] = data[0]
+            return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Vanaheim\n2. Asgard\n3. Nidavellir\n4. Niflheim", 4]
 
-    elif coords == (51, 60):
-        return {
-                0: [0, "Vous cherchez quelque chose ?\n1. Oui : Asgard.\n2. Je cherche Vanaheim.\n3. Non, tout va bien.", 3],
-                    1: [-1, "Vous devriez essayer au nord, en passant par la foret, a l'est."],
-                    2: [-2, "Hum, vous avez regarde du cote de la petite maison tout a l'ouest ? Un bon ami a moi, Laard est souvent a cote."],
-                    3: [-3, "Dans ce cas... Bonne journee !"],
-            }
+        else:
+            destinations = ("Vanaheim", "Asgard", "Nidavellir", "Niflheim")
+            dest_coords = ((1, 54, 29), (0, 126, 71), (6, 93, 8), (4, 78, 19))
+            for i in range(1, 5):
+                if data[0] == stat[9] + i:
+                    stat[9] = -1
+                    if stat[1] < 5: return [-i, "Je ne travaille pas gratuitement."]
+                    else:
+                        data[1], data[2], data[3] = dest_coords[i - 1][0], dest_coords[i - 1][1], dest_coords[i - 1][2]
+                        return [-i, "C'est parti pour {} !".format(destinations[i - 1]), 0, (1, -5), (4, 60)]  
 
 
 
@@ -215,7 +219,7 @@ def h_26_npc(data, stat):
             else:
                 stat[4] = 360
                 return [-2, "Suivez-moi, je vais vous montrer votre chambre. [VOUS SUIVEZ ROSAHIL DANS L'AUBERGE, LA NUIT PASSA.]", 0, (0, 10), (1, -10)]
-
+    
     else: return [0, "Ui hips ?"]
 
 

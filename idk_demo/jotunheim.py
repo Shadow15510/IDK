@@ -43,7 +43,7 @@ jotunheim = (r"""
      /\ /    \    \  /\ /      \        /      \                          ______      /      \  / \  /  \_   /     \   /\   ~
     /  \      \    \/  \               /________\                        /      \    /________\ |_| /     \ /       \ /  \_ ~
    /    \    _     /    \              |        |    _______________    /________\   |<o>  <o>|    /       \         /     \ 
-  / /\   \  / \   /      \             | o o o o|   /               \   | []  [] |   |   _    |     /\       /\     / /\    \
+  / /\   \  / \   /      \             | o o o o|   /    Utgard     \   | []  [] |   |   _    |     /\       /\     / /\    \
    /  \     |_|                   *    |________|  / ()  ()   ()  () \  |        |   |__|^|___|    /  \_    /  \_    /  \_   
   /    \  /\                                      /___________________\ |________|                /  _  \  /     \  /     \  
  /      \/  \                  ______             |_/   \_/   \_/   \_|                          /  / \  \/  /\   \/       \ 
@@ -76,9 +76,9 @@ jotunheim = (r"""
 ~~~~~  ~~~~~~~~             /-\          |   |               ~~~~~~~~~~~~~~~~~  |    ##  ##  ###       |--| ##   ####   ##   
 ~~~~  ~~~~~~~~~~~~~~~~~                 *|___|        ~~~~~~~~~~~~~~~~          |   #### || #####   ##     ####  |--|  ####  
 ~~~~~~~~~~~~~~~~~~~~~~~~~~                        ~~~~~~~~~~~~~       ##    ##  |    ##     #####  ####   ###### |--| ###### 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      ~~~~~~~~~~~~~~~~~~~    ##       ####  #### |    ||      ###  ###### ########    ########
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  |     ####   ##  /\    /\  |        ### |_| ######## ######      ###### 
-~~~~~~~~~~~~~~~~~~~~      # ~~~~~~~~~~~              |      /\   ####           |  ##   #####     ######   ####        ####  
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     |~~~~~~~~~~~~~~~~~~~    ##       ####  #### |    ||      ###  ###### ########    ########
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|  |~~~~~~~~~~~~~~  |     ####   ##  /\    /\  |        ### |_| ######## ######      ###### 
+~~~~~~~~~~~~~~~~~~~~      # ~~~~~|  |~~              |      /\   ####           |  ##   #####     ######   ####        ####  
 ~~~~~~~~~~~~~~           ###              #       |==|   ()       /\   ()       | ####  #####      ####    |--|  ##    |--|  
 ~~~~~~~~~               #####            ###      |     /__\    __    /__\      |  ##    ###       |--|    |--| ####   |--|  
 ~~~~~~      #            ###     #      #####     |     |  |___/()\___|  |      |  ||    |_|       |--|        ######        
@@ -131,7 +131,7 @@ jotunheim = (r"""
 	(29, 11, 31, 19, 14),
 	(88, 25, 32, 14, 24),
 	(89, 45, 33, 30, 24),
-	(60, 50, 34, 34, 29), # Palais de Thrym
+	(60, 50, 34, 34, 29), # Utgard
 	(64, 85, 35, 24, 19), # Manoir du sud (1/2)
 	(65, 85, 35, 25, 19), # Manoir du sud (2/2)
 	(23, 88, 36, 19, 14), # Auberge
@@ -154,7 +154,7 @@ jotunheim = (r"""
 def jotunheim_po(coords):
     if coords == (60, 57): return [0, "Un bruit de fontaine monte a vos oreilles. A travers les arbres, l'immense palais de Thrym se dresse. Les enormes colonnes qui entourent le batiments sont a elles seules des symboles de demesures. Aux alentours se dresse quelques maisons tout aussi imposantes et enorme, mais moins travaillee."]
     elif coords == (23, 70): return [0, "Face a la mer, sur une langue de terre, le phare se dresse, eclairant puissemment le large pour signaler l'estuaire."]
-    elif coords == (60, 86): return [0, "Un imposant manoir se tient devant vous, flanque de deux tours surmontes de domes en ardoise brillantes, l'ensemble est perce de multiples et larges ouvertures. Le parc autour se compose de quelques arbres et est delimite au nord par le fleuve."]
+    elif coords == (60, 86): return [0, "Un imposant manoir se tient devant vous, flanque de deux tours surmontees de domes en ardoise brillantes, l'ensemble est perce de multiples et larges ouvertures. Le parc autour se compose de quelques arbres et est delimite au nord par le fleuve."]
 
 def jotunheim_npc(data, stat):
     pass
@@ -319,11 +319,12 @@ h_35 = (r"""
 |                                                |
 |======================\  /======================|
 |==|/\|=|/\|=|/\|=|/\|=/^^\=|/\|=|/\|=|/\|=|/\|==|""",
-    (24, 19, 5, 0, 0),
-    (25, 19, 5, 0, 0)) # * : (17, 5)
+    (24, 19, 5, 64, 85),
+    (25, 19, 5, 65, 85)) # * : (17, 5)
 
 def h_35_npc(data, stat):
     pass
+        
 
 
 
