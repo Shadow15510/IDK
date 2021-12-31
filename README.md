@@ -10,7 +10,6 @@ Seule la version de démonstration est jouable à ce jour.
 
 La totalité du projet est sous licence GNU General Public Licence v3.0.
 
-
 ## Comment jouer ?
 
 ### Installation
@@ -31,6 +30,7 @@ Pour interagir, le joueur doit entrer le numéro ou la lettre correspondante pui
  - 6 : inventaire (arme et armure)
  - 9 : dormir (permet de passer le temps d'un certain nombre d'heure
  - q : quitter
+ - s : sauvegarde rapide (cela affiche le code de sauvegarde et continue le jeu)
 
 Lors de certains dialogues vous pourrez être amené à choisir une réponse parmi une liste, entrez alors le numéro de la réponse que vous voulez et validez avec [EXE]. Entrer aucun numéro fait quitter le dialogue.
 
