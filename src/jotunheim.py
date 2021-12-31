@@ -163,7 +163,7 @@ def jotunheim_npc(data, stat):
     if coords == (34, 56): return {
         "base": [0, "Utarg, pour vous servir."],
         36: [0, "Utarg, vous me cherchiez ?\n1. Oui, Thrym m'a demande de vous donner ceci [VOUS LUI DONNEZ LA LETTRE].\n2. Quelles sont les relations entre les Geants et les Ases ?", 2],
-            37: [3, "[UTARG LIT LE BILLET.] Hum. Thrym me demande de detacher une garnison et de me rendre a Vanaheim. On se retrouve a l'auberge."],
+            37: [3, "[UTARG LIT LE BILLET.] Hum. Thrym me demande de detacher une garnison et de me rendre a Vanaheim. On se retrouve a l'auberge, au nord de Vanaheim."],
             38: [-2, "Plusieurs differents ont eloignes les Ases des Geants : meutres, enlevements, traitrises... Ce serait long a expliquer."]
     }
 
@@ -336,8 +336,8 @@ h_35 = (r"""
 |                                                |
 |======================\  /======================|
 |==|/\|=|/\|=|/\|=|/\|=/^^\=|/\|=|/\|=|/\|=|/\|==|""",
-    (24, 19, 5, 0, 0),
-    (25, 19, 5, 0, 0)) # * : (17, 5)
+    (24, 19, 5, 64, 85),
+    (25, 19, 5, 65, 85)) # * : (17, 5)
 
 def h_35_npc(data, stat):
     coords = data[2], data[3]

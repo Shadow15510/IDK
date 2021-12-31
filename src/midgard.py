@@ -129,7 +129,7 @@ def midgard_npc(data, stat):
 
     if coords == (67, 46):
         return {
-            "base": ["Hmm ?"],
+            "base": [0, "Hmm ?"],
             96: [2, "[ODIN ET FREYJA S'AVANCERENT SOUS LES COLONNES ET CRACHERENT DANS UNE CUVE. UNE EPAISSE FUMMEE S'ELEVA DE CETTE DERNIERE ET LAISSA APPARAITRE UN CORPS EN DISPARAISSANT, 'KVASIR' DIT FREYJA EN MONTRANT LE NOUVEAU DIEU. EN GUISE D'ACCORD DE PAIX, LES ASES DONNERENT MIMIR ET HOENIR TANDIS QUE LES VANES CEDERNT NJORD, FREYR ET KVASIR. FRYEYJA SE PENCHA VERS VOUS.] {}, je te rejoint a Vanaheim.".format(stat[5])]
         }
 
@@ -159,6 +159,7 @@ def midgard_npc(data, stat):
 
     elif coords == (51, 60):
         return {
+                "base": [0, "Hmm ?"],
                 0: [0, "Vous cherchez quelque chose ?\n1. Oui : Asgard.\n2. Je cherche Vanaheim.\n3. Non, tout va bien.", 3],
                     1: [-1, "Vous devriez essayer au nord, en passant par la foret, a l'est."],
                     2: [-2, "Hum, vous avez regarde du cote de la petite maison tout a l'ouest ? Un bon ami a moi, Laard est souvent a cote."],
@@ -169,7 +170,7 @@ def midgard_npc(data, stat):
     elif coords == (66, 56):
         return {
             "base": [0, "Bonjour, je suis Lithy."],
-            27: [0, "Les morts au combat sont repartis entre les Ases et les Vanes. Tot ou tard tu devras choisir ton camp et renier l'autre.\n1. Sur quel critere les morts sont-ils repartis ?\n2. Freyr m'a dit que je derangeais... ?", 2],
+            27: [0, "Je suis Lithy. Les morts au combat sont repartis entre les Ases et les Vanes. Tot ou tard tu devras choisir ton camp et renier l'autre.\n1. Sur quel critere les morts sont-ils repartis ?\n2. Freyr m'a dit que je derangeais... ?", 2],
                 28: [-1, "Les combattans morts lors d'attaques reviennent en general a Odin alors que ceux qui sont morts pour defendre leurs biens sont plutot l'apanage des Vanes."],
             29: [0, "Votre position vous situe entre Ases et Vanes, a la veille d'une guerre comme celle-ci, les Vanes comme les Ases redoutent les informateurs caches. Vous allez devoir afficher clairement votre camp.\n1. Je suis oblige de choisir ?\n2. Comment je peux choisir ?", 2],
                 30: [-1, "Oui, ne serait-ce que parce qu'Odin n'acceptera jamais le doute : il vous fera tuer."],
@@ -198,7 +199,7 @@ def midgard_npc(data, stat):
                     if stat[1] < 5: return [-i, "Je ne travaille pas gratuitement."]
                     else:
                         data[1], data[2], data[3] = dest_coords[i - 1][0], dest_coords[i - 1][1], dest_coords[i - 1][2]
-                        return [-i, "C'est parti pour {} !".format(destinations[i - 1]), 0, (1, -5)]  
+                        return [-i, "C'est parti pour {} !".format(destinations[i - 1]), 0, (1, -5), (4, 60)]  
 
 
 
@@ -343,7 +344,8 @@ h_28 = (r"""
     (25, 14, 3, 61, 69)) # * : (27, 6)
 
 def h_28_npc(data, stat):
-    coords == data[2], data[3]
+    coords = data[2], data[3]
 
     if coords == (27, 6):
-        if xp == 42: return [10, 10, 10, 10, 100], "Soldat Ase", 10, 2
+        if data[0] == 42: return [10, 10, 10, 10, 100], "Targ", 40, 2
+        elif data[0] == 44: return [0, "[ENCORE SUANT DU COMBAT, VOUS REGARDEZ AVEC UNE CERTAINE SATISFACTION LE TAS DE CHAIR QUI FUT VOTRE ADVERSAIRE.]"]

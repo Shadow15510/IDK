@@ -44,7 +44,7 @@ vanaheim = (r"""
    /      \ /\ /      \ /  \       .''  |_|   ,'`' ',` |_|  /\ /      \ /  
            /  \        /    \         ,.,  .,`,  /\  ', ,` /  \        /   
      /\   /    \   /\ /      \ /\               /  \      /    \   /\ /    
-    /  \ /      \ /  \        /  \   /\        /    \ /\ /      \ /  \     
+    /  \ /      \ /  \        /  \   /\  *     /    \ /\ /      \ /  \     
    /    \        /    \      /    \ /  \   /\ /      /  \   /\   /    \    
   /      \      /      \ /\ /      /    \ /  \      /    \ /  \ /      \   
                         /  \      /      /    \    /      /    \           
@@ -70,6 +70,7 @@ def vanaheim_npc(data, stat):
     # Riethas
     if coords == (31, 12):
         if stat[8] == 5: return {
+            82: [0, "Kamuel est au sud, a la limite des montagnes."],
             86: [2, "Parfait, merci beaucoup !", 0, (1, -25), (8, -5)],
         }
 
@@ -81,11 +82,12 @@ def vanaheim_npc(data, stat):
             }
 
     # Kamuel
-    if coords == ():
+    if coords == (41, 45):
         if stat[8] == 5:
             if data[0] == 84: return [20, 20, 20, 20, 100], "Kamuel", 50, 2
             else: return {
-                82: ["Kamuel, que voulez-vous ?\n1. Tu dois de l'argent a Riethas.\n2. Vous tuer.", 2],
+                "base": [0, "Kamuel, que puis-je pour vous ?"],
+                82: [0, "Kamuel, que voulez-vous ?\n1. Tu dois de l'argent a Riethas.\n2. Vous tuer.", 2],
                 83: [3, "Bien sur, voila. [+50 PO]", 0, (1, 50)],
             }
 
@@ -104,7 +106,7 @@ def vanaheim_npc(data, stat):
                     if stat[1] < 5: return [-i, "Je ne travaille pas gratuitement."]
                     else:
                         data[1], data[2], data[3] = dest_coords[i - 1][0], dest_coords[i - 1][1], dest_coords[i - 1][2]
-                        return [-i, "C'est parti pour {} !".format(destinations[i - 1]), 0, (1, -5)]                     
+                        return [-i, "C'est parti pour {} !".format(destinations[i - 1]), 0, (1, -5), (4, 60)]                     
 
 def vanaheim_po(coords):
     if coords == (42, 20): return [0, "Vous vous trouvez sur le bord d'une large place verdoyante et bien entretenue. Entoure de montagnes, Vanaheim semble hors d'atteinte du temps. Quelques maisons et arbres completent le decor."]
@@ -153,7 +155,8 @@ def h_21_npc(data, stat):
     # Utarg
     elif coords == (21, 6): return {
             "base": [0, "Uiiips ?"],
-            40: [2, "D'apres nos informateurs, Odin va d'abord attaquer Midgard, et plus precisement le manoir au sud. On se retrouve dans le parc. Bon route, {} !".format(stat[5])],
+            40: [2, "Ah, enfin ! D'apres nos informateurs, Odin va d'abord attaquer Midgard, et plus precisement le manoir au sud. On se retrouve dans le parc. Bon route, {} !".format(stat[5])],
+            42: [0, "[UTARG EST DEJA EN ROUTE POUR MIDGARD.]"]
         }
 
 
@@ -188,6 +191,9 @@ def h_22_npc(data, stat):
 
     # Freyja
     if coords == (2, 8):
+        if xp == 45 and stat[8] == 0:
+            stat[8] = 1
+
         if not (360 <= stat[4] <= 1200):
             return [0, "Revenez plus tard s'il vous plait : il fait nuit."]
 
@@ -200,24 +206,24 @@ def h_22_npc(data, stat):
                 32: [-1, "Bien, bien, mais depeche-toi !"],
                 33: [1, "Voila une heureuse nouvelle !\n[FREYJA AVAIT A PEINE FINI SA PHRASE QU'UN TRAIT DE FEU TRAVERSA LE CIEL.]\nOdin nous declare la guerre ! Nous devons rassembler nos forces. Va a Jotunheim, et previent Thrym."],
             
-            44: [0, "Ah, {} !\n1. Nous avons pris le manoir de Midgard.\n2. Quels liens vous unissent aux Geants ?\n3. Savez-vous ou je peux trouver une bibliotheque ?".format(stat[5]), 2],
-                45: [-1, "Parfait ! Tu as quartier libre. Prend ces quelques pieces en guise de recompenses. [+15 PO]", 0, (1, 15)],
+            44: [0, "Ah, {} !\n1. Nous avons pris le manoir de Midgard.\n2. Quels liens vous unissent aux Geants ?\n3. Savez-vous ou je peux trouver une bibliotheque ?".format(stat[5]), 3],
+                45: [-1, "Parfait ! Vois avec Freyr pour ta recompense."],
                 46: [-2, "A l'origine des Vanes est Thjazi, un Geant, il enleva Idunn, une Asyne, ce qui signa le debut de nos conflits avec les Ases. Ces differents n'ont cesses de s'amplifier avec le temps, les Ases ne perdant pas une occasion de tuer un Geant. Finalement, les Geants et nous ne formons qu'une seule et meme famille, ces liens sont encore plus forts depuis que Freyr, mon frere, s'est marie avec Gerd, une Geante. Leur monde est Jotunheim, tu peux y acceder uniquement par Vanaheim."],
                 47: [-3, "Hmm, je crois qu'il y en a une vers Alfheim."],
 
-            56: [1, "Tu as trouve quelque chose ?\n1. Les runes signifient 'kvasir'.", 1],
-            58: [2, "'kvasir' ? Cela ne me dit rien... Laissons cela de cote, Va voir Freyr, il te precisera ta prochaine mission."],
+            56: [0, "Tu as trouve quelque chose ?\n1. Les runes signifient 'kvasir'.", 1],
+            57: [3, "'kvasir' ? Cela ne me dit rien... Laissons cela de cote, Va voir Freyr, il te precisera ta prochaine mission."],
 
             74: [0, "Te voila enfin !\n1. C'est un succes.\n2. Ou en est la guerre ?", 2],
                 75: [3, "Bien joue {} ! Tu as merite un peu de repos. Reviens me voir quand tu sera repose.".format(stat[5])],
                 76: [-2, "Hum... Nous ne parvenons pas a sortir du statu quo. Chez les Ases comme chez nous, les troupes sont fatiguees. Ce ne sont que des rumeurs, mais une treve pourrait se profiler."],
 
-            78: [0, "Va te reposer {}.".format(stat[5])],
+            78: [0, "Riethas cherche quelqu'un pour un service... Tu le trouveras a Vanaheim, dans la direction de Nordri."],
 
             88: [2, "Apres avoir convoque les autres Vanes nous avons conclu qu'il faut cesser cette guerre. Tu iras donc porter ce message a Odin. [FREYJA VOUS TEND UN PARCHEMIN SELLE.]"],
 
             94: [0, "Alors ?\n1. Odin a accepte la treve.", 1],
-                95: [1, "Parfait ! La treve se deroulera a Midgard, sous les colonnes du palais."],
+                95: [1, "Parfait ! J'ai dit a Odin treve se deroulera a Midgard, sous les colonnes du palais. On se retrouve la-bas."],
 
             98: [2, "L'echange d'otage a ete tres inegal, j'ai ordonne l'execution de Mimir ! [FREYJA VOUS TENDIT LA TETE DE MIMIR.] Va donc porter cela a Odin."]
         }
@@ -240,10 +246,23 @@ def h_22_npc(data, stat):
                 return [1, "Chez les Vanes, nous rendons hommage aux messagers, en guise de remerciement, je vais vous apprendre le sort de Soin [FREYR DESSINA DANS L'AIR DES RUNES VIOLETTE QUI TOURNOYERENT UN INSTANT AVANT DE S'ESTOMPER PEU A PEU.]\nEt maintenant : direction Asgard !\n[UNE LOURDE TORPEUR S'ABATTIT SUR VOUS. VOUS VOUS SENTEZ LEGER. LE DUR CHOC CONTRE LE SOL VOUS REVEILLA.]"]
             else:
                 return [1, "Chez les Vanes, nous rendons hommage aux messagers, voici quelques pieces d'or, faites en bon usage ! [UNE LOURDE TORPEUR S'ABATTIT SUR VOUS. VOUS VOUS SENTEZ LEGER. LE DUR CHOC CONTRE LE SOL VOUS REVEILLA.]", 0, (1, 5)]
+        
+        elif xp == 44:
+            if stat[8] == 0: return [0, "Va donc annoncer la nouvelle a Freyja !"]
+            if stat[8] == 2: return [0, "Tsst, tu as deja eu ta recompense. Essaye plutot de comprendre ce que signifie ces runes."]
+            check = True
+            for spell_id, spell_level in stat[7]:
+                if spell_id == 2: check = False
+            
+            if check:
+                stat[7].append((2, 2))
+                return [0, "En remerciement je vais t'apprendre le sort Givre de niveau II. [FREYR COMMENCA A CHANTER UNE MELODIE, VOTRE VISION DEVINT FLOUE. LORSQUE VOUS REPRENEZ VOS ESPRITS, VOUS LE SORT EST GRAVE DANS VOTRE MEMOIRE.]", 0, (8, 1)]
+            else:
+                return [0, "Je vois que tu connais deja le sort Givre, voila la somme equivalente. [+20 PO]", 0, (1, 20), (8, 1)]
 
         if xp == 64:
-            message = input("Entrez le message en clair :\n")
-            if message == "prenez alfheim": return [2, "Ah ! Parfait, montre-moi ca ! [VOUS TENDEZ LE MESSAGE DECHIFFRE A FREYR.]"]
+            message = input("Parfait ! (ecrivez le message dechiffre) :\n")
+            if message.lower() == "prenez alfheim": return [2, "Ah ! Parfait, montre-moi ca ! [VOUS TENDEZ LE MESSAGE DECHIFFRE A FREYR.]"]
             else: return [-2, "Ca n'a aucun sens... cherche encore."]
 
         if xp == 66:

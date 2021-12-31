@@ -19,7 +19,7 @@ Il faut placer le dossier `idk_demo` à la racine de la Graph 90+E. Ce dossier c
 
 ### Lancement
 
-Allez dans le menu Python, ouvrez le dossier `idk_demo` et lancez le script `idk.py` (via [F1]). Une fois le script importé (cela peut prendre quelques instant), exécutez la fonction `idk()` et suivez les instructions.
+Allez dans le menu Python, ouvrez le dossier `idk_demo` et lancez le script `idk.py` (via [F1]). Une fois le script importé (cela peut prendre quelques instants), exécutez la fonction `idk()` et suivez les instructions.
 
 ### Contrôles
 
@@ -27,7 +27,7 @@ Pour interagir, le joueur doit entrer le numéro ou la lettre correspondante pui
  - 1, 2, 3 5 : se déplacer
  - 4 : statistiques du joueur (nom, vitesse, agilité, attaque, défense, points de magie et de vie)
  - 7 : les sorts connus du joueur
- - 8 : information générale (nom du monde actuelle, période de la journée et heure, classe du joueur et pièce d'or)
+ - 8 : informations générales (nom du monde actuelle, période de la journée et heure, classe du joueur et pièce d'or)
  - 6 : inventaire (arme et armure)
  - 9 : dormir (permet de passer le temps d'un certain nombre d'heure
  - q : quitter
@@ -72,9 +72,9 @@ De plus, ce même système est à la base de la régération naturelle du joueur
 
 C'est le gros point fort du jeu, les cartes sont assez grandes. Il y a une grande carte par monde (soif neufs cartes) et chaque monde est muni de maisons ce qui porte le nombre total de cartes explorables à 48.
 
-Se repérer et se déplacer peut se révéler être long et c'est loin d'être évident de se repérer au début. Comme souvent dans mes jeux, j'invite le joueur à jouer avec un crayon et un papier pour noter au fur et à mesure le monde dans lequel il est et où sont les points de passages vers quel autre monde. De même, tous les mondes ne communiquent pas entre eux, il est parfois nécessaire de passer par un autre monde pour aller là où on veut.
+Se repérer et se déplacer peut se révéler être long et c'est loin d'être évident de s'y retrouver au début. Comme souvent dans mes jeux, j'invite le joueur à jouer avec un crayon et un papier pour noter au fur et à mesure le monde dans lequel il est et où sont les points de passages vers quel autre monde. De même, tous les mondes ne communiquent pas entre eux, il est parfois nécessaire de passer par un autre monde pour aller là où on veut.
 
-Les points de passages sont quasiment une mécanique à part entière. Dans la mythologie nordique, les mondes sont reliés par des sortes de portes cachées. N'ayant pas voulu rendre la tâche trop facile pour le joueur, ces "portes" sont cachées dans IDK aussi. Dans certains mondes, plusieurs indices permettent de deviner où sont les portes (dans les mondes que le joueur est sensé découvrir en premier). Dans d'autres monde, trouver les points de passage peut être moins évident. À noter que ces points de passages n'ont pas non plus fait l'objet d'une recherche très poussée pour les cacher au maximum.
+Les points de passages sont quasiment une mécanique à part entière. Dans la mythologie nordique, les mondes sont reliés par des sortes de portes cachées. N'ayant pas voulu rendre la tâche trop facile pour le joueur, ces "portes" sont cachées dans IDK aussi. Dans certains mondes, plusieurs indices permettent de deviner où sont les portes (dans les mondes que le joueur est sensé découvrir en premier). Dans d'autres mondes, trouver les points de passage peut s'avérer plus délicat. À noter que ces points de passages n'ont pas non plus fait l'objet d'une recherche très poussée pour les cacher au maximum.
 
 #### Les combats
 

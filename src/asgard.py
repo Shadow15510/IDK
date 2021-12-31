@@ -129,13 +129,13 @@ def asgard_npc(data, stat):
     elif coords == (121, 21):
         if stat[8] == 3: return {
             21: [0, "Alors ?"],
-            25: [1, "Je savais que je pouvais compter sur toi ! Cela n'a rien a voir, mais j'ai entendu dire que Freyr cherche un certains {}, tu le connais ? [+15 PO]".format(stat[5]), 0, (1, 15), (8, -3)]
+            25: [1, "Je savais que je pouvais compter sur toi ! Cela n'a rien a voir, mais j'ai entendu dire que Freyr cherche un certain {}, tu le connais ? [+15 PO]".format(stat[5]), 0, (1, 15), (8, -3)]
         }
         
         else: return {
             "base": [0, "Daric, je peux vous aider ?"],
             16: [0, "J'ai besoin d'un coup de main.\n1. Je vous ecoute.\n2. Desole.", 2],
-                17: [2, "Cela fait plusieurs fois deja qu'Egel, mon voisin, s'introduit dans mon jardin. Je n'arrive pas a lui faire entendre raison.\n1. Qu'attendez-vous de moi ?\n2. Cela ne m'interesse pas, bonne journee.", 2],
+                17: [1, "Cela fait plusieurs fois deja qu'Egel, mon voisin, s'introduit dans mon jardin. Je n'arrive pas a lui faire entendre raison.\n1. Qu'attendez-vous de moi ?\n2. Cela ne m'interesse pas, bonne journee.", 2],
                     19: [2, "On m'a dit que le dieu de la Justice pouvait m'aider, mais il ne m'ecoutera jamais. Tu peux interceder en ma faveur ?", 0, (8, 3)],
                     20: [-4, "Dans ce cas..."],
                 18: [-2, "Cela ne fait rien."],
@@ -236,6 +236,9 @@ def h_10_npc(data, stat):
     xp = data[0]
 
     if coords == (25, 11):
+        if stat[8]:
+            return [0, "Fini ce que tu as a faire."]
+
         if xp == 0:
             stat[3][0] = 1
             return [1, "Je suis Odin, Roi des Ases. Actuellement nous avons quelques differents avec les Vanes. Vous irez donc porter cette dague a Freyja, a Vanaheim. Elle comprendra. [ODIN VOUS DONNE UNE DAGUE]"]
@@ -261,8 +264,8 @@ def h_10_npc(data, stat):
                 33: [2, "Ca, c'est un choix strategique !"],
 
             90: [0, "Tient donc ! Cela fait longtemps que je n'avais pas vu ta face, traitre !\n1. Freyja m'a demande de vous transmettre ce message.\n2. Espece de vieux barbu borgne !", 2],
-                91: [3, "[ODIN VOUS ARRACHA LE PARCHEMIN DES DOIGTS.] Ah ! Une treve ? Hum. Soit."],
-                92: [-2, "Que croyais-tu ? [ODIN S'AVANCE VERS VOUS CALMEMENT.] C'est moi qui t'ai redonne la vie... Et je peux la reprendre. [UN FROID IMMENSE EMPLIT VOTRE POITRINE, VOUS NE PARVENEZ PLUS A RESPIRER, VOUS VOUS EFFONDREZ, FACE CONTRE TERRE, MORT.]", 0, (1, -(2 * stat[0]))],
+                91: [3, "[ODIN VOUS ARRACHA LE PARCHEMIN DES DOIGTS.] Ah ! Une treve ? Hum. Soit. [ODIN SE RETOURNA BRUTALEMENT VERS VOUS] Tu es encore la !? Hors de ma vue !"],
+                92: [-2, "Que croyais-tu ? [ODIN S'AVANCE VERS VOUS CALMEMENT.] C'est moi qui t'ai redonne la vie... Et je peux la reprendre. [UN FROID IMMENSE EMPLIT VOTRE POITRINE, VOUS NE PARVENEZ PLUS A RESPIRER, VOUS VOUS EFFONDREZ, FACE CONTRE TERRE, MORT.]", 0, (0, -(2 * stat[0]))],
             
             100: [2, "[VOUS TENDEZ LA TETE A ODIN.] Les conseils de Mimir ne vous auront pas servit tres longtemps... [ODIN PRIT LA TETE DANS SES MAINS, UNE INTENSE LUMIERE LES PARCOURUS ET LORSQUE LA LUMINOSITE REVIENT A UN NIVEAU SOUTENABLE, LA TETE AVAIT RETROUVE LA VIE.]"]
         }

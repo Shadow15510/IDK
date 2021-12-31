@@ -219,16 +219,16 @@ def h_43_npc(data, stat):
 
         if stat[9] == -1 or data[0] == stat[9]:
             stat[9] = data[0]
-            return [0, "Bienvenue, dans mon armurerie ! Je suis Bertfrid, besoin d'une armure ?\n1. Oui, d'une rondache. [-10 PO]\n2. d'un pavois [-20 PO]\n3. d'une cotte de mailles [-30 PO]\n4. d'une broigne [-40 PO]\n5. d'un harnois [-50 PO]"]
+            return [0, "Bienvenue, dans mon armurerie ! Je suis Bertfrid, besoin d'une armure ?\n1. Oui, d'une rondache. [-10 PO]\n2. d'un pavois [-20 PO]\n3. d'une cotte de mailles [-30 PO]\n4. d'une broigne [-40 PO]\n5. d'un harnois [-50 PO]", 5]
 
         else:
             shields = ("UNE RONDACHE", "UN PAVOIS", "UNE COTTE DE MAILLES", "UNE BROIGNE", "UN HARNOIS")
             for i in range(1, 6):
                 if data[0] == stat[9] + i:
                     stat[9] = -1
-                    if stat[1] < (i + 1) * 10: return [-i, "Vous n'avez pas assez."]
-                    stat[3][1] = i + 1
-                    return [-i, "C'est un bon achat. [BERTFRID DECROCHA {}]".format(shields[i - 1]), 0, (1, -(i + 1) * 10)]
+                    if stat[1] < i * 10: return [-i, "Vous n'avez pas assez."]
+                    stat[3][1] = i
+                    return [-i, "C'est un bon achat. [BERTFRID DECROCHA {}]".format(shields[i - 1]), 0, (1, -i * 10)]
 
     elif coords == (13, 9):
         if stat[3][1] == 0: return [0, "J'achete, je ne vend pas ! Allez voir Bertfrid du cote du four a metaux, elle vous renseignera"]

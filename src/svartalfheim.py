@@ -97,11 +97,11 @@ def svartalfheim_npc(data, stat):
 	coords = data[2], data[3]
 
 	if coords == (120, 49) or coords == (104, 30):
-		if stat[4] >= 1260 and stat[4] <= 300: return [0, "Hmm, hein ? Quoi ? Zavez pas vu l'heure ??"]
+		if not (360 <= stat[4] <= 1200): return [0, "Hmm, hein ? Quoi ? Zavez pas vu l'heure ??"]
 
 		if stat[9] == -1 or data[0] == stat[9]:
 			stat[9] = data[0]
-			return [0, "Hey, toi ! Tu veux traverser ?\n1.Traverser [2 PO]\n2.Ne pas traverser"]
+			return [0, "Hey, toi ! Tu veux traverser ?\n1. Traverser [2 PO]\n2. Ne pas traverser", 2]
 		
 		elif data[0] == stat[9] + 1:
 			stat[9] = -1
@@ -141,7 +141,7 @@ h_45 = (r"""
 |                 |====| |====|                  |
 |=================|    | |    |==================|
                        |^|                        """,
-	(24, 19, 4, 90, 15)) # * : (15, 4)
+	(24, 19, 8, 90, 15)) # * : (15, 4)
 
 def h_45_npc(data, stat):
 	pass
@@ -161,18 +161,18 @@ h_46 = (r"""
 |                  |
 |                  |
 |=======|^|========|""",
-	(9, 9, 4, 6, 24),
+	(9, 9, 8, 6, 24),
 ) # * : (13, 2) * : (13, 4)
 
 def h_46_npc(data, stat):
 	coords = data[2], data[3]
 
 	if coords == (13, 2):
-		if data[0] in (70, 72): return [15, 20, 30, 30, 100], "Soldat Ase", 10, 2
+		if data[0] in (70, 72): return [12, 10, 15, 15, 100], "Soldat Ase", 10, 2
 		elif data[0] == 74: return [0, "[LA DEPOUILLE SANGLANTE DU SOLDAT EST AFFALLEE SUR LE BANC. UNE MARE DE SANG COAGULE DEJA A SES PIEDS.]"]
 
 	if coords == (13, 4):
-		if data[0] in (70, 72): return [15, 20, 30, 30, 100], "Soldat Ase", 10, 2
+		if data[0] in (70, 72): return [12, 10, 20, 15, 100], "Soldat Ase", 10, 2
 		elif data[0] == 74: return [0, "[DES MORCEAUX DE CORPS JONCHENT LE SOL ET LA TABLE.]"]
 
 
@@ -197,7 +197,7 @@ h_47 = (r"""
 |               |__|   |__|  |
 |                            |
 |^|==========================|""",
-	(1, 14, 4, 91, 33)) # * : (3, 4) * : (15, 8)
+	(1, 14, 8, 91, 33)) # * : (3, 4) * : (15, 8)
 
 def h_47_npc(data, stat):
 	pass
@@ -222,7 +222,7 @@ h_48 = (r"""
 |  \__/      \__/      \__/      \__/  |
 |==|  |======|  |=|  |=|  |======|  |==|
    |  |      |  | |^=| |  |      |  |   """,
-	(19, 14, 4, 57, 59)) # * : (34, 5) * : (29, 6)
+	(19, 14, 8, 57, 59)) # * : (34, 5) * : (29, 6)
 
 def h_48_npc(data, stat):
 	pass
