@@ -211,7 +211,7 @@ def h_22_npc(data, stat):
                 46: [-2, "A l'origine des Vanes est Thjazi, un Geant, il enleva Idunn, une Asyne, ce qui signa le debut de nos conflits avec les Ases. Ces differents n'ont cesses de s'amplifier avec le temps, les Ases ne perdant pas une occasion de tuer un Geant. Finalement, les Geants et nous ne formons qu'une seule et meme famille, ces liens sont encore plus forts depuis que Freyr, mon frere, s'est marie avec Gerd, une Geante. Leur monde est Jotunheim, tu peux y acceder uniquement par Vanaheim."],
                 47: [-3, "Hmm, je crois qu'il y en a une vers Alfheim."],
 
-            56: [0, "Tu as trouve quelque chose ?\n1. Les runes signifient 'kvasir'.", 1],
+            56: [0, "Tu as trouve quelque chose ?\n1. Les runes signifient 'kvasir'.", 1, (8, -2)],
             57: [3, "'kvasir' ? Cela ne me dit rien... Laissons cela de cote, Va voir Freyr, il te precisera ta prochaine mission."],
 
             74: [0, "Te voila enfin !\n1. C'est un succes.\n2. Ou en est la guerre ?", 2],

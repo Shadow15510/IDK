@@ -125,9 +125,6 @@ def routine(data, stat):
     if stat[2][4] < stat[0] // 2 and not (stat[4] % 60):
         stat[2][4] += 1
 
-    if data[0] >= 48 and stat[8] == 2:
-        stat[8] = 0
-
 
 # Game mecanics
 def fight(stat, opponent_stat, opponent_name):
