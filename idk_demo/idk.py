@@ -12,7 +12,6 @@ from nidavellir import *
 from muspellheim import *
 from svartalfheim import *
 
-
 maps = (
     asgard,
     vanaheim,
@@ -60,41 +59,67 @@ def npc(data, stat):
 
     event = npc_data[data[1]](data, stat)
 
-    if not event:
-        msg = ("Hmm ?", "Besoin de quelque chose ?", "Vous cherchez quelqu'un ?", "Vous etes... ?", "Oui ?", "He ! Regarde ou tu vas.")
-        return [0, choice(msg)]
+    if not event:    
+        print("\nChoissez une action :\n1. Attaquer\n2. Voler\n3. Parler\n4. Ne rien faire")
+        choice_sel = input(">")
+        try: choice_sel = int(choice_sel)
+        except: choice_sel = 3
 
-    elif type(event) == tuple:
-        issue = fight(stat, event[0], event[1])
+        if choice_sel == 1:
+            opponent_stat = [randint(5, stat[2][i] + 5) for i in range(4)]
+            opponent_stat.append(randint(50, 150))
+            return launch_fight(data, stat, [opponent_stat, "Ennemi"])
 
-        if issue == 0:
-            stat[1] += event[2]
-            if sum(stat[2][:-1]) >= 200: return [event[3], "Vous avez gagne le combat. [+{}PO]".format(event[2])]
-            
-            print_text("Vous avez gagne le combat. [+{}PO]".format(event[2]))
-            data[0] += event[3]
-            choice = 0
-            while not choice:
-                print("<o> Amelioration  <o>")
-                print(" |1. Vitesse       |")
-                print(" |2. Agilite       |")
-                print(" |3. Attaque       |")
-                print(" |4. Defense       |")
-                print("<o> ============= <o>")
-                choice = get_input()
-                if (choice < 0 or choice > 4) and stat[2][choice - 1] >= 50: choice = 0
+        elif choice_sel == 2:
+            if stat_test(stat[2], 1)[0]:
+                amount = randint(2, 20)
+                return [0, "Vous avez reussi a voler {} PO.".format(amount), 0, (1, amount)]
+            else:
+                if stat[0] > 10: return [0, "Votre victime vous a vu et vous a mis une raclee.", 0, (0, -10)]
+                else: return [0, "Votre victime vous a vu, et vous a mis une tellement grosse raclee que vous etes mort.", 0, (0, -10)]
 
-            print_text("Vous gagnez 2 points {}".format(("de vitesse", "d'agilite", "d'attaque", "de defense")[choice - 1]))
-            stat[2][choice - 1] += 2
-            if stat[2][choice -1] > 50: stat[2][choice - 1] = 50
-            
+        elif choice_sel == 3:
+            msg = ("Hmm ?", "Besoin de quelque chose ?", "Vous cherchez quelqu'un ?", "Vous etes... ?", "Oui ?", "He ! Regarde ou tu vas.")
+            return [0, choice(msg)]
+
+        elif choice_sel == 4:
             return None
 
-        elif issue == 1: return [0, "Vous etes mort."]
-        elif issue == 2: return [0, "Vous avez fuit."]
+    elif type(event) == tuple:
+        return launch_fight(data, stat, event)
     
     else:
         return event
+
+
+def launch_fight(data, stat, event):
+    issue = fight(stat, event[0], event[1])
+
+    if issue == 0:
+        stat[1] += event[2]
+        if sum(stat[2][:-1]) >= 200: return [event[3], "Vous avez gagne le combat. [+{}PO]".format(event[2])]
+        
+        print_text("Vous avez gagne le combat. [+{}PO]".format(event[2]))
+        data[0] += event[3]
+        choice = 0
+        while not choice:
+            print("<o> Amelioration  <o>")
+            print(" |1. Vitesse       |")
+            print(" |2. Agilite       |")
+            print(" |3. Attaque       |")
+            print(" |4. Defense       |")
+            print("<o> ============= <o>")
+            choice = get_input()
+            if (choice < 0 or choice > 4) and stat[2][choice - 1] >= 50: choice = 0
+
+        print_text("Vous gagnez 2 points {}".format(("de vitesse", "d'agilite", "d'attaque", "de defense")[choice - 1]))
+        stat[2][choice - 1] += 2
+        if stat[2][choice -1] > 50: stat[2][choice - 1] = 50
+        
+        return None
+
+    elif issue == 1: return [0, "Vous etes mort."]
+    elif issue == 2: return [0, "Vous avez fuit."]
 
 
 def point_of_interest(data, stat):
@@ -124,9 +149,6 @@ def routine(data, stat):
     # Mana regeneration
     if stat[2][4] < stat[0] // 2 and not (stat[4] % 60):
         stat[2][4] += 1
-
-    if data[0] >= 48 and stat[8] == 2:
-        stat[8] = 0
 
 
 # Game mecanics
@@ -197,7 +219,7 @@ def fight(stat, opponent_stat, opponent_name):
                     msg += "\nVous ne parvenez pas a lancer le sort."
 
         elif choice == 3:
-            if stat_test(player_stat, 1)[0]:
+            if stat_test(player_stat, 1)[0] or stat_test(player_stat, 1)[0]:
                 end = True
             else:
                 msg += "\nVotre tentative de fuite echoue."
@@ -395,6 +417,7 @@ def quick_save(data, stat):
 events = {"*": npc, "?": point_of_interest}
 keys = {4: display_stat, 7: spell, 8: misc_stat, 6: inventory, 9: sleep, "s": quick_save}
 
+
 # Main function
 def idk(stat=None, data=None):
     # stat = [0 - PV, 1 - pièces d'or, 2 - [vitesse, agilité, attaque, defense, magie], 3 - [arme, armure], 4 - ticks, 5 - nom, 6 - classe, 7 - sorts connus : (id, level), 8 - sous-quête en cours]
@@ -442,10 +465,11 @@ def idk(stat=None, data=None):
             raise ValueError("classe du joueur inconnue")
 
         if len(stat[5]) > 13:
-            raise ValueError("nom du joueur trop long")
+            raise ValueError("nom du joueur invalide")
 
     idk_game = Asci(maps, events, keys)
     stat, data = idk_game.mainloop(102, stat, data, routine=routine, door="^_", walkable=".,`' ", exit_key="q")
+
 
     print("idk({0}, {1})".format(stat[:-1], data))
 
