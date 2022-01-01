@@ -84,41 +84,6 @@ svartalfheim = (r"""
 	(57, 59, 48, 19, 14), # Palais des Elfes noirs
 )
 
-# * : (105; 46)
-# * : (22; 50)
-# * : (15; 54)
-# * : (25; 61)
-# * : (121; 68)
-
-def svartalfheim_po(coords):
-	if coords == (113, 37): return [0, "Des tours de guets parsement la cote, plus loin, a l'ouest, une chaine de petites montagnes s'etend, coupant Svartalfheim en deux. Mais la partie est du monde est plus habitee et plus animee que la partie ouest qui reste majoritairement consitituee de denses forets."]
-
-def svartalfheim_npc(data, stat):
-	coords = data[2], data[3]
-
-	if coords == (120, 49) or coords == (104, 30):
-		if not (360 <= stat[4] <= 1200): return [0, "Hmm, hein ? Quoi ? Zavez pas vu l'heure ??"]
-
-		if stat[9] == -1 or data[0] == stat[9]:
-			stat[9] = data[0]
-			return [0, "Hey, toi ! Tu veux traverser ?\n1. Traverser [2 PO]\n2. Ne pas traverser", 2]
-		
-		elif data[0] == stat[9] + 1:
-			stat[9] = -1
-			if stat[1] < 2: return [-1, "Reviens quand tu auras de quoi me payer."]
-			
-			if coords == (104, 30): data[2], data[3] = 119, 49
-			else: data[2], data[3] = 103, 30
-			
-			return [-1, "C'est parti !", 0, (1, -2)]
-
-		elif data[0] == stat[9] + 2:
-			stat[9] = -1
-			return [0, "Reviens quand tu voudras traverser."]
-
-
-
-
 
 h_45 = (r"""
                                                   
@@ -141,13 +106,7 @@ h_45 = (r"""
 |                 |====| |====|                  |
 |=================|    | |    |==================|
                        |^|                        """,
-	(24, 19, 8, 90, 15)) # * : (15, 4)
-
-def h_45_npc(data, stat):
-	pass
-
-
-
+	(24, 19, 8, 90, 15))
 
 
 h_46 = (r"""
@@ -161,24 +120,7 @@ h_46 = (r"""
 |                  |
 |                  |
 |=======|^|========|""",
-	(9, 9, 8, 6, 24),
-) # * : (13, 2) * : (13, 4)
-
-def h_46_npc(data, stat):
-	coords = data[2], data[3]
-
-	if coords == (13, 2):
-		if data[0] in (70, 72): return [12, 10, 15, 15, 100], "Soldat Ase", 10, 2
-		elif data[0] == 74: return [0, "[LA DEPOUILLE SANGLANTE DU SOLDAT EST AFFALLEE SUR LE BANC. UNE MARE DE SANG COAGULE DEJA A SES PIEDS.]"]
-
-	if coords == (13, 4):
-		if data[0] in (70, 72): return [12, 10, 20, 15, 100], "Soldat Ase", 10, 2
-		elif data[0] == 74: return [0, "[DES MORCEAUX DE CORPS JONCHENT LE SOL ET LA TABLE.]"]
-
-
-
-
-
+	(9, 9, 8, 6, 24)) 
 
 
 h_47 = (r"""
@@ -197,13 +139,7 @@ h_47 = (r"""
 |               |__|   |__|  |
 |                            |
 |^|==========================|""",
-	(1, 14, 8, 91, 33)) # * : (3, 4) * : (15, 8)
-
-def h_47_npc(data, stat):
-	pass
-
-
-
+	(1, 14, 8, 91, 33))
 
 
 h_48 = (r"""
@@ -222,7 +158,4 @@ h_48 = (r"""
 |  \__/      \__/      \__/      \__/  |
 |==|  |======|  |=|  |=|  |======|  |==|
    |  |      |  | |^=| |  |      |  |   """,
-	(19, 14, 8, 57, 59)) # * : (34, 5) * : (29, 6)
-
-def h_48_npc(data, stat):
-	pass
+	(19, 14, 8, 57, 59)) 

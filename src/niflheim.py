@@ -83,27 +83,6 @@ _\      /_\ ### ',             |+|       ___     '              '. ``,..'  '.`.`
 	(71, 31, 30, 25, 19),
 )
 
-# * : (95, 30)
-# * : (57, 31)
-# * : (39, 60)
-# * : (108, 67)
-
-def niflheim_po(coords):
-    if coords == (88, 32): return [0, "Entoure de pierre tombales, de nombreux chemins serpentent. De lourd nuages fonces entretiennent une atmosphere pesante et une brume noiratres flotte dans l'air. Dans la penombre ambiante, une haute maison se detache, masse plus sombre encore que le reste, percee de fines fenetres et encadree de deux tours."]
-
-def niflheim_npc(data, stat):
-    coords = data[2], data[3]
-    xp = data[0]
-
-    if coords == (57, 31):
-        if stat[8] == 2: return {
-            "base": [0, "[VOUS REGARDEZ LE SOL SANS COMPRENDRE.]"],
-                7: [1, "Asufaith, besoin de quelque chose ? [VOUS LUI DONNEZ LA LETTRE, L'ESPRIT VOUS REGARDA SANS PARAITRE ETONNE ET S'EN EMPARA.] Notre... Ami commun vous envoie de loin. [SUR CES MOTS L'ESPRIT SE RETOURNA ET TRAVERSA LE SOL DE TERRE, VOUS LAISSANT DESEMPARE.]"],
-        }
-
-
-
-
 
 h_29 = (r"""
 |============================|
@@ -122,46 +101,6 @@ h_29 = (r"""
 |                            |
 |=============|^|============|""",
     (15, 14, 4, 38, 21)) # * : (5, 5)
-
-def h_29_npc(data, stat):
-    coords = data[2], data[3]
-
-    spells_sale = ((0, 5), (1, 5), (2, 5), (3, 5), (4, 5))
-
-    if not (480 <= stat[4] <= 1140): return [0, "Je suis desolee, nous sommes fermes."]
-
-    if coords == (5, 5):
-        if len(stat[7]) >= 3: return [0, "Vous ne pouvez pas apprendre plus de sort, et je ne pratique pas les sorts d'oubli. Je crois qu'une librairie vers Alfheim le fait gratuitement."]
-
-        if stat[9] == -1 or data[0] == stat[9]:
-            stat[9] = data[0]
-            return [0, "Merath, je vend les sorts les plus puissants de tout l'Yggdrasil ! Quel sort voulez-vous ?\n1. Soin V\n2. Flammes V\n3. Givre V\n4. Etincelles V\n4. Fatigue V", 4]
-
-        else:
-            for i in range(1, 5):
-                if data[0] == stat[9] + i:
-                    stat[9] = -1
-                    if stat[1] < 50: return [-i, "Vous n'avez pas les moyens, desolee."]
-
-                    spell_id = -1
-                    for sp_id, sp in range(len(stat[7])):
-                        sp = stat[7][sp_id]
-                        if spells_sale[i - 1][0] == sp[0]:
-                            if spells_sale[i - 1][1] <= sp[1]: return [-i, "Vous connaissez deja ce sort."]
-                            else:
-                                spell_id = sp_id
-                                break
-
-                    if spell_id == -1:
-                        stat[7].append(spells_sale[i - 1])
-                    else:
-                        stat[7][spell_id] = spells_sale[i - 1]
-
-                    return [-i, "[MERATH SE RETOURNA ET S'EMPARA D'UN GRIMOIRE. ELLE L'OUVRIT ET LUT A HAUTE VOIX. UNE LOURDE TORPEUR S'ABBATIT SUR VOUS. QUAND VOUS REPRENEZ PLEINEMENT CONSCIENCE, LE SORT EST GRAVE DANS VOTRE MEMOIRE.]", 0, (1, -50)]
-
-
-
-
 
 
 h_30 = (r"""
@@ -187,6 +126,3 @@ h_30 = (r"""
 |=============|        |^^|        |=============|""",
     (24, 19, 4, 70, 31),
     (25, 19, 4, 71, 31)) # * : (37, 4) * : (17, 6)
-
-def h_30_npc(data, stat):
-    pass
