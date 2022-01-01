@@ -64,27 +64,27 @@ def npc(data, stat):
 
     if not event:    
         print("\nChoissez une action :\n1. Attaquer\n2. Voler\n3. Parler\n4. Ne rien faire")
-        choice_sel = input(">")
-        try: choice_sel = int(choice_sel)
-        except: choice_sel = 3
+        sel_choice = input(">")
+        try: sel_choice = int(sel_choice)
+        except: sel_choice = 3
 
-        if choice_sel == 1:
+        if sel_choice == 1:
             opponent_stat = [randint(5, stat[2][i] + 5) for i in range(4)]
             opponent_stat.append(randint(50, 150))
-            return launch_fight(data, stat, [opponent_stat, "Ennemi"])
+            return launch_fight(data, stat, (opponent_stat, "Ennemi", randint(10, 30), 0))
 
-        elif choice_sel == 2:
+        elif sel_choice == 2:
             if stat_test(stat[2], 1)[0]:
-                amount = randint(2, 20)
+                amount = randint(5, 25)
                 return [0, "Vous avez reussi a voler {} PO.".format(amount), 0, (1, amount)]
             else:
                 return [0, "Votre victime vous a vu et vous a mis une raclee.", 0, (0, -10)]
 
-        elif choice_sel == 3:
+        elif sel_choice == 3:
             msg = ("Hmm ?", "Besoin de quelque chose ?", "Vous cherchez quelqu'un ?", "Vous etes... ?", "Oui ?", "He ! Regarde ou tu vas.")
             return [0, choice(msg)]
 
-        elif choice_sel == 4:
+        elif sel_choice == 4:
             return None
 
     elif type(event) == tuple:
@@ -103,20 +103,20 @@ def launch_fight(data, stat, event):
         
         print_text("Vous avez gagne le combat. [+{}PO]".format(event[2]))
         data[0] += event[3]
-        choice = 0
-        while not choice:
+        sel_choice = 0
+        while not sel_choice:
             print("<o> Amelioration  <o>")
             print(" |1. Vitesse       |")
             print(" |2. Agilite       |")
             print(" |3. Attaque       |")
             print(" |4. Defense       |")
             print("<o> ============= <o>")
-            choice = get_input()
-            if (choice < 0 or choice > 4) and stat[2][choice - 1] >= 50: choice = 0
+            sel_choice = get_input()
+            if (sel_choice < 0 or sel_choice > 4) and stat[2][sel_choice - 1] >= 50: sel_choice = 0
 
-        print_text("Vous gagnez 2 points {}".format(("de vitesse", "d'agilite", "d'attaque", "de defense")[choice - 1]))
-        stat[2][choice - 1] += 2
-        if stat[2][choice -1] > 50: stat[2][choice - 1] = 50
+        print_text("Vous gagnez 2 points {}".format(("de vitesse", "d'agilite", "d'attaque", "de defense")[sel_choice - 1]))
+        stat[2][sel_choice - 1] += 2
+        if stat[2][sel_choice -1] > 50: stat[2][sel_choice - 1] = 50
         
         return None
 
@@ -160,7 +160,7 @@ def fight(stat, opponent_stat, opponent_name):
         end = False
         msg = "Tour de {}".format(stat[5])
         
-        if choice == 1:
+        if sel_choice == 1:
             damage = stat_test(player_stat, 2)[1] - opponent_stat[3]
             if damage < 0: damage = 0
             
@@ -172,7 +172,7 @@ def fight(stat, opponent_stat, opponent_name):
                 opponent_stat[4] -= damage
                 msg += "\n{0} perd {1} PV.".format(opponent_name, damage)
 
-        elif choice == 2:
+        elif sel_choice == 2:
             if len(stat[7]) == 0:
                 msg += "\nVous ne connaissez pas de sort."
             else:
@@ -220,7 +220,7 @@ def fight(stat, opponent_stat, opponent_name):
                 else:
                     msg += "\nVous ne parvenez pas a lancer le sort."
 
-        elif choice == 3:
+        elif sel_choice == 3:
             if stat_test(player_stat, 1)[0]:
                 end = True
             else:
@@ -250,18 +250,18 @@ def fight(stat, opponent_stat, opponent_name):
 
     end = False
     while not end:
-        choice = 0
-        while not choice:
+        sel_choice = 0
+        while not sel_choice:
             print("<o>    Combat     <o>")
             print(" | 1. Attaquer     |")
             print(" | 2. Ensorceler   |")
             print(" | 3. Fuir         |")
             print(" | 4. Statistiques |")
             print("<o> ============= <o>")
-            choice = get_input()
-            if choice < 0 or choice > 4: choice = 0
+            sel_choice = get_input()
+            if sel_choice < 0 or sel_choice > 4: sel_choice = 0
 
-            if choice == 4:
+            if sel_choice == 4:
                 p_capacities = ["{} ".format(i) if i < 10 else str(i) for i in player_stat]
                 o_capacities = ["{} ".format(i) if i < 10 else str(i) for i in opponent_stat[:-1]]
 
@@ -275,7 +275,7 @@ def fight(stat, opponent_stat, opponent_name):
                 print("Def: {0}  | {1}".format(p_capacities[3], o_capacities[3]))
                 print("Vie: {0} | {1}".format(p_health, o_health))
                 input()
-                choice = 0
+                sel_choice = 0
 
         # Who start
         player = opponent = False
