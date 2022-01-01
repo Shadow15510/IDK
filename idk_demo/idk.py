@@ -68,7 +68,7 @@ def npc(data, stat):
         if choice_sel == 1:
             opponent_stat = [randint(5, stat[2][i] + 5) for i in range(4)]
             opponent_stat.append(randint(50, 150))
-            return launch_fight(data, stat, [opponent_stat, "Ennemi"])
+            return launch_fight(data, stat, (opponent_stat, "Ennemi", randint(5, 20), 0))
 
         elif choice_sel == 2:
             if stat_test(stat[2], 1)[0]:
@@ -101,20 +101,20 @@ def launch_fight(data, stat, event):
         
         print_text("Vous avez gagne le combat. [+{}PO]".format(event[2]))
         data[0] += event[3]
-        choice = 0
-        while not choice:
+        choice_sel = 0
+        while not choice_sel:
             print("<o> Amelioration  <o>")
             print(" |1. Vitesse       |")
             print(" |2. Agilite       |")
             print(" |3. Attaque       |")
             print(" |4. Defense       |")
             print("<o> ============= <o>")
-            choice = get_input()
-            if (choice < 0 or choice > 4) and stat[2][choice - 1] >= 50: choice = 0
+            choice_sel = get_input()
+            if (choice_sel < 0 or choice_sel > 4) and stat[2][choice_sel - 1] >= 50: choice_sel = 0
 
-        print_text("Vous gagnez 2 points {}".format(("de vitesse", "d'agilite", "d'attaque", "de defense")[choice - 1]))
-        stat[2][choice - 1] += 2
-        if stat[2][choice -1] > 50: stat[2][choice - 1] = 50
+        print_text("Vous gagnez 2 points {}".format(("de vitesse", "d'agilite", "d'attaque", "de defense")[choice_sel - 1]))
+        stat[2][choice_sel - 1] += 2
+        if stat[2][choice_sel -1] > 50: stat[2][choice_sel - 1] = 50
         
         return None
 
