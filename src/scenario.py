@@ -34,8 +34,8 @@ def asgard_npc(data, stat):
     # * : (138, 71)
     if coords == (34, 7):
         if stat[8] == 4:
-            if xp == 20: return [5, 3, 10, 12, 70], "Hargduf", 10, 1
-            elif xp == 21: return [0, "[VOUS REGARDEZ LE CADAVRE D'HARGDUF. UNE FLAQUE DE SANG NOIR S'ETEND DEJA SOUS LUI.]"]
+            if data[0] == 20: return [5, 3, 7, 5, 70], "Hargduf", 10, 1
+            elif data[0] == 21: return [0, "[VOUS REGARDEZ LE CADAVRE D'HARGDUF. UNE FLAQUE DE SANG NOIR S'ETEND DEJA SOUS LUI.]"]
     
     elif coords == (121, 21):
         if stat[8] == 3: return {
@@ -54,7 +54,8 @@ def asgard_npc(data, stat):
 
     elif coords == (117, 32):
         if stat[8] == 4: return {
-            22: [4, "Je savais que je pouvais te faire confiance. Je n'ai pas beaucoup d'argent a te donner, mais si cela peut t'aider : Niflheim a une magicienne tres puissante qui vend des sorts. Avant que j'oublie, Freyr te demande.", 0, (8, -4)]
+            "base": [0, "Alors ? Tu as reussi ?"],
+            22: [4, "Je savais que je pouvais te faire confiance. Je n'ai pas beaucoup d'argent a te donner [+5 PO], mais si cela peut t'aider : Niflheim a une magicienne tres puissante qui vend des sorts. Avant que j'oublie, Freyr te demande.", 0, (1, 5), (8, -4)]
         }
 
         else: return {
@@ -69,7 +70,7 @@ def asgard_npc(data, stat):
 # Forseti
 def h_9_npc(data, stat):
     coords = data[2], data[3]
-    xp = data[0]
+    
 
     if coords == (19, 4):
         if stat[8] == 3: return {
@@ -88,13 +89,13 @@ def h_9_npc(data, stat):
 # Odin
 def h_10_npc(data, stat):
     coords = data[2], data[3]
-    xp = data[0]
+    
 
     if coords == (25, 11):
         if stat[8]:
             return [0, "Fini ce que tu as a faire."]
 
-        if xp == 0:
+        if data[0] == 0:
             stat[3][0] = 1
             return [1, "Je suis Odin, Roi des Ases. Actuellement nous avons quelques differents avec les Vanes. Vous irez donc porter cette dague a Freyja, a Vanaheim. Elle comprendra. [ODIN VOUS DONNE UNE DAGUE]"]
 
@@ -256,11 +257,11 @@ def h_21_npc(data, stat):
 
 def h_22_npc(data, stat):
     coords = data[2], data[3]
-    xp = data[0]
+    
 
     # Freyja
     if coords == (2, 8):
-        if xp == 45 and stat[8] == 0:
+        if data[0] == 45 and stat[8] == 0:
             stat[8] = 1
 
         if not (360 <= stat[4] <= 1200):
@@ -302,7 +303,7 @@ def h_22_npc(data, stat):
         if (not 360 <= stat[4] <= 1200):
             return [0, "He ! Il fait nuit !"]
 
-        if xp == 2:
+        if data[0] == 2:
             check = True
             for spell_id, spell_level in stat[7]:
                 if spell_id == 0: check = False
@@ -316,7 +317,7 @@ def h_22_npc(data, stat):
             else:
                 return [1, "Chez les Vanes, nous rendons hommage aux messagers, voici quelques pieces d'or, faites en bon usage ! [UNE LOURDE TORPEUR S'ABATTIT SUR VOUS. VOUS VOUS SENTEZ LEGER. LE DUR CHOC CONTRE LE SOL VOUS REVEILLA.]", 0, (1, 5)]
         
-        elif xp == 44:
+        elif data[0] == 44:
             if stat[8] == 0: return [0, "Va donc annoncer la nouvelle a Freyja !"]
             if stat[8] == 2: return [0, "Tsst, tu as deja eu ta recompense. Essaye plutot de comprendre ce que signifie ces runes."]
             check = True
@@ -329,12 +330,12 @@ def h_22_npc(data, stat):
             else:
                 return [0, "Je vois que tu connais deja le sort Givre, voila la somme equivalente. [+20 PO]", 0, (1, 20), (8, 1)]
 
-        if xp == 64:
+        if data[0] == 64:
             message = input("Parfait ! (ecrivez le message dechiffre) :\n")
             if message.lower() == "prenez alfheim": return [2, "Ah ! Parfait, montre-moi ca ! [VOUS TENDEZ LE MESSAGE DECHIFFRE A FREYR.]"]
             else: return [-2, "Ca n'a aucun sens... cherche encore."]
 
-        if xp == 66:
+        if data[0] == 66:
             data[1], data[2], data[3] = 6, 93, 8
             return [2, "Bien, j'ai modifie le contenu du message pour attire les soldats Ases dans un piege, tu vas donne ce parchemin a Skirnir qui le portera aux Ases. Tu le trouveras vers Nidavellir. [UNE TERRIBLE FATIGUE S'ABATTIT SUR VOUS, UNE SENSATION DE CHUTE ACCOMPAGNA VOTRE PERTE DE CONSCIENCE. LE DUR CHOC CONTRE LE SOL VOUS REVEILLA.]"]
 
@@ -342,7 +343,7 @@ def h_22_npc(data, stat):
             "base": [0, "Freyr, dieu de la vie. Bienvenue a Vanaheim"],
             16: [8, "J'aurais besoin de ton aide...\n1. Peut-etre plus tard ?\n2. Oui ?", 2],
                 25: [-9, "Si tu es toujours interesse..."],
-            26: [1, "Votre situation, entre Vanes et Ases nous derange. Je suis desole de ne pas etre plus explicite. Allez voir Lithy, elle se trouve a Midgard, vers le centre, dans l'alignement du grand palais. Elle vous expliquera la suite."],
+            26: [1, "Votre situation, entre Vanes et Ases nous derange. Je suis desole de ne pas etre plus edata[0]licite. Allez voir Lithy, elle se trouve a Midgard, vers le centre, dans l'alignement du grand palais. Elle vous edata[0]liquera la suite."],
 
             60: [2, "Ah {} ! Mon messager, Skirnir, en se faisant passer pour un Ase, a intercepte un message; mais il est chiffre. [FREYR VOUS TEND UN PARCHEMIN PLIE.] Le message est : 'zmefmq kgfzmzw'. Reviens me voir quand tu auras termine.".format(stat[5])],
             62: [0, "Deja fini ?\n1. Pas encore...\n2. Oui !", 2],
@@ -399,7 +400,7 @@ def h_23_npc(data, stat):
 
 def h_24_npc(data, stat):
     coords = data[2], data[3]
-    xp = data[0]
+    
 
     spells = ("Soin", "Flammes", "Givre", "Etincelles", "Fatigue")
     levels = ("I", "II", "III", "IV", "V")
@@ -466,7 +467,7 @@ def midgard_npc(data, stat):
     # (66, 56)
     # (68, 71)
     coords = data[2], data[3]
-    xp = data[0]
+    
 
     if coords == (67, 46):
         return {
@@ -491,9 +492,9 @@ def midgard_npc(data, stat):
     # Gardim
     elif coords == (94, 85):
         if stat[8] == 1:
-            if xp < 7: 
+            if data[0] < 7: 
                 return [0, "Gardim, capitaine du Mantree [IL DESIGNA UN DRAKKAR]"]
-            elif xp == 7:
+            elif data[0] == 7:
                 return [5, 2, 7, 7, 30], "Gardim", 3, 1
             else: return {
                     "base": [0, "[A VOS PIEDS S'ETEND LE CORPS FROID DE GARDIM.]"]
@@ -554,7 +555,7 @@ def h_26_npc(data, stat):
     # * : (17, 8)
     # * : (27, 8)
     coords = data[2], data[3]
-    xp = data[0]
+    
 
     # Rosahil Green
     if coords == (27, 6):
@@ -610,7 +611,7 @@ def niflheim_npc(data, stat):
     # * : (39, 60)
     # * : (108, 67)
     coords = data[2], data[3]
-    xp = data[0]
+    
 
     if coords == (57, 31):
         if stat[8] == 2: return {
@@ -688,7 +689,7 @@ def jotunheim_npc(data, stat):
         "base": [0, "Utarg, pour vous servir."],
         36: [0, "Utarg, vous me cherchiez ?\n1. Oui, Thrym m'a demande de vous donner ceci [VOUS LUI DONNEZ LA LETTRE].\n2. Quelles sont les relations entre les Geants et les Ases ?", 2],
             37: [3, "[UTARG LIT LE BILLET.] Hum. Thrym me demande de detacher une garnison et de me rendre a Vanaheim. On se retrouve a l'auberge, au nord de Vanaheim."],
-            38: [-2, "Plusieurs differents ont eloignes les Ases des Geants : meutres, enlevements, traitrises... Ce serait long a expliquer."]
+            38: [-2, "Plusieurs differents ont eloignes les Ases des Geants : meutres, enlevements, traitrises... Ce serait long a edata[0]liquer."]
     }
 
 
@@ -719,11 +720,11 @@ def h_34_npc(data, stat):
 
 def h_35_npc(data, stat):
     coords = data[2], data[3]
-    xp = data[0]
+    
 
     if coords == (17, 5):
-        if xp == 14: return [8, 8, 5, 5, 80], "Gullveig", 15, 1
-        elif xp == 15: return [0, "[VOUS REGARDEZ LA DEPOUILLE DESARTICULEE DE LA MAGICIENNE, ODIN SERA CONTENT.]"]
+        if data[0] == 14: return [8, 8, 5, 5, 80], "Gullveig", 15, 1
+        elif data[0] == 15: return [0, "[VOUS REGARDEZ LA DEPOUILLE DESARTICULEE DE LA MAGICIENNE, ODIN SERA CONTENT.]"]
         else: return {
                 "base": [0, "Gullveig, magicienne Vane, pour te servir."],
                 44: [0, "Gullveig, magicienne Vane, besoin de quelque chose ?\n1. Pouvez-vous dechiffre ces runes pour moi ?\n2. Non, excusez-moi.", 2],
