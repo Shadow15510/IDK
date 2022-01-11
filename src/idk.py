@@ -1,4 +1,4 @@
-from asci_lib import Asci, print_text
+from asci import Asci, print_text
 from random import randint
 from math import floor, ceil
 
@@ -63,10 +63,7 @@ def npc(data, stat):
     event = npc_data[data[1]](data, stat)
 
     if not event:    
-        print("\nChoissez une action :\n1. Attaquer\n2. Voler\n3. Parler\n4. Ne rien faire")
-        sel_choice = input(">")
-        try: sel_choice = int(sel_choice)
-        except: sel_choice = 3
+        sel_choice = print_text("\nChoissez une action :\n1. Attaquer\n2. Voler\n3. Parler\n4. Ne rien faire", 1, 4, 3)
 
         if sel_choice == 1:
             opponent_stat = [randint(5, stat[2][i] + 5) for i in range(4)]
@@ -87,14 +84,16 @@ def npc(data, stat):
         elif sel_choice == 4:
             return None
 
-    elif type(event) == tuple:
-        return launch_fight(data, stat, event)
+    elif type(event) == tuple and len(event) > 2:
+        if len(event) == 4: quest = "main"
+        else: event, quest = event[:-1], event[-1]
+        return launch_fight(data, stat, event, quest)
     
     else:
         return event
 
 
-def launch_fight(data, stat, event):
+def launch_fight(data, stat, event, quest="main"):
     issue = fight(stat, event[0], event[1])
 
     if issue == 0:
@@ -102,7 +101,7 @@ def launch_fight(data, stat, event):
         if sum(stat[2][:-1]) >= 200: return [event[3], "Vous avez gagne le combat. [+{}PO]".format(event[2])]
         
         print_text("Vous avez gagne le combat. [+{}PO]".format(event[2]))
-        data[0] += event[3]
+        data[0][quest] += event[3]
         sel_choice = 0
         while not sel_choice:
             print("<o> Amelioration  <o>")
@@ -412,7 +411,9 @@ def quick_save(data, stat):
     data_copy = data[:]
     data_copy[2] += 10
     data_copy[3] += 3
-    print("idk({0}, {1})".format(stat[:-1], data_copy))
+
+    stat_copy = stat[:-1]
+    print("\"{}\"".format(encode_save(data_copy, stat_copy)))
     input()
 
 
@@ -421,11 +422,12 @@ keys = {4: display_stat, 7: spell, 8: misc_stat, 6: inventory, 9: sleep, "s": qu
 
 
 # Main function
-def idk(stat=None, data=None):
-    # stat = [0 - PV, 1 - pièces d'or, 2 - [vitesse, agilité, attaque, defense, magie], 3 - [arme, armure], 4 - ticks, 5 - nom, 6 - classe, 7 - sorts connus : (id, level), 8 - sous-quête en cours]
-    if not stat:
-        name = ""
+def idk(save_code=None):
+    # stat = [0 - PV, 1 - pièces d'or, 2 - [vitesse, agilité, attaque, defense, magie], 3 - [arme, armure], 4 - ticks, 5 - nom, 6 - classe, 7 - sorts connus : (id, level), 8 - sous-quêtes terminées]
+    if not save_code:
+        name = input("Entrez votre nom :\n>")
         while len(name) == 0 or len(name) > 13:
+            print("Erreur : nom invalide.")
             name = input("Entrez votre nom :\n>")
 
         player_class = 0
@@ -435,20 +437,20 @@ def idk(stat=None, data=None):
             if player_class < 0 or player_class > 5: player_class = 0
 
         if player_class == 1:
-            stat = [5, 5, 10, 5, 5]
+            stat = [6, 6, 10, 6, 6]
         elif player_class == 2:
-            stat = [5, 10, 5, 5, 5] 
+            stat = [6, 10, 6, 6, 6] 
         elif player_class == 3:
-            stat = [5, 5, 5, 10, 5]
+            stat = [6, 6, 6, 10, 6]
         elif player_class == 4:
-            stat = [5, 5, 5, 5, 20]
+            stat = [6, 6, 6, 6, 20]
         elif player_class == 5:
-            stat = [10, 5, 5, 5, 5]
+            stat = [10, 6, 6, 6, 6]
 
-        stat = [100, 10, stat, [0, 0], 360, name, player_class - 1, [], 0, -1]
+        stat = [100, 10, stat, [0, 0], 360, name, player_class - 1, [], 1, -1]
         if player_class == 4:
             stat[7].append((1, 1))
-        data = [0, 3, 44, 66]
+        data = [{"main": 0}, 3, 44, 66]
 
         print_text("Au alentour du Ve siecle, quelque part en Scandinavie. La bataille prenait place dans un champ saccage, et la nuit etait tombee depuis quelques heures lorsque l'assaut debuta.")
         print_text("Hache levee, a la seule lueur de la pleine lune, {0} et sa division se jeterent sur le camp adverse, mais, pris a revers, le combat tourna vite a la defaveur des assaillants qui furent reduit sans autres difficultes.".format(name))
@@ -456,31 +458,17 @@ def idk(stat=None, data=None):
         print_text("Mais Odin avait d'autres plan pour {0} qu'une retraite parmi les meilleurs guerriers, et il le renvoya dans le vaste monde avec cet ultimatum : si il trouve la voie jusqu'a Asgard et le Valaskjalf, Odin conscent a le garder a son service, sinon il sera condamne a errer dans le monde sans jamais trouver le repos.".format(name))
 
     else:
-        stat.append(-1)
-
-        # Money check
-        if stat[1] < 0: stat[1] = 0
-        if stat[1] > 100000: stat[1] = 100000
-
-        # Stat check
-        for i in range(len(stat[2])):
-            if stat[2][i] > 50: stat[2][i] = 50
-            if stat[2][i] < 0: stat[2][i] = 0
-
-        # Player's class check
-        if not (0 <= stat[6] <= 5):
-            raise ValueError("classe du joueur inconnue")
-
-        if len(stat[5]) > 13:
-            raise ValueError("nom du joueur invalide")
+        stat, data = decode_save(save_code)
 
     idk_game = Asci(maps, events, keys)
     stat, data = idk_game.mainloop(102, stat, data, routine=routine, door="^_", walkable=".,`' ", exit_key="q")
+    if stat[9] != -1: data[0]["main"] -= stat[9]
 
-    if data[0] == 102:
+    if data[0]["main"] == 102:
         print_text("Ainsi s'acheva la premiere guerre du monde. Les Ases garderent la tete de Mimir pour ses conseils avises, mais il n'y eu jamais de represailles. Les Ases et les Vanes se melerent ne formant ainsi qu'une seule et meme grande famille.")
+    
     else:
-        print("idk({0}, {1})".format(stat[:-1], data))
+        print("idk(\"{}\")".format(encode_save(data, stat[:-1])))
 
 
 # Misc functions
@@ -503,3 +491,79 @@ def stat_test(stat, test_id):
     score = (80 + randint(-20, 20)) * stat[test_id] / 50
     return randint(1, 100) <= score, floor(score)
 
+
+def encode_save(data, stat):
+    xp = ["{0}-{1}".format(key, data[0][key]) for key in data[0] if key == "main" or data[0][key]]
+    data = "{0},{1},{2},{3}".format(data[1], data[2], data[3], ",".join(xp))
+
+    stat[5] = 0
+    if not stat[7]: stat[7] = 0
+    else: stat[7] = ",".join(["{0}-{1}".format(i[0], i[1]) for i in stat[7]])
+
+    save_code = []
+    for i in stat:
+        if type(i) == list:
+            for j in i: save_code.append(str(j))
+        else: save_code.append(str(i))
+
+    return ",".join(save_code) + ".{}".format(data)
+
+
+def decode_save(save_code):
+    stat, data = save_code.split(".")
+    encoded_stat = stat.split(",")
+    encoded_data = data.split(",")
+
+    encoded_stat = [encoded_stat[0], encoded_stat[1], encoded_stat[2: 7], encoded_stat[7: 9], encoded_stat[9], 0, encoded_stat[11], encoded_stat[12: -1], encoded_stat[-1], -1]
+    
+    if encoded_stat[7] == ["0"]:
+        encoded_stat[7] = []
+    else:
+        spells = []
+        for spell in encoded_stat[7]:
+            s_id, s_lv = spell.split("-")
+            spells.append((s_id, s_lv))
+        encoded_stat[7] = spells
+
+    stat = str_to_int(encoded_stat)
+
+    for i in range(len(stat[7])):
+        stat[7][i] = tuple(stat[7][i])
+    
+    # Money check
+    if stat[1] < 0: stat[1] = 0
+    if stat[1] > 100000: stat[1] = 100000
+
+    # Stat check
+    for i in range(len(stat[2])):
+        if stat[2][i] > 50: stat[2][i] = 50
+        if stat[2][i] < 0: stat[2][i] = 0
+
+    # Player's class check
+    if not (0 <= stat[6] <= 5):
+        raise ValueError("classe du joueur inconnue")
+
+    # PLayer's name check
+    name = input("Entrez votre nom :\n>")
+    while len(name) == 0 or len(name) > 13:
+        print("Erreur : Nom invalide")
+        name = input("Entrez votre nom :\n>")
+    stat[5] = name
+
+    xp = {}
+    for quest in encoded_data[3:]:
+        q_id, q_xp = quest.split("-")
+        xp[q_id] = int(q_xp)
+    data = [xp, int(encoded_data[0]), int(encoded_data[1]), int(encoded_data[2])]
+
+    return stat, data
+
+
+def str_to_int(data):
+    result = []
+    for i in data:
+        if isinstance(i, (list, tuple)):
+            result.append(str_to_int(i))
+        else:
+            result.append(int(i))
+    return result
