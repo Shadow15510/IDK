@@ -28,7 +28,7 @@ Pour interagir, le joueur doit entrer le numéro ou la lettre correspondante pui
  - 7 : les sorts connus du joueur
  - 8 : informations générales (nom du monde actuelle, période de la journée et heure, classe du joueur et pièces d'or)
  - 6 : inventaire (arme et armure)
- - 9 : dormir (permet de passer le temps d'un certain nombre d'heure
+ - 9 : dormir (permet de passer le temps d'un certain nombre d'heure)
  - q : quitter
  - s : sauvegarde rapide (cela affiche le code de sauvegarde et continue le jeu)
 
