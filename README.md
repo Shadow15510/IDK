@@ -14,11 +14,11 @@ La totalité du projet est sous licence GNU General Public Licence v3.0.
 
 ### Installation
 
-Il faut placer le dossier `idk_demo` à la racine de la Graph 90+E. Ce dossier contient déjà tous les fichiers du jeu ainsi que le moteur. (le dossier de la version démo fait environ 170 kio tout compris)
+Il faut placer le dossier `idk` à la racine de la Graph 90+E. Ce dossier contient déjà tous les fichiers du jeu ainsi que le moteur. (le dossier fait environ 210 kio tout compris)
 
 ### Lancement
 
-Allez dans le menu Python, ouvrez le dossier `idk_demo` et lancez le script `idk.py` (via [F1]). Une fois le script importé (cela peut prendre quelques instants), exécutez la fonction `idk()` et suivez les instructions.
+Allez dans le menu Python, ouvrez le dossier `idk` et lancez le script `idk.py` (via [F1]). Une fois le script importé (cela peut prendre quelques instants), exécutez la fonction `idk()`.
 
 ### Contrôles
 
@@ -26,7 +26,7 @@ Pour interagir, le joueur doit entrer le numéro ou la lettre correspondante pui
  - 1, 2, 3 5 : se déplacer
  - 4 : statistiques du joueur (nom, vitesse, agilité, attaque, défense, points de magie et de vie)
  - 7 : les sorts connus du joueur
- - 8 : informations générales (nom du monde actuelle, période de la journée et heure, classe du joueur et pièce d'or)
+ - 8 : informations générales (nom du monde actuelle, période de la journée et heure, classe du joueur et pièces d'or)
  - 6 : inventaire (arme et armure)
  - 9 : dormir (permet de passer le temps d'un certain nombre d'heure
  - q : quitter
@@ -94,8 +94,8 @@ Le jeu est évidemment en lien avec la mythologie nordique, cependant, plusieurs
 
 #### Les quêtes
 
-Le jeu est constitué d'une quête principale qui s'articule autour de la mythologie nordique. À plusieurs moment, la quête se suspend. Le joueur a alors la liberté de poursuivre la quête principale ou d'essayer de trouver une quête annexe. À chaque interruption de ce type, le joueur à le choix entre au moins deux quêtes annexes. 
+Le jeu est constitué d'une quête principale qui s'articule autour de la mythologie nordique, pour le premier opus, le joueur accède à un statut particulier qui lui donne le pouvoir de voyager entre les neufs monde de la mythologie nordique. Votre but ? Tenter de survivre alors que Ases et Vanes se livrent une guerre féroce.
 
-Ces petites quêtes ne sont pas du tout en rapport avec la quête principale, elles permettent essentiellement de récupérer de l'argent ou des conseils. Et elles sont en général plutôt courtes. Néanmoins ces quêtes restent rares (ou dur à trouver comme vous voulez) en effet, lorsque le scénario se met en pause, les débuts des quêtes annexes ne sont pas forcément dans le monde dans lequel vous êtes (elles sont alors dans un monde adjacent).
+Outre les 13 quêtes qui constituent l'histoire principale, IDK a également un système de quêtes annexes. Ces petites quêtes ne sont pas du tout en rapport avec la quête principale, elles permettent essentiellement de récupérer de l'argent ou des conseils. Et elles sont en général plutôt courtes. Néanmoins ces quêtes restent rares (ou dur à trouver comme vous voulez).
 
 Mais comme je le disais plus haut, ces quêtes sont purement facultatives et vous devriez pouvoir survire sans elles.
