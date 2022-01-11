@@ -413,8 +413,7 @@ def quick_save(data, stat):
     data_copy[3] += 3
 
     stat_copy = stat[:-1]
-    print("\"{}\"".format(encode_save(data_copy, stat_copy)))
-    input()
+    print_text("\"{}\"".format(encode_save(data_copy, stat_copy)))
 
 
 events = {"*": npc, "?": point_of_interest}
