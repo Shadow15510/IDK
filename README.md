@@ -4,8 +4,6 @@
 
 Pour commencer merci à KikooDX qui m'a donné le titre. IDK est un jeu de rôle en Python pour Graph 90+E sur fond de mythologie nordique. Le but général est divisé en deux : s'amuser avec la mythologie nordique d'une part et réussir à finir la quête principale d'autre part.
 
-Seule la version de démonstration est jouable à ce jour.
-
 ## Licence
 
 La totalité du projet est sous licence GNU General Public Licence v3.0.
@@ -23,7 +21,7 @@ Allez dans le menu Python, ouvrez le dossier `idk` et lancez le script `idk.py` 
 ### Contrôles
 
 Pour interagir, le joueur doit entrer le numéro ou la lettre correspondante puis appuyer sur [EXE] pour valider.
- - 1, 2, 3 5 : se déplacer
+ - 1, 2, 3 et 5 : se déplacer (respectivement vers la gauche, le bas, la droite et le haut)
  - 4 : statistiques du joueur (nom, vitesse, agilité, attaque, défense, points de magie et de vie)
  - 7 : les sorts connus du joueur
  - 8 : informations générales (nom du monde actuelle, période de la journée et heure, classe du joueur et pièces d'or)
