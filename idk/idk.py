@@ -1,36 +1,62 @@
 from idk_lib import *
 
-print(" Island of the Dead  \n   *  Kings  *\n---------------------\nEntrez 'idk()' pour\nune nouvelle partie.")
 
 # Game
+def npc(data, stat):    
+    npc_data = (
+    asgard_npc,
+    vanaheim_npc,
+    alfheim_npc,
+    midgard_npc,
+    niflheim_npc,
+    jotunheim_npc,
+    nidavellir_npc,
+    muspellheim_npc,
+    svartalfheim_npc,
+    h_9_npc, h_10_npc, h_11_npc, h_12_npc, h_13_npc, h_14_npc, h_15_npc, h_16_npc, h_17_npc, h_18_npc, h_19_npc, h_20_npc,
+    h_21_npc, h_22_npc,
+    h_23_npc, h_24_npc,
+    h_25_npc, h_26_npc, h_27_npc, h_28_npc,
+    h_29_npc, h_30_npc,
+    h_31_npc, h_32_npc, h_33_npc, h_34_npc, h_35_npc, h_36_npc,
+    h_37_npc, h_38_npc, h_39_npc, h_40_npc, h_41_npc,
+    h_42_npc, h_43_npc, h_44_npc,
+    h_45_npc, h_46_npc, h_47_npc, h_48_npc)
+
+
+    return npc_core(npc_data[data[1]](data, stat), data, stat)
+
+
+def point_of_interest(data, stat):
+    po_data = (
+        asgard_po,
+        vanaheim_po,
+        alfheim_po,
+        midgard_po,
+        niflheim_po,
+        jotunheim_po,
+        nidavellir_po,
+        muspellheim_po,
+        svartalfheim_po
+    )
+
+    coords = data[2], data[3]
+    event = po_data[data[1]](coords)
+
+    if not event: return [0, "Il n'y a rien à voir ici."]
+    else: return event
+
+
+print(" Island of the Dead  \n   *  Kings  *\n---------------------\nEntrez 'idk()' pour\nune nouvelle partie.")
+events = {"*": npc, "?": point_of_interest}
+keys = {4: display_stat, 7: spell, 8: misc_stat, 6: inventory, 9: sleep, "s": quick_save}
+
+
 def idk(save_code=None):
     # stat = [0 - PV, 1 - pièces d'or, 2 - [vitesse, agilité, attaque, defense, magie], 3 - [arme, armure], 4 - ticks, 5 - nom, 6 - classe, 7 - sorts connus : (id, level), 8 - sous-quêtes terminées]
     if not save_code:
-        name = input("Entrez votre nom :\n>")
-        while len(name) == 0 or len(name) > 13:
-            print("Erreur : nom invalide.")
-            name = input("Entrez votre nom :\n>")
-
-        player_class = 0
-        while(not player_class):
-            print("Choisissez une classe\n1. Guerrier\n2. Voleur\n3. Moine\n4. Mage\n5. Assassin")
-            player_class = get_input()
-            if player_class < 0 or player_class > 5: player_class = 0
-
-        if player_class == 1:
-            stat = [6, 6, 10, 6, 6]
-        elif player_class == 2:
-            stat = [6, 10, 6, 6, 6] 
-        elif player_class == 3:
-            stat = [6, 6, 6, 10, 6]
-        elif player_class == 4:
-            stat = [6, 6, 6, 6, 20]
-        elif player_class == 5:
-            stat = [10, 6, 6, 6, 6]
-
-        stat = [100, 10, stat, [0, 0], 360, name, player_class - 1, [], 1, -1]
-        if player_class == 4:
-            stat[7].append((1, 1))
+        stat = init_stat()
+        name = stat[5]
         data = [{"main": 0}, 3, 44, 66]
 
         print_text("Au alentour du Ve siecle, quelque part en Scandinavie. La bataille prenait place dans un champ saccage, et la nuit etait tombee depuis quelques heures lorsque l'assaut debuta.")

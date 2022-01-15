@@ -1,5 +1,5 @@
 from asci import Asci, print_text
-from random import randint
+from random import randint, choice
 from math import floor, ceil
 
 from asgard import *
@@ -33,32 +33,7 @@ maps = (
     h_45, h_46, h_47, h_48)
 
 # Asci functions
-def npc(data, stat):
-    from random import choice
-    
-    npc_data = (
-    asgard_npc,
-    vanaheim_npc,
-    alfheim_npc,
-    midgard_npc,
-    niflheim_npc,
-    jotunheim_npc,
-    nidavellir_npc,
-    muspellheim_npc,
-    svartalfheim_npc,
-    h_9_npc, h_10_npc, h_11_npc, h_12_npc, h_13_npc, h_14_npc, h_15_npc, h_16_npc, h_17_npc, h_18_npc, h_19_npc, h_20_npc,
-    h_21_npc, h_22_npc,
-    h_23_npc, h_24_npc,
-    h_25_npc, h_26_npc, h_27_npc, h_28_npc,
-    h_29_npc, h_30_npc,
-    h_31_npc, h_32_npc, h_33_npc, h_34_npc, h_35_npc, h_36_npc,
-    h_37_npc, h_38_npc, h_39_npc, h_40_npc, h_41_npc,
-    h_42_npc, h_43_npc, h_44_npc,
-    h_45_npc, h_46_npc, h_47_npc, h_48_npc)
-
-
-    event = npc_data[data[1]](data, stat)
-
+def npc_core(event, data, stat):
     if not event:    
         sel_choice = print_text("\nChoissez une action :\n1. Attaquer\n2. Voler\n3. Parler\n4. Ne rien faire", 1, 4, 3)
 
@@ -118,27 +93,6 @@ def launch_fight(data, stat, event, quest="main"):
 
     elif issue == 1: return [0, "Vous etes mort."]
     elif issue == 2: return [0, "Vous avez fuit."]
-
-
-def point_of_interest(data, stat):
-    po_data = (
-        asgard_po,
-        vanaheim_po,
-        alfheim_po,
-        midgard_po,
-        niflheim_po,
-        jotunheim_po,
-        nidavellir_po,
-        muspellheim_po,
-        svartalfheim_po
-    )
-
-    coords = data[2], data[3]
-
-    event = po_data[data[1]](coords)
-
-    if not event: return [0, "Il n'y a rien à voir ici."]
-    else: return event
 
 
 def routine(data, stat):
@@ -413,10 +367,6 @@ def quick_save(data, stat):
     print_text("\"{}\"".format(encode_save(data_copy, stat_copy)))
 
 
-events = {"*": npc, "?": point_of_interest}
-keys = {4: display_stat, 7: spell, 8: misc_stat, 6: inventory, 9: sleep, "s": quick_save}
-
-
 # Misc functions
 def get_input():
     string = input(">")
@@ -436,6 +386,36 @@ def center(string, total_length, symbol):
 def stat_test(stat, test_id):
     score = (80 + randint(-20, 20)) * stat[test_id] / 50
     return randint(1, 100) <= score, floor(score)
+
+
+def init_stat():
+    name = input("Entrez votre nom :\n>")
+    while len(name) == 0 or len(name) > 13:
+        print("Erreur : nom invalide.")
+        name = input("Entrez votre nom :\n>")
+
+    player_class = 0
+    while(not player_class):
+        print("Choisissez une classe\n1. Guerrier\n2. Voleur\n3. Moine\n4. Mage\n5. Assassin")
+        player_class = get_input()
+        if player_class < 0 or player_class > 5: player_class = 0
+
+    if player_class == 1:
+        stat = [6, 6, 10, 6, 6]
+    elif player_class == 2:
+        stat = [6, 10, 6, 6, 6] 
+    elif player_class == 3:
+        stat = [6, 6, 6, 10, 6]
+    elif player_class == 4:
+        stat = [6, 6, 6, 6, 20]
+    elif player_class == 5:
+        stat = [10, 6, 6, 6, 6]
+
+    stat = [100, 10, stat, [0, 0], 360, name, player_class - 1, [], 1, -1]
+    if player_class == 4:
+        stat[7].append((1, 1))
+
+    return stat
 
 
 def encode_save(data, stat):
