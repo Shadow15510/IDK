@@ -47,7 +47,9 @@ def point_of_interest(data, stat):
     else: return event
 
 
-print(" Island of the Dead  \n   *  Kings  *\n---------------------\nEntrez 'idk()' pour\nune nouvelle partie.")
+print(center("Island of the Dead", 21, " "))
+print(center("*  Kings  *", 21, " "))
+print("---------------------\n\nEntrez 'idk()' pour\nune nouvelle partie.")
 events = {"*": npc, "?": point_of_interest}
 keys = {4: display_stat, 7: spell, 8: misc_stat, 6: inventory, 9: sleep, "s": quick_save}
 
