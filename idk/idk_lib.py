@@ -33,7 +33,9 @@ maps = (
     h_45, h_46, h_47, h_48)
 
 # Asci functions
-def npc_core(event, data, stat):
+def npc_core(event_fn, data, stat):
+    event = event_fn(data, stat)
+
     if not event:    
         sel_choice = print_text("\nChoissez une action :\n1. Attaquer\n2. Voler\n3. Parler\n4. Ne rien faire", 1, 4, 3)
 

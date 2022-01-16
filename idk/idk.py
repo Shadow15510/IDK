@@ -24,7 +24,7 @@ def npc(data, stat):
     h_45_npc, h_46_npc, h_47_npc, h_48_npc)
 
 
-    return npc_core(npc_data[data[1]](data, stat), data, stat)
+    return npc_core(npc_data[data[1]], data, stat)
 
 
 def point_of_interest(data, stat):
