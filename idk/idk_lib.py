@@ -32,6 +32,12 @@ maps = (
     h_42, h_43, h_44,
     h_45, h_46, h_47, h_48)
 
+spells = ("Soin", "Flammes", "Givre", "Etincelles", "Fatigue")
+spells_level = ("I", "II", "III", "IV", "V")
+spells_effect = ((0, 1, True), (4, -1, False), (4, -1, False), (4, -1, False), (0, -1, False)) # (capacity, factor, True on player; False on opponent)
+weapons = ("<aucune>", "Dague", "Marteau", "Masse", "Fleau", "Hache", "Epee", "Espadon", "Hache double")
+armors = ("<aucune>", "Rondache", "Pavois", "Cote de maille", "Broigne", "Harnois")
+
 # Asci functions
 def npc_core(event_fn, data, stat):
     event = event_fn(data, stat)
@@ -68,7 +74,7 @@ def npc_core(event_fn, data, stat):
 
 
 def launch_fight(data, stat, event, quest="main"):
-    issue = fight(stat, event[0], event[1])
+    issue, stat[0] = fight(stat, event[0], event[1])
 
     if issue == 0:
         stat[1] += event[2]
@@ -128,46 +134,32 @@ def fight(stat, opponent_stat, opponent_name):
             if len(stat[7]) == 0:
                 msg += "\nVous ne connaissez pas de sort."
             else:
-                spell_data = ("Soin", "Flammes", "Givre", "Etincelles", "Fatigue")
-                spell_level = ("I", "II", "III", "IV", "V")
-
                 spell_choice = 0
                 while not spell_choice:
                     print("\n" * 6 + "Sort(s) connu(s) :")
                     count = 0
                     for spell_id, level in stat[7]:
-                        print("{0}. {1} {2}".format(count + 1, spell_data[spell_id], spell_level[level - 1]))
+                        print("{0}. {1} {2}".format(count + 1, spells[spell_id], spells_level[level - 1]))
                         count += 1
                     spell_choice = get_input()
                     if spell_choice < 0 or spell_choice > 3: spell_choice = 0
 
                 spell_choice -= 1
-                name, level = spell_data[stat[7][spell_choice][0]], stat[7][spell_choice][1]
+                spell_id, level = stat[7][spell_choice][0], stat[7][spell_choice][1]
 
                 if stat[2][4] >= level * 10:
-                    msg += "\nVous lancez {0} de niveau {1} [-{2} PM].".format(name, spell_level[level - 1], level * 10)
+                    msg += "\nVous lancez {0} de niveau {1} [-{2} PM].".format(spells[spell_id], spells_level[level - 1], level * 10)
                     stat[2][4] -= level * 10
                     pts = 12 * level + randint(-5, 5)
 
-                    if stat[7][spell_choice][0] == 0:
-                        stat[0] += pts
-                        msg += "\nVous gagnez {} PV".format(pts)
-                    
-                    elif stat[7][spell_choice][0] == 1:
-                        opponent_stat[4] -= pts
-                        msg += "\n{0} perd {1} PV".format(opponent_name, pts)
-                    
-                    elif stat[7][spell_choice][0] == 2:
-                        opponent_stat[4] -= pts
-                        msg += "\n{0} perd {1} PV".format(opponent_name, pts)
-                    
-                    elif stat[7][spell_choice][0] == 3:
-                        opponent_stat[4] -= pts
-                        msg += "\n{0} perd {1} PV".format(opponent_name, pts)
-                    
-                    elif stat[7][spell_choice][0] == 4:
-                        opponent_stat[0] -= pts
-                        msg += "\n{0} perd {1} points de vitesse".format(opponent_name, 12 * level)
+                    capacity, factor, apply_on_player = spells_effect[spell_id]
+
+                    if apply_on_player:
+                        player_stat[capacity] += factor * pts
+                        msg += "\nVous {0} {1} points de {2}".format(("perdez", "gagnez")[factor > 0], pts, ("vitesse", "agilité", "attaque", "défense", "vie")[capacity])
+                    else:
+                        opponent_stat[capacity] += factor * pts
+                        msg += "\n{0} {1} {2} points de {3}".format(opponent_name, ("perd", "gagne")[factor > 0], pts, ("vitesse", "agilité", "attaque", "défense", "vie")[capacity])
 
                 else:
                     msg += "\nVous ne parvenez pas a lancer le sort."
@@ -191,14 +183,14 @@ def fight(stat, opponent_stat, opponent_name):
         elif stat_test(player_stat, 1)[0]:
             msg += "\n{} esquive le coup.".format(stat[5])
         else:
-            stat[0] -= damage
+            player_stat[4] -= damage
             msg += "\n{0} perd {1} PV.".format(stat[5], damage)
 
         print_text(msg)
 
     # opponent_stat = [vitesse, agilité, attaque, défense, vie]
-    # player_stat = [vitesse, agilité, attaque, défense]
-    player_stat = [stat[2][0], stat[2][1], stat[2][2] + stat[3][0] * 5, stat[2][3] + stat[3][1] * 5]
+    # player_stat = [vitesse, agilité, attaque, défense, vie]
+    player_stat = [stat[2][0], stat[2][1], stat[2][2] + stat[3][0] * 5, stat[2][3] + stat[3][1] * 5, stat[0]]
 
     end = False
     while not end:
@@ -217,7 +209,7 @@ def fight(stat, opponent_stat, opponent_name):
                 p_capacities = ["{} ".format(i) if i < 10 else str(i) for i in player_stat]
                 o_capacities = ["{} ".format(i) if i < 10 else str(i) for i in opponent_stat[:-1]]
 
-                p_health = str(stat[0]) + " " * (3 - len(str(stat[0])))
+                p_health = str(player_stat[4]) + " " * (3 - len(str(player_stat[4])))
                 o_health = str(opponent_stat[4]) + " " * (3 - len(str(opponent_stat[4])))
 
                 print("  Joueur | Ennemi")
@@ -243,18 +235,18 @@ def fight(stat, opponent_stat, opponent_name):
         if player > opponent:
             end = player_turn()
             if end: return 2
-            if opponent_stat[4] <= 0: return 0
+            if opponent_stat[4] <= 0: return 0, player_stat[4]
             opponent_turn()
         
         else:
             opponent_turn()
-            if stat[0] <= 0: return 1 
+            if player_stat[4] <= 0: return 1, player_stat[4]
             end = player_turn()
 
-        if opponent_stat[4] <= 0: return 0
-        if stat[0] <= 0: return 1
+        if opponent_stat[4] <= 0: return 0, player_stat[4]
+        if player_stat[4] <= 0: return 1, player_stat[4]
 
-    return 2
+    return 2, player_stat[4]
 
 
 def misc_stat(data, stat):
@@ -306,8 +298,8 @@ def display_stat(data, stat):
 
 
 def inventory(data, stat):
-    weapon = ("<aucune>", "Dague", "Marteau", "Masse", "Fleau", "Hache", "Epee", "Espadon", "Hache double")[stat[3][0]]
-    shield = ("<aucune>", "Rondache", "Pavois", "Cote de maille", "Broigne", "Harnois")[stat[3][1]]
+    weapon = weapons[stat[3][0]]
+    shield = armors[stat[3][1]]
 
     weapon = " |" + weapon + " " * (17 - len(weapon)) + "|"
     shield = " |" + shield + " " * (17 - len(shield)) + "|"
@@ -327,22 +319,19 @@ def sleep(data, stat):
         if sleep_hours < 0: sleep_hours = 0
 
     stat[4] += sleep_hours * 60
-    if stat[0] < 100: stat[0] += sleep_hours
-    if stat[2][4] < 50: stat[2][4] += sleep_hours // 2
+    if stat[0] < 100: stat[0] += sleep_hours // 2
+    if stat[2][4] < 50: stat[2][4] += sleep_hours // 4
 
 
     # If the player is at home
     if data[1] == 27:
-        if stat[0] < 100: stat[0] += 5 * sleep_hours
+        if stat[0] < 100: stat[0] += 2 * sleep_hours
         if stat[2][4] < 50: stat[2][4] += sleep_hours // 2
 
     print_text("Vous vous reposez {0} heure{1}.".format(sleep_hours, ("", "s")[sleep_hours > 1]))
 
 
 def spell(data, stat):
-    spell_data = ("Soin", "Flammes", "Givre", "Etincelles", "Fatigue")
-    spell_level = ("I", "II", "III", "IV", "V")
-
     to_disp = "Magie : {} PM".format(stat[2][4])
     print("<o>    Sorts     <o>")
     print(" |" + to_disp + " " * (16 - len(to_disp)) + "|")
@@ -351,7 +340,7 @@ def spell(data, stat):
         if i < len(stat[7]):
             spell_id, level = stat[7][i]
             if spell_id >= 0:
-                to_disp = "{0} {1}".format(spell_data[spell_id], spell_level[level - 1])
+                to_disp = "{0} {1}".format(spells[spell_id], spells_level[level - 1])
                 print(" |" + to_disp + " " * (16 - len(to_disp)) + "|")
         else:
             print(" |<aucun>         |")

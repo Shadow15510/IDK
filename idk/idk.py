@@ -1,5 +1,16 @@
 from idk_lib import *
 
+try:
+    import dlc_idk as dlc
+    spells = dlc.spells
+    spells_level = dlc.spells_level
+    spells_effect = dlc.spells_effect
+    weapons = dlc.weapons
+    armors = dlc.armors
+except:
+    dlc = None
+
+
 
 # Game
 def npc(data, stat):    
@@ -23,6 +34,10 @@ def npc(data, stat):
     h_42_npc, h_43_npc, h_44_npc,
     h_45_npc, h_46_npc, h_47_npc, h_48_npc)
 
+
+    if dlc:
+        event = dlc.npc(data, stat)
+        if event: return event
 
     return npc_core(npc_data[data[1]], data, stat)
 
@@ -49,7 +64,10 @@ def point_of_interest(data, stat):
 
 print(center("Island of the Dead", 21, " "))
 print(center("*  Kings  *", 21, " "))
-print("---------------------\n\nEntrez 'idk()' pour\nune nouvelle partie.")
+print("---------------------")
+if dlc: print(center("DLC : marchands", 21, " "))
+else: print()
+print("Entrez 'idk()' pour\nune nouvelle partie.")
 events = {"*": npc, "?": point_of_interest}
 keys = {4: display_stat, 7: spell, 8: misc_stat, 6: inventory, 9: sleep, "s": quick_save}
 
@@ -515,13 +533,8 @@ def h_23_npc(data, stat):
             54: [2, "Si j'en crois ce qui est note, cela veut dire : 'kvasir'."]
         }
 
-
 def h_24_npc(data, stat):
     coords = data[2], data[3]
-    
-
-    spells = ("Soin", "Flammes", "Givre", "Etincelles", "Fatigue")
-    levels = ("I", "II", "III", "IV", "V")
 
     if not (480 <= stat[4] <= 1140): return [0, "Excusez-moi, nous sommes fermes."]
 
@@ -530,7 +543,7 @@ def h_24_npc(data, stat):
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
-            return [0, "Quel sort souhaitez-vous oublier ?\n" + "\n".join(["{0}. {1} {2}".format(nb + 1, spells[stat[7][nb][0]], levels[stat[7][nb][1] - 1]) for nb in range(len(stat[7]))]), len(stat[7])]
+            return [0, "Quel sort souhaitez-vous oublier ?\n" + "\n".join(["{0}. {1} {2}".format(nb + 1, spells[stat[7][nb][0]], spells_level[stat[7][nb][1] - 1]) for nb in range(len(stat[7]))]), len(stat[7])]
 
         else:
             for i in range(1, len(stat[7]) + 1):
@@ -539,37 +552,47 @@ def h_24_npc(data, stat):
                     stat[7].pop(i - 1)
                     return [-i, "Asseyez-vous, je vais vous faire oublier ce sort. [UN PUISSANT MAL DE TETE VOUS PRIT, LES MURS SEMBLERENT TANGUER TANDIS QUE VOTRE VUE DEVINT FLOUE. LE VERTIGE S'ESTOMPA PROGRESSIVEMENT.] Et voila !"]
 
-    if coords == (36, 12):
-        spells_sale = ((0, 2), (1, 2), (2, 4), (4, 1))
-
+    if coords == (36, 12):         
         if len(stat[7]) >= 3: return [0, "Je suis desole, vous ne pouvez pas apprendre plus de trois sorts."]
 
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Diomwar, pour vous servir. Quel sort voulez-vous acheter ?\n1. Soin II\n2. Flammes II\n3. Givre IV\n4. Fatigue I", 4]
+        spells_sale = []
+        formated_spells = ""
+        while len(spells_sale) < 3:
+            sp_id = randint(0, len(spells) - 1)
+            sp_lvl = randint(1, len(spells_level))
 
+            check = True
+            for sp in spells_sale:
+                if sp[0] == sp_id and sp[1] == sp_lvl:
+                    check = False
+                    break
+
+            if check:
+                spells_sale.append((sp_id, sp_lvl))
+                formated_spells += "{0}. {1} {2}\n".format(len(spells_sale), spells[sp_id], spells_level[sp_lvl - 1])
+
+        spell_choice = print_text("Diomwar, pour vous servir. Quel sort voulez-vous acheter ?\n{}".format(formated_spells), 1, 3, 0)
+
+        if not spell_choice: return [0, "Hmm ?"]
+
+        spell_sel = spells_sale[spell_choice - 1]
+        if stat[1] < 10 * spell_sel[1]: return [0, "Vous n'avez pas les moyens, desole."]
+
+        spell_id = -1
+        for sp_id in range(len(stat[7])):
+            sp = stat[7][sp_id]
+            if spell_sel[0] == sp[0]:
+                if spells_sel[1] <= sp[1]: return [0, "Vous connaissez deja ce sort."]
+                else:
+                    spell_id = sp_id
+                    break
+
+        if spell_id == -1:
+            stat[7].append(spells_sale[i])
         else:
-            for i in range(1, 5):
-                if data[0]["main"] == stat[9] + i:
-                    stat[9] = -1
-                    if stat[1] < spells_sale[i - 1][1] * 10: return [-i, "Vous n'avez pas les moyens, desole."]
+            stat[7][spell_id] = spells_sale[i]
 
-                    spell_id = -1
-                    for sp_id in range(len(stat[7])):
-                        sp = stat[7][sp_id]
-                        if spells_sale[i - 1][0] == sp[0]:
-                            if spells_sale[i - 1][1] <= sp[1]: return [-i, "Vous connaissez deja ce sort."]
-                            else:
-                                spell_id = sp_id
-                                break
-
-                    if spell_id == -1:
-                        stat[7].append(spells_sale[i - 1])
-                    else:
-                        stat[7][spell_id] = spells_sale[i - 1]
-
-                    return [-i, "[DIOMWAR OUVRIT UN LIVRE RELIE DE CUIR NOIR, ET TRACA DU DOIGT DES SIGNES CABALISTIQUES SUR LE SOL. LES RUNES BRILLERENT PUISSAMMENT AVANT DE S'ETEINDRE.]", 0, (1, -spells_sale[i - 1][1] * 10)]
-
+        return [0, "[DIOMWAR OUVRIT UN LIVRE RELIE DE CUIR NOIR, ET TRACA DU DOIGT DES SIGNES CABALISTIQUES SUR LE SOL. LES RUNES BRILLERENT PUISSAMMENT AVANT DE S'ETEINDRE.]", 0, (1, -10 * spells_sel[1])]                
 
 # - - - Midgard - - - #
 def midgard_po(coords):
@@ -620,19 +643,16 @@ def midgard_npc(data, stat):
             if stat[8] % 3: return [0, "Gardim, capitaine du Mantree [IL DESIGNA UN DRAKKAR]"]
             else: return [0, "Marli, assistant de feu Gardim, je peux vous renseigner ?"]
 
-    elif coords == (51, 60):
-        return {
-                "base": [0, "Hmm ?"],
-                0: [0, "Vous cherchez quelque chose ?\n1. Oui : Asgard.\n2. Je cherche Vanaheim.\n3. Non, tout va bien.", 3],
-                    1: [-1, "Vous devriez essayer au nord, en passant par la foret, a l'est."],
-                    2: [-2, "Hum, vous avez regarde du cote de la petite maison tout a l'ouest ? Un bon ami a moi, Laard est souvent a cote."],
-                    3: [-3, "Dans ce cas... Bonne journee !"],
-            }
-
     # Lithy
     elif coords == (66, 56):
         return {
             "base": [0, "Bonjour, je suis Lithy."],
+            
+            0: [0, "Vous cherchez quelque chose ?\n1. Oui : Asgard.\n2. Je cherche Vanaheim.\n3. Non, tout va bien.", 3],
+                1: [-1, "Vous devriez essayer au nord, en passant par la foret, a l'est."],
+                2: [-2, "Hum, vous avez regarde du cote de la petite maison tout a l'ouest ? Un bon ami a moi, Laard est souvent a cote."],
+                3: [-3, "Dans ce cas... Bonne journee !"],
+
             27: [0, "Je suis Lithy. Les morts au combat sont repartis entre les Ases et les Vanes. Tot ou tard tu devras choisir ton camp et renier l'autre.\n1. Sur quel critere les morts sont-ils repartis ?\n2. On m'a dit que je derangeais... ?", 2],
                 28: [-1, "Les combattans morts lors d'attaques reviennent en general a Odin alors que ceux qui sont morts pour defendre leurs biens sont plutot l'apanage des Vanes."],
             29: [0, "Votre position vous situe entre Ases et Vanes, a la veille d'une guerre comme celle-ci, les Vanes comme les Ases redoutent les informateurs caches. Vous allez devoir afficher clairement votre camp.\n1. Je suis oblige de choisir ?\n2. Comment je peux choisir ?", 2],
@@ -730,6 +750,7 @@ def h_28_npc(data, stat):
             57: [2, "Ah voila {} ! Skirnir vient de repartir, nous devons prendre une tour de guet de Svartalfheim. Nous passerons par Nidavellir. On se retrouve au pied de la tour.".format(stat[5])]
         }
 
+
 # - - - Niflheim - - - #
 def niflheim_po(coords):
     if coords == (88, 32): return [0, "Entoure de pierre tombales, de nombreux chemins serpentent. De lourd nuages fonces entretiennent une atmosphere pesante et une brume noiratres flotte dans l'air. Dans la penombre ambiante, une haute maison se detache, masse plus sombre encore que le reste, percee de fines fenetres et encadree de deux tours."]
@@ -753,7 +774,11 @@ def niflheim_npc(data, stat):
 def h_29_npc(data, stat):
     coords = data[2], data[3]
 
-    spells_sale = ((0, 5), (1, 5), (2, 5), (3, 5), (4, 5))
+    n = len(spells)
+    spells_sale = [(i, len(spells_level)) for i in range(n)]
+    formated_spells = ""
+    for sp in range(n):
+        formated_spells += "{0}. {1} {2}\n".format(sp + 1, spells[spells_sale[sp][0]], spells_level[spells_sale[sp][1] - 1])
 
     if not (480 <= stat[4] <= 1140): return [0, "Je suis desolee, nous sommes fermes."]
 
@@ -762,16 +787,16 @@ def h_29_npc(data, stat):
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
-            return [0, "Merath, je vend les sorts les plus puissants de tout l'Yggdrasil ! Quel sort voulez-vous ?\n1. Soin V\n2. Flammes V\n3. Givre V\n4. Etincelles V\n4. Fatigue V", 4]
+            return [0, "Merath, je vend les sorts les plus puissants de tout l'Yggdrasil ! Quel sort voulez-vous ?\n{}".format(formated_spells), n]
 
         else:
-            for i in range(1, 5):
+            for i in range(1, n + 1):
                 if data[0]["main"] == stat[9] + i:
                     stat[9] = -1
                     if stat[1] < 50: return [-i, "Vous n'avez pas les moyens, desolee."]
 
                     spell_id = -1
-                    for sp_id, sp in range(len(stat[7])):
+                    for sp_id in range(len(stat[7])):
                         sp = stat[7][sp_id]
                         if spells_sale[i - 1][0] == sp[0]:
                             if spells_sale[i - 1][1] <= sp[1]: return [-i, "Vous connaissez deja ce sort."]
@@ -946,21 +971,23 @@ def h_39_npc(data, stat):
     if not (480 <= stat[4] <= 1140): return [0, "La forge de Nivallir est ouverte de 8 heures a 18 heures."]
 
     if coords == (9, 2):
-
         if stat[3][0]: return [0, "Vous avez deja une arme. Allez voir mon confrere si vous voulez la vendre et revenez me voir."]
 
-        elif stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Bienvenue a la forge de Nidavellir ! Vous desirez une piece particulière ?\n1. Un marteau [-20 PO]\n2. Une masse [-30 PO]\n3. Un fleau [-40 PO]\n4. Une hache [-50 PO]", 4]
+        weapons_sale = []
+        formated_wpn = ""
+        while len(weapons_sale) < 4:
+            wpn = randint(1, len(weapons) - 1)
+            if not wpn in weapons_sale:
+                weapons_sale.append(wpn)
+                formated_wpn += "{0}. {1} [-{2} PO]\n".format(len(weapons_sale), weapons[wpn], 10 * wpn)
 
-        else:
-            weapons = ("UN MARTEAU", "UNE MASSE", "UN FLEAU", "UNE HACHE")
-            for i in range(1, 5):
-                if data[0]["main"] == stat[9] + i:
-                    stat[9] = -1
-                    if stat[1] < (i+1) * 10: return [-i, "Vous n'avez pas assez."]
-                    stat[3][0] = i + 1
-                    return [-i, "Tres bon choix ! [LE NAIN DECROCHA {} DU RATELIER ET VOUS TENDIT L'ARME.]".format(weapons[i - 1]), 0, (1, -(i+1) * 10)]
+        wpn_choice = print_text("Bienvenue a la forge de Nidavellir ! Vous desirez une piece particulière ?\n{}".format(formated_wpn), 1, 4, 0)
+        if not wpn_choice: return [0, "Hmm ?"]
+    
+        wpn = weapons_sale[wpn_choice - 1]
+        if stat[1] < 10 * wpn: return [0, "Vous n'avez pas assez."]
+        stat[3][0] = wpn
+        return [0, "Tres bon choix ! [LE NAIN DECROCHA L'ARME DU RATELIER ET VOUS LA TENDIT.]", 0, (1, -10 * wpn)]
 
     if coords == (9, 4):
         if stat[3][0] == 0: return [0, "Vous n'avez pas d'arme a me vendre. Allez voir mon collegue pour en acheter une."]
@@ -990,7 +1017,7 @@ def h_41_npc(data, stat):
 
 # - - - Muspellheim - - - #
 def muspellheim_po(coords):
-    if coords == (66, 8): return [0, "La mer s'etendait, calme. Bosquets et maisons peuplaient la cote, dont plusieurs petite tentes."]
+    if coords == (66, 8): return [0, "La mer s'etendait, calme. Bosquets et maisons peuplaient la cote. Quelques petites tentes pointues ponctuaient le tout, bravant la brise marine par une fine enveloppe de cuir tanne."]
     elif coords == (64, 97): return [0, "La cloture de la propriete etait ouvragee, le manoir aussi. Constitue d'un corps de ferme rehabilite et entoure de deux tours decoratives, l'ensemble conservait un air propre et entretenu. Le jardin taille en temoigne."]
 
 
