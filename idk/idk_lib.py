@@ -30,7 +30,8 @@ maps = (
     h_31, h_32, h_33, h_34, h_35, h_36,
     h_37, h_38, h_39, h_40, h_41,
     h_42, h_43, h_44,
-    h_45, h_46, h_47, h_48)
+    h_45, h_46, h_47, h_48
+    )
 
 spells = ("Soin", "Flammes", "Givre", "Etincelles", "Fatigue")
 spells_level = ("I", "II", "III", "IV", "V")
