@@ -40,8 +40,8 @@ weapons = ("<aucune>", "Dague", "Marteau", "Masse", "Fleau", "Hache", "Epee", "E
 armors = ("<aucune>", "Rondache", "Pavois", "Cote de maille", "Broigne", "Harnois")
 
 # Asci functions
-def npc_core(event_fn, data, stat):
-    event = event_fn(data, stat)
+def npc_core(event_fn, data, stat, entities, identifiant):
+    event = event_fn(data, stat, entities, identifiant)
 
     if not event:    
         sel_choice = print_text("\nChoissez une action :\n1. Attaquer\n2. Voler\n3. Parler\n4. Ne rien faire", 1, 4, 3)
@@ -166,7 +166,7 @@ def fight(stat, opponent_stat, opponent_name):
                     msg += "\nVous ne parvenez pas a lancer le sort."
 
         elif sel_choice == 3:
-            if stat_test(player_stat, 1)[0]:
+            if stat_test(player_stat, 1)[0] or not stat_test(opponent_stat, 1)[1]:
                 end = True
             else:
                 msg += "\nVotre tentative de fuite echoue."
@@ -314,10 +314,17 @@ def inventory(data, stat):
 
 def sleep(data, stat):
     sleep_hours = 0
+    hours = "= {0} h ".format(stat[4] // 60)
+    if stat[4] % 60 < 10: hours += "0{1} ="
+    else: hours += "{1} ="
+
+    hours = center(hours.format(stat[4] // 60, stat[4] % 60), 21, " ")
+    
     while not sleep_hours:
+        print(hours)
         print("Combien d'heures\nvoulez-vous dormir ?")
         sleep_hours = get_input() % 25
-        if sleep_hours < 0: sleep_hours = 0
+        if not sleep_hours or sleep_hours < 0: return
 
     stat[4] += sleep_hours * 60
     if stat[0] < 100: stat[0] += sleep_hours // 2

@@ -13,7 +13,7 @@ except:
 
 
 # Game
-def npc(data, stat):    
+def npc(data, stat, entities, identifiant):    
     npc_data = (
     asgard_npc,
     vanaheim_npc,
@@ -36,13 +36,13 @@ def npc(data, stat):
 
 
     if dlc:
-        event = dlc.npc(data, stat)
+        event = dlc.npc(data, stat, entities, identifiant)
         if event: return event
 
-    return npc_core(npc_data[data[1]], data, stat)
+    return npc_core(npc_data[data[1]], data, stat, entities, identifiant)
 
 
-def point_of_interest(data, stat):
+def point_of_interest(data, stat, entities, identifiant):
     po_data = (
         asgard_po,
         vanaheim_po,
@@ -56,7 +56,7 @@ def point_of_interest(data, stat):
     )
 
     coords = data[2], data[3]
-    event = po_data[data[1]](coords)
+    event = po_data[data[1]](coords, identifiant)
 
     if not event: return [0, "Il n'y a rien à voir ici."]
     else: return event
@@ -65,7 +65,7 @@ def point_of_interest(data, stat):
 print(center("Island of the Dead", 21, " "))
 print(center("*  Kings  *", 21, " "))
 print("---------------------")
-if dlc: print(center("DLC : marchands", 21, " "))
+if dlc: print(center("DLC : {}".format(dlc.title), 21, " "))
 else: print()
 print("Entrez 'idk()' pour\nune nouvelle partie.")
 events = {"*": npc, "?": point_of_interest}
@@ -108,12 +108,12 @@ def shop_interaction(data, stat, nb_choice, *events):
 
 
 # - - - Asgard - - - #
-def asgard_po(coords):
-    if coords == (120, 26): return [0, "De hautes montagnes vous entourent de toutes part. Taillees dans la roche enneigee, les marches de l'escalier qui mene a Valaskjalf se decoupent nettement. La grande demeure d'Odin et son toit d'argent domine les environs."]
-    elif coords == (51, 55): return [0, "Tout autour de vous s'etend un riche jardin soigneusement entretenu. Dans l'alignement de l'allee nord, une fontaine complete l'ensemble. Une douce odeur de verdure emplit vos narines, l'ambiance est calme."] 
+def asgard_po(coords, identifiant):
+    if identifiant == "valaskjalf": return [0, "De hautes montagnes vous entourent de toutes part. Taillees dans la roche enneigee, les marches de l'escalier qui mene a Valaskjalf se decoupent nettement. La grande demeure d'Odin et son toit d'argent domine les environs."]
+    elif identifiant == "jardin sud": return [0, "Tout autour de vous s'etend un riche jardin soigneusement entretenu. Dans l'alignement de l'allee nord, une fontaine complete l'ensemble. Une douce odeur de verdure emplit vos narines, l'ambiance est calme."] 
 
 
-def asgard_npc(data, stat):
+def asgard_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
     # * : ( 34, 7)
     # * : ( 29, 13)
@@ -174,7 +174,7 @@ def asgard_npc(data, stat):
 
 
 # Forseti
-def h_9_npc(data, stat):
+def h_9_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
     
     if coords == (19, 4):
@@ -189,7 +189,7 @@ def h_9_npc(data, stat):
 
 
 # Odin
-def h_10_npc(data, stat):
+def h_10_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
     
     if coords == (25, 11):
@@ -247,16 +247,16 @@ def h_10_npc(data, stat):
         }
 
 
-def h_11_npc(data, stat):
+def h_11_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_12_npc(data, stat):
+def h_12_npc(data, stat, entites, identifiant):
     pass
 
 
 # Folkvangr
-def h_13_npc(data, stat):
+def h_13_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
     if coords == (21, 8): return {
@@ -272,12 +272,12 @@ def h_13_npc(data, stat):
     }
 
 
-def h_14_npc(data, stat):
+def h_14_npc(data, stat, entites, identifiant):
     pass
 
 
 # Vidar
-def h_15_npc(data, stat):
+def h_15_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
     if coords == (10, 6):
@@ -292,39 +292,38 @@ def h_15_npc(data, stat):
             "base": [0, "Les taillis croissent\nEt l'herbe haute\nDans la foret du pays de Vidarr\nEt la, le fils intrepide\nDescendra de cheval\nPour venger son pere."],
         }
 
-def h_16_npc(data, stat):
+def h_16_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_17_npc(data, stat):
+def h_17_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_18_npc(data, stat):
+def h_18_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_19_npc(data, stat):
+def h_19_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_20_npc(data, stat):
+def h_20_npc(data, stat, entites, identifiant):
     pass
 
 
 # - - - Vanaheim - - - #
-def vanaheim_po(coords):
+def vanaheim_po(coords, identifiant):
     if coords == (42, 20): return [0, "Vous vous trouvez sur le bord d'une large place verdoyante et bien entretenue. Entoure de montagnes, Vanaheim semble hors d'atteinte du temps. Quelques maisons et arbres completent le decor."]
 
 
-def vanaheim_npc(data, stat):
+def vanaheim_npc(data, stat, entites, identifiant):
     # * : (31; 12)
     # * : (52; 22)
     # * : (52; 30)
     # * : (45; 39)
     coords = data[2], data[3]
 
-    # Riethas
     if coords == (31, 12):
         if "riethas" in data[0] and data[0]["riethas"] == 7:
             stat[8] *= 5            
@@ -340,7 +339,6 @@ def vanaheim_npc(data, stat):
 
         else: return [0, "Riethas, simple paysan. Que Nerthus vous garde !"]
 
-    # Kamuel
     if coords == (41, 45):
         if "riethas" in data[0]:
             if data[0]["riethas"] == 5: return [20, 20, 20, 20, 100], "Kamuel", 50, 1, "riethas"
@@ -350,8 +348,7 @@ def vanaheim_npc(data, stat):
                 4: [2, "Bien sur, voila. [+50 PO]", 0, (1, 50)],
             }
 
-    # Charrette
-    if coords == (45, 39):
+    if identifiant == "charretier":
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Midgard\n2. Jotunheim\n3. Alfheim", 3]
@@ -368,10 +365,10 @@ def vanaheim_npc(data, stat):
                         return [-i, "C'est parti pour {} !".format(destinations[i - 1]), 0, (1, -5), (4, 60)]                     
 
 
-def h_21_npc(data, stat):
+def h_21_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
-    if coords == (8, 1):
+    if identifiant == "aubergiste":
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "Cher client bonjour ! Que puis-je faire pour vous ?\n1. Manger [5 PO]\n2. Boire [2 PO]\n3. Dormir [10 PO]", 3]
@@ -386,17 +383,13 @@ def h_21_npc(data, stat):
     # Utarg
     elif coords == (21, 6): return {
             "base": [0, "Uiiips ?"],
-            40: [2, "Ah, enfin ! D'apres nos informateurs, Odin va d'abord attaquer Midgard, et plus precisement le manoir au sud. On se retrouve dans le parc. Bon route, {} !".format(stat[5])],
+            40: [2, "Ah, enfin ! D'apres nos informateurs, Odin va d'abord attaquer Midgard, et plus precisement le manoir au sud. On se retrouve dans le parc. Bonne route, {} !".format(stat[5])],
             42: [0, "[UTARG EST DEJA EN ROUTE POUR MIDGARD.]"]
         }
 
 
-def h_22_npc(data, stat):
-    coords = data[2], data[3]
-    
-
-    # Freyja
-    if coords == (2, 8):
+def h_22_npc(data, stat, entites, identifiant):    
+    if identifiant == "Freyja":
         if data[0]["main"] == 44:
             check = True
             for spell_id, spell_level in stat[7]:
@@ -444,8 +437,7 @@ def h_22_npc(data, stat):
             98: [2, "L'echange d'otage a ete tres inegal, j'ai ordonne l'execution de Mimir pour montrer que nous ne nous laissons pas faire. [FREYJA VOUS TENDIT LA TETE DE MIMIR.] Va donc porter cela a Odin."]
         }
 
-    # Freyr
-    elif coords == (36, 3):
+    elif identifiant == "Freyr":
         if (not 360 <= stat[4] <= 1200):
             return [0, "He ! Il fait nuit !"]
 
@@ -488,19 +480,16 @@ def h_22_npc(data, stat):
 
 
 # - - - Alfheim - - - #
-def alfheim_po(coords):
-    coords = data[2], data[3]
+def alfheim_po(coords, identifiant):
     if coords == (34, 20): return [0, "Quelques arbres au sud vous masque la vue. Au nord, l'imposant palais des Elfes et ses quatres colonnes finement travaillee s'offrent a vous. La lourde porte a deux battants en bois massif et fer forge vous fait face. Au sud est, les bruits d'un bourg en pleine activite montent a vos oreilles."]
 
 
-def alfheim_npc(data, stat):
+def alfheim_npc(data, stat, entites, identifiant):
     # * : (11; 4)
     # * : (46; 6)
     # * : (23; 17)
     # * : (27; 54)
-    coords = data[2], data[3]
-
-    if coords == (23, 17):
+    if identifiant == "charretier":
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Midgard\n2. Asgard\n3. Vanaheim\n4. Svartalfheim", 4]
@@ -517,10 +506,8 @@ def alfheim_npc(data, stat):
                         return [-i, "C'est parti pour {} !".format(destinations[i - 1]), 0, (1, -5), (4, 60)] 
 
 
-def h_23_npc(data, stat):
-    coords = data[2], data[3]
-
-    if coords == (23, 5):
+def h_23_npc(data, stat, entites, identifiant):
+    if identifiant == "Sagriel":
         return {
             "base": [0, "Bonjour... ?"],
             44: [0, "Je suis Sagriel, alfe claire. Je peux t'aider ?\n1. Oui, je voulais connaitre la signification de ces runes.\n2. Non, rien, excusez-moi...", 2],
@@ -533,7 +520,7 @@ def h_23_npc(data, stat):
             54: [2, "Si j'en crois ce qui est note, cela veut dire : 'kvasir'."]
         }
 
-def h_24_npc(data, stat):
+def h_24_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
     if not (480 <= stat[4] <= 1140): return [0, "Excusez-moi, nous sommes fermes."]
@@ -550,7 +537,8 @@ def h_24_npc(data, stat):
                 if data[0]["main"] == stat[9] + i:
                     stat[9] = -1
                     stat[7].pop(i - 1)
-                    return [-i, "Asseyez-vous, je vais vous faire oublier ce sort. [UN PUISSANT MAL DE TETE VOUS PRIT, LES MURS SEMBLERENT TANGUER TANDIS QUE VOTRE VUE DEVINT FLOUE. LE VERTIGE S'ESTOMPA PROGRESSIVEMENT.] Et voila !"]
+                    pts = (20 * stat[0]) // 100
+                    return [-i, "Asseyez-vous, je vais vous faire oublier ce sort. [UN PUISSANT MAL DE TETE VOUS PRIT, LES MURS SEMBLERENT TANGUER TANDIS QUE VOTRE VUE DEVINT FLOUE. LE VERTIGE S'ESTOMPA PROGRESSIVEMENT.] Et voila ! [-{} PV]".format(pts), 0, (0, -pts)]
 
     if coords == (36, 12):         
         if len(stat[7]) >= 3: return [0, "Je suis desole, vous ne pouvez pas apprendre plus de trois sorts."]
@@ -594,15 +582,16 @@ def h_24_npc(data, stat):
 
         return [0, "[DIOMWAR OUVRIT UN LIVRE RELIE DE CUIR NOIR, ET TRACA DU DOIGT DES SIGNES CABALISTIQUES SUR LE SOL. LES RUNES BRILLERENT PUISSAMMENT AVANT DE S'ETEINDRE.]", 0, (1, -10 * spells_sel[1])]                
 
+
 # - - - Midgard - - - #
-def midgard_po(coords):
+def midgard_po(coords, identifiant):
     if coords == (29, 9): return [0, "Du haut des falaises, vous regardez vers le nord. La mer s'etale, infinie. Le vent porte des embruns a votre visage. 30 metres plus bas, les vagues se dechainent contre le calcaire de la roche dans un fracas assourdissant."]
     elif coords == (53, 24): return [0, "Vous regardez la clairiere autour de vous, l'endroit est agreable. Une douce chaleur traine dans l'air sec. Au dela des grands pins qui vous entourent, vous parvenez a voir quelques sommets de montagnes."]
     elif coords == (66, 45): return [0, "Les imposantes colonnes du palais de Midgard vous entourent. Un peu au sud, le bourg est actif : marchands de toutes sortent deambulent, entoures d'une population dense et bruyante."]
     elif coords == (52, 79): return [0, "Tournant le dos a l'epais mur qui delimite la propriete, vous observez le manoir. Le corps du batiment etait clairement une ancienne ferme a laquelle deux tours on ete rajoute a posteriori. L'ensemble garde un aspect massif et froid. Neanmoins, le reste de la propriete a fait l'objet d'un certain soin, en particulier le jardin en 4 parties dans lequel un vieux jardinier s'affaire."]
 
 
-def midgard_npc(data, stat):
+def midgard_npc(data, stat, entites, identifiant):
     # (67, 46)
     # (39, 49)
     # (66, 56)
@@ -632,8 +621,7 @@ def midgard_npc(data, stat):
                 4: [1, "C'est un grand service que tu m'a rendu l'ami, je ne l'oublierai pas ! [+5 PO]", 0, (1, 5)]
             }
 
-
-    # Gardim
+    # Gardim / Marli
     elif coords == (94, 85):
         if "laard" in data[0]:
             if data[0]["laard"] < 3: return "laard", [0, "Gardim, capitaine du Mantree [IL DESIGNA UN DRAKKAR]"]
@@ -673,8 +661,7 @@ def midgard_npc(data, stat):
                 55: [-4, "C'est bien, passez. [ALORS QUE VOUS PASSIEZ A COTE DE IROB, UNE VIVE DOULEUR VOUS PRIT L'ABDOMEN, LE SANG ET LES CHAIRS SE REPANDIRENT SUR VOS MAINS ET VOTRE INCOMPREHENSION.]"],
         }
 
-    # Charrette
-    elif coords == (39, 49):
+    elif identifiant == "charretier":
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Vanaheim\n2. Asgard\n3. Nidavellir\n4. Niflheim", 4]
@@ -691,20 +678,18 @@ def midgard_npc(data, stat):
                         return [-i, "C'est parti pour {} !".format(destinations[i - 1]), 0, (1, -5), (4, 60)]  
 
 
-def h_25_npc(data, stat):
+def h_25_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_26_npc(data, stat):
+def h_26_npc(data, stat, entites, identifiant):
     # * : (17, 7)
     # * : (22, 7)
     # * : (17, 8)
     # * : (27, 8)
     coords = data[2], data[3]
     
-
-    # Rosahil Green
-    if coords == (27, 6):
+    if identifiant == "Rosahil Green":
         if stat[4] >= 1320 or stat[4] <= 340: return [0, "Je suis desolee, nous sommes fermes. Revenez plus tard !"]
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
@@ -734,11 +719,11 @@ def h_26_npc(data, stat):
     else: return [0, "Ui hips ?"]
 
 
-def h_27_npc(data, stat):
+def h_27_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_28_npc(data, stat):
+def h_28_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
     if coords == (27, 6):
@@ -752,11 +737,11 @@ def h_28_npc(data, stat):
 
 
 # - - - Niflheim - - - #
-def niflheim_po(coords):
+def niflheim_po(coords, identifiant):
     if coords == (88, 32): return [0, "Entoure de pierre tombales, de nombreux chemins serpentent. De lourd nuages fonces entretiennent une atmosphere pesante et une brume noiratres flotte dans l'air. Dans la penombre ambiante, une haute maison se detache, masse plus sombre encore que le reste, percee de fines fenetres et encadree de deux tours."]
 
 
-def niflheim_npc(data, stat):
+def niflheim_npc(data, stat, entites, identifiant):
     # * : (95, 30)
     # * : (57, 31)
     # * : (39, 60)
@@ -771,7 +756,7 @@ def niflheim_npc(data, stat):
         }
 
 
-def h_29_npc(data, stat):
+def h_29_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
     n = len(spells)
@@ -812,11 +797,11 @@ def h_29_npc(data, stat):
                     return [-i, "[MERATH SE RETOURNA ET S'EMPARA D'UN GRIMOIRE. ELLE L'OUVRIT ET LUT A HAUTE VOIX. UNE LOURDE TORPEUR S'ABBATIT SUR VOUS. QUAND VOUS REPRENEZ PLEINEMENT CONSCIENCE, LE SORT EST GRAVE DANS VOTRE MEMOIRE.]", 0, (1, -50)]
 
 
-def h_30_npc(data, stat):
+def h_30_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
     # Hel
-    if coords == (37, 4): return {
+    if identifiant == "Hel": return {
         "base": [0, "Hel, deesse de la mort, tu veux quelque chose ?"],
 
         35: [2, "Une guerre contre les Vanes ? Les guerriers du Valhalla vont enfin sortir affronter ceux du Folkvangr. Je m'occupe du Valhalla, retourne voir Odin. Voici quelques pieces pour ta commission. [+10 PO]", 0, (1, 10)],
@@ -824,13 +809,13 @@ def h_30_npc(data, stat):
 
 
 # - - - Jotunheim - - - #
-def jotunheim_po(coords):
+def jotunheim_po(coords, identifiant):
     if coords == (60, 57): return [0, "Un bruit de fontaine monte a vos oreilles. A travers les arbres, l'immense palais de Thrym se dresse. Les enormes colonnes qui entourent le batiments sont a elles seules des symboles de demesures. Aux alentours se dresse quelques maisons tout aussi imposantes et enorme, mais moins travaillee."]
     elif coords == (23, 70): return [0, "Face a la mer, sur une langue de terre, le phare se dresse, eclairant puissemment le large pour signaler l'estuaire."]
     elif coords == (60, 86): return [0, "Un imposant manoir se tient devant vous, flanque de deux tours surmontees de domes en ardoise brillantes, l'ensemble est perce de multiples et larges ouvertures. Le parc autour se compose de quelques arbres et est delimite au nord par le fleuve."]
 
 
-def jotunheim_npc(data, stat):
+def jotunheim_npc(data, stat, entites, identifiant):
     # * : (25; 10)
     # * : (39; 20)
     # * : (3; 28)
@@ -846,8 +831,7 @@ def jotunheim_npc(data, stat):
     # * : (6; 98)
     coords = data[2], data[3]
 
-    # Utarg
-    if coords == (34, 56): return {
+    if identifiant == "Utarg": return {
         "base": [0, "Utarg, pour vous servir."],
         36: [0, "Utarg, vous me cherchiez ?\n1. Oui, Thrym m'a demande de vous donner ceci [VOUS LUI DONNEZ LA LETTRE].\n2. Quelles sont les relations entre les Geants et les Ases ?", 2],
             37: [3, "[UTARG LIT LE BILLET.] Hum. Thrym me demande de detacher une garnison et de me rendre a Vanaheim. On se retrouve a l'auberge, au nord de Vanaheim."],
@@ -855,22 +839,20 @@ def jotunheim_npc(data, stat):
     }
 
 
-def h_31_npc(data, stat):
+def h_31_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_32_npc(data, stat):
+def h_32_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_33_npc(data, stat):
+def h_33_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_34_npc(data, stat):
-    coords = data[2], data[3]
-
-    if coords == (26, 6):
+def h_34_npc(data, stat, entites, identifiant):
+    if identifiant == "Thrym":
         if not (360 <= stat[4] <= 1200):
             return [0, "Reviens quand il fera jour s'il te plait."]
         else: return {
@@ -880,11 +862,8 @@ def h_34_npc(data, stat):
         }
 
 
-def h_35_npc(data, stat):
-    coords = data[2], data[3]
-    
-
-    if coords == (17, 5):
+def h_35_npc(data, stat, entites, identifiant):
+    if identifiant == "Gullveig":
         if data[0]["main"] == 14: return [8, 8, 5, 5, 80], "Gullveig", 15, 1
         elif data[0]["main"] == 15: return [0, "[VOUS REGARDEZ LA DEPOUILLE DESARTICULEE DE LA MAGICIENNE, ODIN SERA CONTENT.]"]
         else: return {
@@ -898,10 +877,10 @@ def h_35_npc(data, stat):
             }
 
 
-def h_36_npc(data, stat):
+def h_36_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
     
-    if coords == (27, 10):
+    if identifiant == "aubergiste":
         if not (300 <= stat[4] <= 1380): return [0, "Je suis desole, nous somme ferme la nuit."]
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
@@ -918,12 +897,12 @@ def h_36_npc(data, stat):
 
 
 # - - - Nidavellir - - - #
-def nidavellir_po(coords):
+def nidavellir_po(coords, identifiant):
     if coords == (65, 7): return [0, "La mer etendait ses rouleaux sur le sable noir. Au sud s'etend le rocheux royaume de Nidavellir. Le monde des nains a pour seul maison les montagnes. D'ancienne legendes racontent que certaines communiquent entre elles par des passages oublies."]
     elif coords == (66, 58): return [0, "Coupee en deux par le fleuve, la chaine de montagne semble s'etendre a l'infini. De toute part le meme paysage rocailleux. Le terrain est si inhospitalier que les nains eux-meme restent dans leurs mines."]
 
 
-def nidavellir_npc(data, stat):
+def nidavellir_npc(data, stat, entites, identifiant):
     # * : (49, 21)
     # * : (25, 31)
     # * : (74, 46)
@@ -939,10 +918,10 @@ def nidavellir_npc(data, stat):
         }
 
 
-def h_37_npc(data, stat):
+def h_37_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
-    if coords == (2, 1):
+    if identifiant == "Muin":
         if not (340 <= stat[4] <= 1380): return [0, "Nous sommes ouverts de 5 heures a 23."]
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
@@ -961,14 +940,14 @@ def h_37_npc(data, stat):
     return [0, "Hmm ?"]
 
 
-def h_38_npc(data, stat):
+def h_38_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_39_npc(data, stat):
+def h_39_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
-    if not (480 <= stat[4] <= 1140): return [0, "La forge de Nivallir est ouverte de 8 heures a 18 heures."]
+    if not (480 <= stat[4] <= 1140): return [0, "La forge de Nidavellir est ouverte de 8 heures a 18 heures."]
 
     if coords == (9, 2):
         if stat[3][0]: return [0, "Vous avez deja une arme. Allez voir mon confrere si vous voulez la vendre et revenez me voir."]
@@ -1007,21 +986,21 @@ def h_39_npc(data, stat):
             return [-2, "A votre guise, revenez quand vous voulez !"]
 
 
-def h_40_npc(data, stat):
+def h_40_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_41_npc(data, stat):
+def h_41_npc(data, stat, entites, identifiant):
     pass
 
 
 # - - - Muspellheim - - - #
-def muspellheim_po(coords):
+def muspellheim_po(coords, identifiant):
     if coords == (66, 8): return [0, "La mer s'etendait, calme. Bosquets et maisons peuplaient la cote. Quelques petites tentes pointues ponctuaient le tout, bravant la brise marine par une fine enveloppe de cuir tanne."]
     elif coords == (64, 97): return [0, "La cloture de la propriete etait ouvragee, le manoir aussi. Constitue d'un corps de ferme rehabilite et entoure de deux tours decoratives, l'ensemble conservait un air propre et entretenu. Le jardin taille en temoigne."]
 
 
-def muspellheim_npc(data, stat):
+def muspellheim_npc(data, stat, entites, identifiant):
     # * : (20, 12)
     # * : (78, 14)
     # * : (54, 80)
@@ -1035,10 +1014,10 @@ def muspellheim_npc(data, stat):
         if data[0]["main"] == 71: return [15, 20, 20, 15, 100], "Soldat Vane", 20, 2
 
 
-def h_42_npc(data, stat):
+def h_42_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
-    if coords == (6, 7):
+    if identifiant == "aubergiste":
         if not (300 <= stat[4] <= 1380): return [0, "Nous sommes ouverts de 5 a 23 heures."]
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
@@ -1052,12 +1031,12 @@ def h_42_npc(data, stat):
         
             return event
 
-def h_43_npc(data, stat):
+def h_43_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
     if not (480 <= stat[4] <= 1140): return [0, "L'armurerie est ouverte de 8 heures a 18 heures."]
 
-    if coords == (24, 4):
+    if identifiant == "Bertfrid":
         if stat[3][1]: return [0, "Vous portez deja une armure, allez voir mon confrere."]
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
@@ -1090,10 +1069,10 @@ def h_43_npc(data, stat):
             return [-2, "Revenez quand vous voulez !"]
 
     elif coords == (6, 5):
-        return [0, "Je ne suis qu'apprenti monseigneur. Adressez-vous plutot a Bertfrid."]
+        return [0, "Je ne suis qu'apprenti monseigneur. Adressez-vous plutot a Bertfrid. Vous la trouverez pres du four."]
 
 
-def h_44_npc(data, stat):
+def h_44_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
     if coords == (13, 20): return {
@@ -1104,11 +1083,11 @@ def h_44_npc(data, stat):
 
 
 # - - - Svartalfheim - - - #
-def svartalfheim_po(coords):
+def svartalfheim_po(coords, identifiant):
     if coords == (113, 37): return [0, "Des tours de guets parsement la cote, plus loin, a l'ouest, une chaine de petites montagnes s'etend, coupant Svartalfheim en deux. Mais la partie est du monde est plus habitee et plus animee que la partie ouest qui reste majoritairement consitituee de denses forets."]
 
 
-def svartalfheim_npc(data, stat):
+def svartalfheim_npc(data, stat, entites, identifiant):
     # * : (10; 24)
     # * : (105; 46)
     # * : (22; 50)
@@ -1146,14 +1125,11 @@ def svartalfheim_npc(data, stat):
                 return [2, "Voici un equipement de meilleure qualite, avec ca, tu ne peux pas perdre le combat ! Selon nos espions, la tour est vide ou presque. Tu rentres, tu elemines les Vanes, pendant ce temps, on surveille les alentours."]
 
 
-def h_45_npc(data, stat):
-    # * : (15, 4)
+def h_45_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_46_npc(data, stat):
-    # * : (13, 2)
-    # * : (13, 4)
+def h_46_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
     if coords == (13, 2):
@@ -1175,13 +1151,9 @@ def h_46_npc(data, stat):
         elif data[0]["main"] == 74: return [0, "[DES MORCEAUX DE CORPS JONCHENT LE SOL ET LA TABLE.]"]
 
 
-def h_47_npc(data, stat):
-    # * : (3, 4)
-    # * : (15, 8)
+def h_47_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_48_npc(data, stat):
-    # * : (34, 5)
-    # * : (29, 6)
+def h_48_npc(data, stat, entites, identifiant):
     pass
