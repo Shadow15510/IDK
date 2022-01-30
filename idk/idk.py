@@ -79,10 +79,7 @@ def idk(save_code=None):
         name = stat[5]
         data = [{"main": 0}, 3, 44, 66]
 
-        print_text("Au alentour du Ve siecle, quelque part en Scandinavie. La bataille prenait place dans un champ saccage, et la nuit etait tombee depuis quelques heures lorsque l'assaut debuta.")
-        print_text("Hache levee, a la seule lueur de la pleine lune, {0} et sa division se jeterent sur le camp adverse, mais, pris a revers, le combat tourna vite a la defaveur des assaillants qui furent reduit sans autres difficultes.".format(name))
-        print_text("Blesse a plusieurs endroit, {0} se trainait sur le sol, tentant de se refugier dans la nuit lorsqu'une forme humaine portant un espadon dans le dos et une lourde armure d'argent s'arreta devant lui. La Valkyrie degaina son espadon et acheva {0} avant de l'emporter dans ses bras.".format(name))
-        print_text("Mais Odin avait d'autres plan pour {0} qu'une retraite parmi les meilleurs guerriers, et il le renvoya dans le vaste monde avec cet ultimatum : si il trouve la voie jusqu'a Asgard et le Valaskjalf, Odin conscent a le garder a son service, sinon il sera condamne a errer dans le monde sans jamais trouver le repos.".format(name))
+        print_text("Au alentour du Ve siecle, quelque part en Scandinavie. La bataille prenait place dans un champ saccage, et la nuit etait tombee depuis quelques heures lorsque l'assaut debuta. Hache levee, a la seule lueur de la pleine lune, {0} et sa division se jeterent sur le camp adverse, mais, pris a revers, le combat tourna vite a la defaveur des assaillants qui furent reduit sans autres difficultes.\nBlesse a plusieurs endroit, {0} se trainait sur le sol, tentant de se refugier dans la nuit lorsqu'une forme humaine portant un espadon dans le dos et une lourde armure d'argent s'arreta silencieusement devant lui. La Valkyrie degaina son espadon et acheva {0} avant de l'emporter dans ses bras.\nMais Odin, septique des exploits au combat de {0}, lui refusa une retraite parmi les meilleurs guerriers, et il le renvoya dans le vaste monde avec cet ultimatum : s'il trouve la voie jusqu'a Asgard et le Valaskjalf, Odin conscent a revoir son jugement, sinon il sera condamne a errer dans le monde sans jamais trouver le repos.".format(name))
 
     else:
         stat, data = decode_save(save_code)
