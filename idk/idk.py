@@ -631,19 +631,19 @@ def midgard_npc(data, stat, entites, identifiant):
     # Lithy
     elif coords == (66, 56):
         if data[0]["main"] == 0:
-			stat[9] = 0
-			return [0, "Vous cherchez quelque chose ?\n1. Oui : Asgard.\n2. Je cherche Vanaheim.\n3. Non, tout va bien.", 3]
-		
+            stat[9] = 0
+            return [0, "Vous cherchez quelque chose ?\n1. Oui : Asgard.\n2. Je cherche Vanaheim.\n3. Non, tout va bien.", 3]
+        
         elif stat[9] == 0:
-			stat[9] = -1
-			if data[0]["main"] == 1:
-				return [-1, "Vous devriez essayer au nord, en passant par la foret, a l'est."]
-			elif data[0]["main"] == 2:
+            stat[9] = -1
+            if data[0]["main"] == 1:
+                return [-1, "Vous devriez essayer au nord, en passant par la foret, a l'est."]
+            elif data[0]["main"] == 2:
                 return [-2, "Hum, vous avez regarde du cote de la petite maison tout a l'ouest ? Un bon ami a moi, Laard est souvent a cote."]
-			elif data[0]["main"] == 3:
-				return [-3, "Dans ce cas... Bonne journee !"]
+            elif data[0]["main"] == 3:
+                return [-3, "Dans ce cas... Bonne journee !"]
 
-		else: return {
+        else: return {
             "base": [0, "Bonjour, je suis Lithy."],
             
             27: [0, "Je suis Lithy. Les morts au combat sont repartis entre les Ases et les Vanes. Tot ou tard tu devras choisir ton camp et renier l'autre.\n1. Sur quel critere les morts sont-ils repartis ?\n2. On m'a dit que je derangeais... ?", 2],
@@ -651,7 +651,7 @@ def midgard_npc(data, stat, entites, identifiant):
             29: [0, "Votre position vous situe entre Ases et Vanes, a la veille d'une guerre comme celle-ci, les Vanes comme les Ases redoutent les informateurs caches. Vous allez devoir afficher clairement votre camp.\n1. Je suis oblige de choisir ?\n2. Comment je peux choisir ?", 2],
                 30: [-1, "Oui, ne serait-ce que parce qu'Odin n'acceptera jamais le doute : il vous fera tuer."],
                 31: [0, "Allez voir Freyja ou Odin. C'est aussi simple. Et ne vous retournez pas."]
-        	}
+            }
 
     elif coords == (68, 71):
         return {
