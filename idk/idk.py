@@ -2,11 +2,11 @@ from idk_lib import *
 
 try:
     import dlc_idk as dlc
-    spells = dlc.spells
-    spells_level = dlc.spells_level
-    spells_effect = dlc.spells_effect
-    weapons = dlc.weapons
-    armors = dlc.armors
+    spells = dlc.dlc_spells
+    spells_level = dlc.dlc_spells_level
+    spells_effect = dlc.dlc_spells_effect
+    weapons = dlc.dlc_weapons
+    armors = dlc.dlc_armors
 except:
     dlc = None
 
@@ -36,8 +36,8 @@ def npc(data, stat, entities, identifiant):
 
 
     if dlc:
-        event = dlc.npc(data, stat, entities, identifiant)
-        if event: return event
+        event = dlc.dlc_npc(data, stat, entities, identifiant)
+        if event: return "dlc", event
 
     return npc_core(npc_data[data[1]], data, stat, entities, identifiant)
 
@@ -65,7 +65,7 @@ def point_of_interest(data, stat, entities, identifiant):
 print(center("Island of the Dead", 21, " "))
 print(center("*  Kings  *", 21, " "))
 print("---------------------")
-if dlc: print(center("DLC : {}".format(dlc.title), 21, " "))
+if dlc: print(center("DLC : {}".format(dlc.dlc_title), 21, " "))
 else: print()
 print("Entrez 'idk()' pour\nune nouvelle partie.")
 events = {"*": npc, "?": point_of_interest}
@@ -345,7 +345,7 @@ def vanaheim_npc(data, stat, entites, identifiant):
                 4: [2, "Bien sur, voila. [+50 PO]", 0, (1, 50)],
             }
 
-    if identifiant == "charretier":
+    if identifiant == "vanaheim_charretier":
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Midgard\n2. Jotunheim\n3. Alfheim", 3]
@@ -486,7 +486,7 @@ def alfheim_npc(data, stat, entites, identifiant):
     # * : (46; 6)
     # * : (23; 17)
     # * : (27; 54)
-    if identifiant == "charretier":
+    if identifiant == "alfheim_charretier":
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Midgard\n2. Asgard\n3. Vanaheim\n4. Svartalfheim", 4]
@@ -666,7 +666,7 @@ def midgard_npc(data, stat, entites, identifiant):
                 55: [-4, "C'est bien, passez. [ALORS QUE VOUS PASSIEZ A COTE DE IROB, UNE VIVE DOULEUR VOUS PRIT L'ABDOMEN, LE SANG ET LES CHAIRS SE REPANDIRENT SUR VOS MAINS ET VOTRE INCOMPREHENSION.]"],
         }
 
-    elif identifiant == "charretier":
+    elif identifiant == "midgard_charretier":
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Vanaheim\n2. Asgard\n3. Nidavellir\n4. Niflheim", 4]

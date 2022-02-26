@@ -50,14 +50,14 @@ vanaheim = (r"""
                         /  \      /      /    \    /      /    \           
                        /    \           /      \         /      \          """,
 [
-    ("vanaheim", '?', 42, 20, 'stand by'),
-    (0, '?', 26, 29, 'stand by'),
+    ("vanaheim_1", '?', 42, 20, 'stand by'),
+    ("vanaheim_2", '?', 26, 29, 'stand by'),
     
-    ("charretier", '*', 45, 39, 'stand by'),
-    (1, '*', 31, 12, 'stand by'),
-    (2, '*', 41, 45, 'stand by'),
-    (3, '*', 52, 22, 'stand by'),
-    (4, '*', 52, 30, 'stand by'),
+    ("vanaheim_charretier", '*', 45, 39, 'stand by'),
+    (19, '*', 31, 12, 'stand by'),
+    (20, '*', 41, 45, 'stand by'),
+    (21, '*', 52, 22, 'stand by'),
+    (22, '*', 52, 30, 'stand by'),
 ],
 
 # Autres mondes (Vanaheim = 1)
@@ -84,8 +84,8 @@ h_21 = (r"""
 |                       |
 |===|^|=================|""",
 [
-    ("aubergiste", '*', 8, 1, 'stand by'),
-    (0, '*', 21, 6, 'stand by'),
+    ("h_21_aubergiste", '*', 8, 1, 'stand by'),
+    ("h_21", '*', 21, 6, 'stand by'),
 ],
     (5, 9, 1, 44, 11)) 
 
