@@ -10,7 +10,7 @@ try:
     dlc_entities = dlc.dlc_entities
 except:
     dlc = None
-    dlc_entities = []
+    dlc_entities = ()
 
 
 
