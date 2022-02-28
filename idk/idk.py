@@ -2,13 +2,15 @@ from idk_lib import *
 
 try:
     import dlc_idk as dlc
-    spells = dlc.spells
-    spells_level = dlc.spells_level
-    spells_effect = dlc.spells_effect
-    weapons = dlc.weapons
-    armors = dlc.armors
+    spells = dlc.dlc_spells
+    spells_level = dlc.dlc_spells_level
+    spells_effect = dlc.dlc_spells_effect
+    weapons = dlc.dlc_weapons
+    armors = dlc.dlc_armors
+    dlc_entities = dlc.dlc_entities
 except:
     dlc = None
+    dlc_entities = []
 
 
 
@@ -36,8 +38,8 @@ def npc(data, stat, entities, identifiant):
 
 
     if dlc:
-        event = dlc.npc(data, stat, entities, identifiant)
-        if event: return event
+        event = dlc.dlc_npc(data, stat, entities, identifiant)
+        if event: return "dlc", event
 
     return npc_core(npc_data[data[1]], data, stat, entities, identifiant)
 
@@ -62,10 +64,12 @@ def point_of_interest(data, stat, entities, identifiant):
     else: return event
 
 
+entities = asgard_entities + vanaheim_entities + alfheim_entities + midgard_entities + niflheim_entities + jotunheim_entities + nidavellir_entities + muspellheim_entities + svartalfheim_entities + dlc_entities
+
 print(center("Island of the Dead", 21, " "))
 print(center("*  Kings  *", 21, " "))
 print("---------------------")
-if dlc: print(center("DLC : {}".format(dlc.title), 21, " "))
+if dlc: print(center("DLC : {}".format(dlc.dlc_title), 21, " "))
 else: print()
 print("Entrez 'idk()' pour\nune nouvelle partie.")
 events = {"*": npc, "?": point_of_interest}
@@ -84,7 +88,7 @@ def idk(save_code=None):
     else:
         stat, data = decode_save(save_code)
 
-    idk_game = Asci(maps, events, keys)
+    idk_game = Asci(maps, entities, events, keys)
     stat, data = idk_game.mainloop(102, stat, data, routine=routine, door="^_", walkable=".,`' ", exit_key="q")
     if stat[9] != -1: data[0]["main"] -= stat[9]
 
@@ -106,8 +110,8 @@ def shop_interaction(data, stat, nb_choice, *events):
 
 # - - - Asgard - - - #
 def asgard_po(coords, identifiant):
-    if identifiant == "valaskjalf": return [0, "De hautes montagnes vous entourent de toutes part. Taillees dans la roche enneigee, les marches de l'escalier qui mene a Valaskjalf se decoupent nettement. La grande demeure d'Odin et son toit d'argent domine les environs."]
-    elif identifiant == "jardin sud": return [0, "Tout autour de vous s'etend un riche jardin soigneusement entretenu. Dans l'alignement de l'allee nord, une fontaine complete l'ensemble. Une douce odeur de verdure emplit vos narines, l'ambiance est calme."] 
+    if coords == (120, 26): return [0, "De hautes montagnes vous entourent de toutes part. Taillees dans la roche enneigee, les marches de l'escalier qui mene a Valaskjalf se decoupent nettement. La grande demeure d'Odin et son toit d'argent domine les environs."]
+    elif coords == (51, 55): return [0, "Tout autour de vous s'etend un riche jardin soigneusement entretenu. Dans l'alignement de l'allee nord, une fontaine complete l'ensemble. Une douce odeur de verdure emplit vos narines, l'ambiance est calme."] 
 
 
 def asgard_npc(data, stat, entites, identifiant):
@@ -345,7 +349,7 @@ def vanaheim_npc(data, stat, entites, identifiant):
                 4: [2, "Bien sur, voila. [+50 PO]", 0, (1, 50)],
             }
 
-    if identifiant == "charretier":
+    if identifiant == "vanaheim_charretier":
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Midgard\n2. Jotunheim\n3. Alfheim", 3]
@@ -365,7 +369,7 @@ def vanaheim_npc(data, stat, entites, identifiant):
 def h_21_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
-    if identifiant == "aubergiste":
+    if identifiant == "vanaheim_aubergiste":
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "Cher client bonjour ! Que puis-je faire pour vous ?\n1. Manger [5 PO]\n2. Boire [2 PO]\n3. Dormir [10 PO]", 3]
@@ -486,7 +490,7 @@ def alfheim_npc(data, stat, entites, identifiant):
     # * : (46; 6)
     # * : (23; 17)
     # * : (27; 54)
-    if identifiant == "charretier":
+    if identifiant == "alfheim_charretier":
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Midgard\n2. Asgard\n3. Vanaheim\n4. Svartalfheim", 4]
@@ -666,7 +670,7 @@ def midgard_npc(data, stat, entites, identifiant):
                 55: [-4, "C'est bien, passez. [ALORS QUE VOUS PASSIEZ A COTE DE IROB, UNE VIVE DOULEUR VOUS PRIT L'ABDOMEN, LE SANG ET LES CHAIRS SE REPANDIRENT SUR VOS MAINS ET VOTRE INCOMPREHENSION.]"],
         }
 
-    elif identifiant == "charretier":
+    elif identifiant == "midgard_charretier":
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Vanaheim\n2. Asgard\n3. Nidavellir\n4. Niflheim", 4]
@@ -885,7 +889,7 @@ def h_35_npc(data, stat, entites, identifiant):
 def h_36_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
     
-    if identifiant == "aubergiste":
+    if identifiant == "jotunheim_aubergiste":
         if not (300 <= stat[4] <= 1380): return [0, "Je suis desole, nous somme ferme la nuit."]
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
@@ -1022,7 +1026,7 @@ def muspellheim_npc(data, stat, entites, identifiant):
 def h_42_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
-    if identifiant == "aubergiste":
+    if identifiant == "muspellheim_aubergiste":
         if not (300 <= stat[4] <= 1380): return [0, "Nous sommes ouverts de 5 a 23 heures."]
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
