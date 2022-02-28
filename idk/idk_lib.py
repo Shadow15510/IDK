@@ -359,9 +359,6 @@ def spell(data, stat):
 
 def quick_save(data, stat):
     data_copy = data[:]
-    data_copy[2] += 10
-    data_copy[3] += 3
-
     stat_copy = stat[:-1]
     print_text("\"{}\"".format(encode_save(data_copy, stat_copy)))
 

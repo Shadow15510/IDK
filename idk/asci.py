@@ -1,17 +1,18 @@
-# Asci (1.7.3)
+# Asci (1.8.1)
 
 class Asci:
-    def __init__(self, maps, events_mapping, keys_mapping, behaviors=None, screen_width=21, screen_height=6):
+    def __init__(self, maps, entities, events_mapping, keys_mapping, behaviors=None, screen_width=21, screen_height=6):
         # Load maps and entities
-        self.maps = []
+        self.maps = [Map(*i) for i in maps]
         self.entities = {}
-        for index, raw_map in [(i, maps[i]) for i in range(len(maps))]:
-            for j in raw_map[1]:
-                if j[0] in self.entities: raise KeyError("'{}' is already a registered entities".format(j[0]))
-                else: self.entities[j[0]] = Entity(index, *j)
-            raw_map = list(raw_map)
-            raw_map.pop(1)
-            self.maps.append(Map(*raw_map))
+        entity_id = 0
+        for i in entities:
+            if not i[0]:
+                i[0] = entity_id
+                entity_id += 1
+
+            if i[0] in self.entities: raise KeyError("'{}' is already a registered entities".format(i[0]))
+            else: self.entities[i[0]] = Entity(*i)
         
         # Custom functions
         self._legend = list(events_mapping.keys())
@@ -19,7 +20,7 @@ class Asci:
         self._game_keys_mapping = {key: keys_mapping[key] for key in keys_mapping if not key in (1, 2, 3, 5)}
         
         # Custom entities behavior
-        self._behaviors = {"permanent": permanent, "stand by": stand_by, "follow": follow, "walk": walk}
+        self._behaviors = {"permanent": permanent, "stand by": stand_by, "follow": follow, "walk between": walk_between, "walk to": walk_to, "follow by player": follow_by_player}
         if behaviors:
             for i in behaviors: self._behaviors[i] = behaviors[i]
 
@@ -100,6 +101,7 @@ class Asci:
         # Update map id and data
         old_map, self.data[1] = self.data[1], new_map
         self.current_map = self.maps[self.data[1]]
+        self.current_map.entities = {}
 
         # Update entities
         for i in self.entities:
@@ -167,7 +169,7 @@ class Asci:
         # Configuration
         self._legend.append(door)
         self._legend.append(walkable)
-        self._change_map(data[1])
+        self._change_map(self.data[1])
         self.screen.load_data(self.data)
 
         key = 0
@@ -180,7 +182,7 @@ class Asci:
             data_copy = self.data[:]
             for entity in self.current_map.entities.values():
                 self._behaviors[entity.behavior](entity, data_copy, self.stat, self.screen, walkable)
-                if (0 <= entity.pos_x - self.data[2] + 10 < self.screen.screen_width) and (0 <= entity.pos_y - self.data[3] + 3 < self.screen.screen_height):
+                if entity.map_id == self.data[1] and (0 <= entity.pos_x - self.data[2] + 10 < self.screen.screen_width) and (0 <= entity.pos_y - self.data[3] + 3 < self.screen.screen_height):
                     self.screen.set_cell(entity.pos_x, entity.pos_y, entity.symbol)
 
             self.screen.set_cell(self.data[2], self.data[3], player)
@@ -286,8 +288,9 @@ class Map:
         self.coords = coords
         self.entities = {}
 
+
 class Entity:
-    def __init__(self, map_id, entity_id, symbol, x, y, behavior, *args):
+    def __init__(self, entity_id, symbol, map_id, x, y, behavior, *args):
         self.entity_id = entity_id
         self.symbol = symbol
         self.map_id = map_id
@@ -298,6 +301,9 @@ class Entity:
 
     def change_behavior(self, new_behavior):
         if self.behavior != "permanent": self.behavior = new_behavior
+
+    def teleport(self, map_id, x, y):
+        if self.behavio != "permanent": self.map_id, self.pos_x, self.pos_y = map_id, x, y
 
 
 # Functions used by Asci
@@ -410,9 +416,46 @@ def follow(entity, data, stat, screen, walkable):
         elif screen.get_cell(cases[0], cases[1]) in walkable: entity.pos_x, entity.pos_y = cases
 
 
-def walk(entity, data, stat, screen, walkable):
+def walk_between(entity, data, stat, screen, walkable):
     frame = (entity.args[0] + 1) % len(entity.args[1])
-    new_x, new_y = entity.args[1][frame]
+    new_x, new_y = _walk_engine(entity, frame)
     if screen.get_cell(new_x, new_y) in walkable:
         entity.pos_x, entity.pos_y = new_x, new_y
     entity.args[0] = frame
+
+
+def walk_to(entity, data, stat, screen, walkable):
+    frame = entity.args[0]
+    if len(entity.args[1]) == frame:
+        entity.behavior = "stand by"
+        entity.args = []
+        return
+
+    new_x, new_y = _walk_engine(entity, frame)
+    
+    if screen.get_cell(new_x, new_y) in walkable:
+        entity.pos_x, entity.pos_y = new_x, new_y
+    entity.args[0] += 1
+
+
+def follow_by_player(entity, data, stat, screen, walkable):
+    frame = entity.args[0]
+    if len(entity.args[1]) == frame:
+        entity.behavior = "stand by"
+        entity.args = []
+        return
+        
+    new_x, new_y = _walk_engine(entity, frame)
+
+    if abs(data[2] - new_x) < 5 and abs(data[3] - new_y) < 3 and screen.get_cell(new_x, new_y) in walkable:
+        entity.pos_x, entity.pos_y = new_x, new_y
+        if (new_x, new_y) == entity.args[1][frame]: entity.args[0] += 1
+
+
+def _walk_engine(entity, frame):
+    delta_x, delta_y = list(map(lambda x,y: y - x, (entity.pos_x, entity.pos_y), entity.args[1][frame]))
+    new_x = entity.pos_x
+    new_y = entity.pos_y
+    if delta_x: new_x += abs(delta_x) // delta_x
+    if delta_y: new_y += abs(delta_y) // delta_y
+    return new_x, new_y
