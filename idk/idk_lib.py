@@ -35,7 +35,7 @@ maps = (
 
 spells = ("Soin", "Flammes", "Givre", "Etincelles", "Fatigue")
 spells_level = ("I", "II", "III", "IV", "V")
-spells_effect = ((0, 1, True), (4, -1, False), (4, -1, False), (4, -1, False), (0, -1, False)) # (capacity, factor, True on player; False on opponent)
+spells_effect = ((4, 1, True), (4, -1, False), (4, -1, False), (4, -1, False), (0, -1, False)) # (capacity, factor, True on player; False on opponent)
 weapons = ("<aucune>", "Dague", "Marteau", "Masse", "Fleau", "Hache", "Epee", "Espadon", "Hache double")
 armors = ("<aucune>", "Rondache", "Pavois", "Cote de maille", "Broigne", "Harnois")
 
@@ -43,8 +43,9 @@ armors = ("<aucune>", "Rondache", "Pavois", "Cote de maille", "Broigne", "Harnoi
 def npc_core(event_fn, data, stat, entities, identifiant):
     event = event_fn(data, stat, entities, identifiant)
 
-    if not event:    
-        sel_choice = print_text("\nChoissez une action :\n1. Attaquer\n2. Voler\n3. Parler\n4. Ne rien faire", 1, 4, 3)
+    if not event:
+        msg = ("Hmm ?", "Besoin de quelque chose ?", "Vous cherchez quelqu'un ?", "Vous etes... ?", "Oui ?", "He ! Regarde ou tu vas.")
+        sel_choice = print_text("{0}\n1. Attaquer\n2. Voler\n3. Ne rien faire".format(choice(msg)), 1, 3, 3)
 
         if sel_choice == 1:
             opponent_stat = [randint(5, stat[2][i] + 5) for i in range(4)]
@@ -59,10 +60,6 @@ def npc_core(event_fn, data, stat, entities, identifiant):
                 return [0, "Votre victime vous a vu et vous a mis une raclee.", 0, (0, -10)]
 
         elif sel_choice == 3:
-            msg = ("Hmm ?", "Besoin de quelque chose ?", "Vous cherchez quelqu'un ?", "Vous etes... ?", "Oui ?", "He ! Regarde ou tu vas.")
-            return [0, choice(msg)]
-
-        elif sel_choice == 4:
             return None
 
     elif type(event) == tuple and len(event) > 2:
@@ -340,22 +337,40 @@ def sleep(data, stat):
 
 
 def spell(data, stat):
-    to_disp = "Magie : {} PM".format(stat[2][4])
     print("<o>    Sorts     <o>")
-    print(" |" + to_disp + " " * (16 - len(to_disp)) + "|")
-
     for i in range(3):
         if i < len(stat[7]):
             spell_id, level = stat[7][i]
             if spell_id >= 0:
                 to_disp = "{0} {1}".format(spells[spell_id], spells_level[level - 1])
-                print(" |" + to_disp + " " * (16 - len(to_disp)) + "|")
+                print(" |{}.".format(i + 1) + to_disp + " " * (14 - len(to_disp)) + "|")
         else:
             print(" |<aucun>         |")
 
     print("<o> ============ <o>")
-    input()
+    spell_choice = get_input()
+    if not (1 <= spell_choice <= 3): spell_choice = 0
+    if spell_choice:
+        spell_choice -= 1
+        spell_id, level = stat[7][spell_choice][0], stat[7][spell_choice][1]
+        capacity, factor, apply_on_player = spells_effect[spell_id]
 
+        if not apply_on_player:
+            print_text("Vous ne pouvez pas lancer ce sort.")
+
+        elif stat[2][4] >= level * 10:
+            msg = "".format()
+            stat[2][4] -= level * 10
+            pts = 12 * level + randint(-5, 5)
+            
+            if capacity == 4:
+                stat[0] += factor * pts
+            else:
+                stat[2][capacity] += factor * pts
+            print_text("Vous lancez {0} de niveau {1} [-{2} PM] et {3} {4} points de {5}".format(spells[spell_id], spells_level[level - 1], level * 10, ("perdez", "gagnez")[factor > 0], pts, ("vitesse", "agilité", "attaque", "défense", "vie")[capacity]))
+            
+        else:
+            print_text("Vous n'avez plus assez de points de Magie.")
 
 def quick_save(data, stat):
     data_copy = data[:]
@@ -364,8 +379,8 @@ def quick_save(data, stat):
 
 
 # Misc functions
-def get_input():
-    string = input(">")
+def get_input(string=">"):
+    string = input(string)
     try:
         return int(string)
     except:
