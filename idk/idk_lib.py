@@ -337,10 +337,7 @@ def sleep(data, stat):
 
 
 def spell(data, stat):
-    #to_disp = "Magie : {} PM".format(stat[2][4])
     print("<o>    Sorts     <o>")
-    #print(" |" + to_disp + " " * (16 - len(to_disp)) + "|")
-
     for i in range(3):
         if i < len(stat[7]):
             spell_id, level = stat[7][i]
