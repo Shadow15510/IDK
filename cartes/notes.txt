@@ -1,0 +1,38 @@
+------------------------
+ Liens entre les mondes
+------------------------
+Alfheim    Asgard    Muspellheim
+   ↑          ↑          ↑
+Vanaheim ← Midgard → Nidavellir
+   ↓          ↓          ↓
+Jotunheim  Niflheim  Svartalfheim
+
+------------------------
+ Notes sur chaque monde
+------------------------
+	Alheim
+Monde des elfes clairs, peu présent dans ce premier opus.
+
+	Asgard
+Monde des dieux Ases, une des deux grande famille du panthéon nordique. Mené par Odin et Thor, il s'agit des dieux de la guerre.
+
+	Muspellheim
+Le monde du feu, dirigé par un géant. Également secondaire pour l'instant.
+
+	Vanaheim
+Royaume des dieux Vanes, la deuxième grande famille. Mené par Freyja et Freyr, il s'agit des dieux de l'amour, de la beauté et de l'érotisme.
+
+	Midgard
+Le monde des Hommes. Protégés des autres mondes par un océan gardé par Jormungandr, un serpent géant qui entoure complètement le monde.
+
+	Nidavellir
+Le Royaume des Nains. 
+
+	Jotunheim
+Le monde des Géants.
+	
+	Niflheim (ou Helheim)
+Le royaume des morts, gardé par la déesse Hel.
+
+	Svartalfheim
+Le monde des elfes noirs, sortes de créatures maléfiques. Il est, en plus d'être secondaire dans ce jeu, très dur d'accès puisqu'il faut passer par Nidavellir qui est un véritable labyrinthe.
