@@ -104,16 +104,24 @@ def launch_fight(data, stat, event, quest="main"):
 def routine(data, stat):
     stat[4] = (stat[4] + 1) % 1440
 
+    # Health regeneration
+    if stat[0] < 100 and not (stat[4] % 60):
+        stat[0] += 1
+    if stat[0] > 999: stat[0] = 999
+
     # Mana regeneration
-    if stat[2][4] < stat[0] // 2 and not (stat[4] % 60):
+    if stat[2][4] < stat[0] // 2 and not (stat[4] % 30):
         stat[2][4] += 1
+    if stat[2][4] > 99: stat[2][4] = 99 
+
+
 
 
 def low_bar(data, stat):
     h = stat[4] // 60
     m = stat[4] % 60
     if m < 10: m = "0" + str(m)
-    return "{0}h{1} | {2}PV ".format(h, m, stat[0])
+    return "{0}h|{2}PV|{3}PM ".format(h, m, stat[0], stat[2][4])
 
 
 # Game mecanics
@@ -332,13 +340,13 @@ def sleep(data, stat):
 
     stat[4] += sleep_hours * 60
     if stat[0] < 100: stat[0] += sleep_hours // 2
-    if stat[2][4] < 50: stat[2][4] += sleep_hours // 4
+    if stat[2][4] < 50: stat[2][4] += sleep_hours
 
 
     # If the player is at home
     if data[1] == 27:
-        if stat[0] < 100: stat[0] += 2 * sleep_hours
-        if stat[2][4] < 50: stat[2][4] += sleep_hours // 2
+        if stat[0] < 100: stat[0] += sleep_hours
+        if stat[2][4] < 50: stat[2][4] += sleep_hours * 2
 
     print_text("Vous vous reposez {0} heure{1}.".format(sleep_hours, ("", "s")[sleep_hours > 1]))
 
