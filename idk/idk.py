@@ -60,7 +60,7 @@ def point_of_interest(data, stat, entities, identifiant):
     coords = data[2], data[3]
     event = po_data[data[1]](coords, identifiant)
 
-    if not event: return [0, "Il n'y a rien à voir ici."]
+    if not event: return [0, "Il n'y a rien a voir ici."]
     else: return event
 
 
@@ -89,7 +89,7 @@ def idk(save_code=None):
         stat, data = decode_save(save_code)
 
     idk_game = Asci(maps, entities, events, keys)
-    stat, data = idk_game.mainloop(102, stat, data, routine=routine, door="^_", walkable=".,`' ", exit_key="q")
+    stat, data = idk_game.mainloop(102, stat, data, routine=routine, low_bar=low_bar, door="^_", walkable=".,`' ", exit_key="q")
     if stat[9] != -1: data[0]["main"] -= stat[9]
 
     if data[0]["main"] == 102:
@@ -284,7 +284,7 @@ def h_15_npc(data, stat, entites, identifiant):
     if coords == (10, 6):
         if "theldis" in data[0]: return "theldis", {
             "base": [0, "Vidar, dieu de la vengeance et du silence. Besoin de faire taire quelqu'un ?"],
-            3: [1, "Hum, j'accepte de réaliser votre vengeance, mais j'ai une condition : vous devrez vous charger d'une autre vengeance. Allez dans les montagnes au nord-est, trouvez Hargduf, c'est un orc, vous ne pouvez pas le louper. Eliminez-le."],
+            3: [1, "Hum, j'accepte de realiser votre vengeance, mais j'ai une condition : vous devrez vous charger d'une autre vengeance. Allez dans les montagnes au nord-est, trouvez Hargduf, c'est un orc, vous ne pouvez pas le louper. Eliminez-le."],
             4: [0, "Si tu veux que justice soit faite, va tuer cet orc."],
             5: [1, "Bon travail. Je m'occupe de ton affaire des que possible."]
         }
@@ -512,7 +512,7 @@ def h_23_npc(data, stat, entites, identifiant):
         return {
             "base": [0, "Bonjour... ?"],
             44: [0, "Je suis Sagriel, alfe claire. Je peux t'aider ?\n1. Oui, je voulais connaitre la signification de ces runes.\n2. Non, rien, excusez-moi...", 2],
-                45: [1, "[VOUS TENDEZ LE CROQUIS D'UTARG À SAGRIEL] Hum, ces runes sont celles d'Odin. Il s'interesse de tres pres a cela. Je peux vous les traduire contre un service.\n1. Lequel ?\n2. Je trouverais quelqu'un d'autre.", 2],
+                45: [1, "[VOUS TENDEZ LE CROQUIS D'UTARG A SAGRIEL] Hum, ces runes sont celles d'Odin. Il s'interesse de tres pres a cela. Je peux vous les traduire contre un service.\n1. Lequel ?\n2. Je trouverais quelqu'un d'autre.", 2],
                 46: [-2, "Eh bien revenez quand vous vous serez decide alors..."],
 
             47: [3, "J'ai besoin d'une potion d'eternelle jeunesse, Gullveig en vend pour 10 pieces d'or. [+10 PO]", 0, (1, 10)],
@@ -615,7 +615,7 @@ def midgard_npc(data, stat, entites, identifiant):
 
         if stat[8] % 3: return "laard", {
                 "base": [0, "Laard, je suis marin de mon etat."],
-                0: [0, "Laard, marin. Vous cherchez un engagement ?\n1. Hmm ? Proposez toujours ?\n2. Désolé, j'ai d'autres affaires a regler.", 2],
+                0: [0, "Laard, marin. Vous cherchez un engagement ?\n1. Hmm ? Proposez toujours ?\n2. Desole, j'ai d'autres affaires a regler.", 2],
                     1: [2, "Voila, il y a quelques temps j'ai embarque dans un navire. Malheureusement, Njord ne nous a pas ete favorable et la tempete fut rude. La situation a bord est devenue tendue, nous nous sommes mutines. En represailles, Gardim, le capitaine, a fait passer quelques matelots par dessus bord. J'ai jure de les venger, mais je ne connais rien aux armes. Tu peux t'en charger pour moi ?"],
                     2: [-2, "Je comprends."],
                 3: [0, "En clair, j'aimerais que tu elimines Gardim. La paye sera bonne."],
@@ -969,7 +969,7 @@ def h_39_npc(data, stat, entites, identifiant):
                 weapons_sale.append(wpn)
                 formated_wpn += "{0}. {1} [-{2} PO]\n".format(len(weapons_sale), weapons[wpn], 10 * wpn)
 
-        wpn_choice = print_text("Bienvenue a la forge de Nidavellir ! Vous desirez une piece particulière ?\n{}".format(formated_wpn), 1, 4, 0)
+        wpn_choice = print_text("Bienvenue a la forge de Nidavellir ! Vous desirez une piece particuliere ?\n{}".format(formated_wpn), 1, 4, 0)
         if not wpn_choice: return [0, "Hmm ?"]
     
         wpn = weapons_sale[wpn_choice - 1]

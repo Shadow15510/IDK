@@ -1,8 +1,21 @@
 from idk_lib import *
 
+try:
+    import dlc_scenario as dlc
+    spells = dlc.dlc_spells
+    spells_level = dlc.dlc_spells_level
+    spells_effect = dlc.dlc_spells_effect
+    weapons = dlc.dlc_weapons
+    armors = dlc.dlc_armors
+    dlc_entities = dlc.dlc_entities
+except:
+    dlc = None
+    dlc_entities = ()
+
+
 
 # Game
-def npc(data, stat):    
+def npc(data, stat, entities, identifiant):    
     npc_data = (
     asgard_npc,
     vanaheim_npc,
@@ -24,10 +37,14 @@ def npc(data, stat):
     h_45_npc, h_46_npc, h_47_npc, h_48_npc)
 
 
-    return npc_core(npc_data[data[1]], data, stat)
+    if dlc:
+        event = dlc.dlc_npc(data, stat, entities, identifiant)
+        if event: return "dlc", event
+
+    return npc_core(npc_data[data[1]], data, stat, entities, identifiant)
 
 
-def point_of_interest(data, stat):
+def point_of_interest(data, stat, entities, identifiant):
     po_data = (
         asgard_po,
         vanaheim_po,
@@ -41,13 +58,16 @@ def point_of_interest(data, stat):
     )
 
     coords = data[2], data[3]
-    event = po_data[data[1]](coords)
+    event = po_data[data[1]](coords, identifiant)
 
     if not event: return [0, "Il n'y a rien à voir ici."]
     else: return event
 
 
-print("<scenario>")
+entities = asgard_entities + vanaheim_entities + alfheim_entities + midgard_entities + niflheim_entities + jotunheim_entities + nidavellir_entities + muspellheim_entities + svartalfheim_entities + dlc_entities
+
+print("<titre>")
+print("Entrez '' pour\nune nouvelle partie.")
 events = {"*": npc, "?": point_of_interest}
 keys = {4: display_stat, 7: spell, 8: misc_stat, 6: inventory, 9: sleep, "s": quick_save}
 
@@ -59,18 +79,18 @@ def scenario(save_code=None):
         name = stat[5]
         data = [{"main": 0}, 3, 44, 66]
 
-        print_text("<intro>")
+        print_text("introduction")
     else:
         stat, data = decode_save(save_code)
 
-    idk_game = Asci(maps, events, keys)
-    stat, data = idk_game.mainloop(10, stat, data, routine=routine, door="^_", walkable=".,`' ", exit_key="q")
+    idk_game = Asci(maps, entities, events, keys)
+    stat, data = idk_game.mainloop(1, stat, data, routine=routine, door="^_", walkable=".,`' ", exit_key="q")
     if stat[9] != -1: data[0]["main"] -= stat[9]
 
-    if data[0]["main"] == 10:
-        print_text("<conclusion>")
+    if data[0]["main"] == 1:
+        print_text("conclusion")
     else:
-        print("Pour continuer :\nscenario(\"{}\")".format(encode_save(data, stat[:-1])))
+        print("idk(\"{}\")".format(encode_save(data, stat[:-1])))
 
 
 # Scenario
@@ -83,12 +103,11 @@ def shop_interaction(data, stat, nb_choice, *events):
 
 
 # - - - Asgard - - - #
-def asgard_po(coords):
-    # ? : (120, 26)
-    # ? : (51, 55)
+def asgard_po(coords, identifiant):
     pass
 
-def asgard_npc(data, stat):
+
+def asgard_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
     # * : ( 34, 7)
     # * : ( 29, 13)
@@ -112,164 +131,85 @@ def asgard_npc(data, stat):
 
 
 # Forseti
-def h_9_npc(data, stat):
-    # * : (19, 4)
+def h_9_npc(data, stat, entites, identifiant):
     pass
+
 
 # Odin
-def h_10_npc(data, stat):
-    # * : (25, 11)
+def h_10_npc(data, stat, entites, identifiant):
+    pass
+
+def h_11_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_11_npc(data, stat):
-    # * : (34, 7)
-    pass
-
-
-def h_12_npc(data, stat):
-    # * : (19, 4)
+def h_12_npc(data, stat, entites, identifiant):
     pass
 
 
 # Folkvangr
-def h_13_npc(data, stat):
-    # * : (21, 8)
+def h_13_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_14_npc(data, stat):
-    # * : (26, 2)
+def h_14_npc(data, stat, entites, identifiant):
     pass
 
 
 # Vidar
-def h_15_npc(data, stat):
-    # * : (10, 6)
-    pass
-
-def h_16_npc(data, stat):
-    # * : (50, 14)
+def h_15_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_17_npc(data, stat):
-    # * : (36, 14)
+def h_16_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_18_npc(data, stat):
-    # * : (30, 9)
+def h_17_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_19_npc(data, stat):
-    # * : (28, 7)
+def h_18_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_20_npc(data, stat):
-    # * : (39, 9)
+def h_19_npc(data, stat, entites, identifiant):
+    pass
+
+
+def h_20_npc(data, stat, entites, identifiant):
     pass
 
 
 # - - - Vanaheim - - - #
-def vanaheim_po(coords):
-    # ? : (42, 20)
+def vanaheim_po(coords, identifiant):
+    pass
+
+def vanaheim_npc(data, stat, entites, identifiant):
     pass
 
 
-def vanaheim_npc(data, stat):
-    # * : (31; 12)
-    # * : (52; 22)
-    # * : (52; 30)
-    # * : (45; 39)
-
-    # Charrette
-    if coords == (45, 39):
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Midgard\n2. Jotunheim\n3. Alfheim", 3]
-
-        else:
-            destinations = ("Midgard", "Jotunheim", "Alfheim")
-            dest_coords = ((3, 10, 58), (5, 11, 120), (2, 14, 68))
-            for i in range(1, 4):
-                if data[0]["main"] == stat[9] + i:
-                    stat[9] = -1
-                    if stat[1] < 5: return [-i, "Je ne travaille pas gratuitement."]
-                    else:
-                        data[1], data[2], data[3] = dest_coords[i - 1][0], dest_coords[i - 1][1], dest_coords[i - 1][2]
-                        return [-i, "C'est parti pour {} !".format(destinations[i - 1]), 0, (1, -5), (4, 60)]                     
-
-
-def h_21_npc(data, stat):
-    # * : (8, 1)
-    # * : (21, 6)
-    coords = data[2], data[3]
-
-    if coords == (8, 1):
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Cher client bonjour ! Que puis-je faire pour vous ?\n1. Manger [5 PO]\n2. Boire [2 PO]\n3. Dormir [10 PO]", 3]
-        else:
-            event, _ = shop_interaction(data, stat, 3,
-                (5, [-1, "Et un plat chaud, un ! [VOUS VOUS ASSEYEZ DEVANT UN TRANCHOIR DE PAIN ET UNE ASSIETTE DE SOUPE EPAISSE.]", 0, (0, 5), (1, -5)], [-1, "Tsst, quand on ne peut pas payer, on ne rentre pas."]),
-                (2, [-2, "Et voila ! [L'AUBERGISTE PLACA DEVANT VOUS UNE CHOPE DE BIERE]", 0, (0, 2), (1, -2)], [-2, "La maison ne fait pas credit."]),
-                (10, [-3, "Votre chambre est a l'etage.\n[VOUS MONTEZ A L'ETAGE ET VOUS ENDORMEZ SANS DIFFICULTES.]", 0, (0, 10), (1, -10), (4, 480)], [-3, "Allez donc voir ailleurs."]))
-
-            return event
-
-
-def h_22_npc(data, stat):
-    # * : (36, 3)
-    # * : (2, 8)
+def h_22_npc(data, stat, entites, identifiant):    
     pass
 
 
 # - - - Alfheim - - - #
-def alfheim_po(coords):
-    # ? : (34, 20)
+def alfheim_po(coords, identifiant):
     pass
 
-def alfheim_npc(data, stat):
+def alfheim_npc(data, stat, entites, identifiant):
     # * : (11; 4)
     # * : (46; 6)
     # * : (23; 17)
     # * : (27; 54)
-    coords = data[2], data[3]
-
-    # Charrette
-    if coords == (23, 17):
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Midgard\n2. Asgard\n3. Vanaheim\n4. Svartalfheim", 4]
-
-        else:
-            destinations = ("Midgard", "Asgard", "Vanaheim", "Svartalfheim")
-            dest_coords = ((3, 10, 58), (0, 126, 71), (1, 28, 13), (8, 109, 66))
-            for i in range(1, 5):
-                if data[0]["main"] == stat[9] + i:
-                    stat[9] = -1
-                    if stat[1] < 5: return [-i, "Je ne travaille pas gratuitement."]
-                    else:
-                        data[1], data[2], data[3] = dest_coords[i - 1][0], dest_coords[i - 1][1], dest_coords[i - 1][2]
-                        return [-i, "C'est parti pour {} !".format(destinations[i - 1]), 0, (1, -5), (4, 60)] 
+    pass 
 
 
-def h_23_npc(data, stat):
-    # * : (23, 5)
+def h_23_npc(data, stat, entites, identifiant):
     pass
 
-
-def h_24_npc(data, stat):
-    # * : (12, 3)
-    # * : (36, 12)
+def h_24_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
-    
-
-    spells = ("Soin", "Flammes", "Givre", "Etincelles", "Fatigue")
-    levels = ("I", "II", "III", "IV", "V")
 
     if not (480 <= stat[4] <= 1140): return [0, "Excusez-moi, nous sommes fermes."]
 
@@ -278,29 +218,144 @@ def h_24_npc(data, stat):
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
-            return [0, "Quel sort souhaitez-vous oublier ?\n" + "\n".join(["{0}. {1} {2}".format(nb + 1, spells[stat[7][nb][0]], levels[stat[7][nb][1] - 1]) for nb in range(len(stat[7]))]), len(stat[7])]
+            return [0, "Quel sort souhaitez-vous oublier ?\n" + "\n".join(["{0}. {1} {2}".format(nb + 1, spells[stat[7][nb][0]], spells_level[stat[7][nb][1] - 1]) for nb in range(len(stat[7]))]), len(stat[7])]
 
         else:
             for i in range(1, len(stat[7]) + 1):
                 if data[0]["main"] == stat[9] + i:
                     stat[9] = -1
                     stat[7].pop(i - 1)
-                    return [-i, "Asseyez-vous, je vais vous faire oublier ce sort. [UN PUISSANT MAL DE TETE VOUS PRIT, LES MURS SEMBLERENT TANGUER TANDIS QUE VOTRE VUE DEVINT FLOUE. LE VERTIGE S'ESTOMPA PROGRESSIVEMENT.] Et voila !"]
+                    pts = (20 * stat[0]) // 100
+                    return [-i, "Asseyez-vous, je vais vous faire oublier ce sort. [UN PUISSANT MAL DE TETE VOUS PRIT, LES MURS SEMBLERENT TANGUER TANDIS QUE VOTRE VUE DEVINT FLOUE. LE VERTIGE S'ESTOMPA PROGRESSIVEMENT.] Et voila ! [-{} PV]".format(pts), 0, (0, -pts)]
 
-    if coords == (36, 12):
-        spells_sale = ((0, 2), (1, 2), (2, 4), (4, 1))
-
+    if coords == (36, 12):         
         if len(stat[7]) >= 3: return [0, "Je suis desole, vous ne pouvez pas apprendre plus de trois sorts."]
+
+        spells_sale = []
+        formated_spells = ""
+        while len(spells_sale) < 3:
+            sp_id = randint(0, len(spells) - 1)
+            sp_lvl = randint(1, len(spells_level))
+
+            check = True
+            for sp in spells_sale:
+                if sp[0] == sp_id and sp[1] == sp_lvl:
+                    check = False
+                    break
+
+            if check:
+                spells_sale.append((sp_id, sp_lvl))
+                formated_spells += "{0}. {1} {2}\n".format(len(spells_sale), spells[sp_id], spells_level[sp_lvl - 1])
+
+        spell_choice = print_text("Diomwar, pour vous servir. Quel sort voulez-vous acheter ?\n{}".format(formated_spells), 1, 3, 0)
+
+        if not spell_choice: return [0, "Hmm ?"]
+
+        spell_sel = spells_sale[spell_choice - 1]
+        if stat[1] < 10 * spell_sel[1]: return [0, "Vous n'avez pas les moyens, desole."]
+
+        spell_id = -1
+        for sp_id in range(len(stat[7])):
+            sp = stat[7][sp_id]
+            if spell_sel[0] == sp[0]:
+                if spells_sel[1] <= sp[1]: return [0, "Vous connaissez deja ce sort."]
+                else:
+                    spell_id = sp_id
+                    break
+
+        if spell_id == -1:
+            stat[7].append(spells_sale[i])
+        else:
+            stat[7][spell_id] = spells_sale[i]
+
+        return [0, "[DIOMWAR OUVRIT UN LIVRE RELIE DE CUIR NOIR, ET TRACA DU DOIGT DES SIGNES CABALISTIQUES SUR LE SOL. LES RUNES BRILLERENT PUISSAMMENT AVANT DE S'ETEINDRE.]", 0, (1, -10 * spells_sel[1])]                
+
+
+# - - - Midgard - - - #
+def midgard_po(coords, identifiant):
+    pass
+
+
+def midgard_npc(data, stat, entites, identifiant):
+    # (67, 46)
+    # (39, 49)
+    # (66, 56)
+    # (68, 71)
+    pass
+
+
+def h_25_npc(data, stat, entites, identifiant):
+    pass
+
+
+def h_26_npc(data, stat, entites, identifiant):
+    # * : (17, 7)
+    # * : (22, 7)
+    # * : (17, 8)
+    # * : (27, 8)
+    coords = data[2], data[3]
+    
+    if identifiant == "Rosahil Green":
+        if stat[4] >= 1320 or stat[4] <= 340: return [0, "Je suis desolee, nous sommes fermes. Revenez plus tard !"]
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
-            return [0, "Diomwar, pour vous servir. Quel sort voulez-vous acheter ?\n1. Soin II\n2. Flammes II\n3. Givre IV\n4. Fatigue I", 4]
+            return [0, "Rosahil Green, tenanciere de cette auberge. Vous desirez quelque chose ?\n1.De quoi manger s'il vous plait. [-5 PO]\n2.Je voudrais une chambre pour la nuit. [-10 PO]", 2]
+        else:
+            event, choice = shop_interaction(data, stat, 2,
+                (5, [-1, "Et voila pour vous ! [ROSAHIL POSA UNE ASSIETTE DE RAGOUT CHAUD DEVANT VOUS.]", 0, (0, 5), (1, -5)], [-1, "Reviens quand tu auras assez de pieces d'or."]),
+                (10, [-2, "Suivez-moi, je vais vous montrer votre chambre. [VOUS SUIVEZ ROSAHIL DANS L'AUBERGE, LA NUIT PASSA.]", 0, (0, 10), (1, -10), (4, 480)], [-2, "Je suis desolee, tu n'as pas assez !"]))
+
+            if choice == 2 and 360 < stat[4] < 1140: return [-2, "Il est trop tot, revenez vers 19h."]
+            else: return event
+    
+    else: return [0, "Ui hips ?"]
+
+
+def h_27_npc(data, stat, entites, identifiant):
+    pass
+
+
+def h_28_npc(data, stat, entites, identifiant):
+    pass
+
+
+# - - - Niflheim - - - #
+def niflheim_po(coords, identifiant):
+    pass
+
+
+def niflheim_npc(data, stat, entites, identifiant):
+    # * : (95, 30)
+    # * : (57, 31)
+    # * : (39, 60)
+    # * : (108, 67)
+    pass
+
+
+def h_29_npc(data, stat, entites, identifiant):
+    coords = data[2], data[3]
+
+    n = len(spells)
+    spells_sale = [(i, len(spells_level)) for i in range(n)]
+    formated_spells = ""
+    for sp in range(n):
+        formated_spells += "{0}. {1} {2}\n".format(sp + 1, spells[spells_sale[sp][0]], spells_level[spells_sale[sp][1] - 1])
+
+    if not (480 <= stat[4] <= 1140): return [0, "Je suis desolee, nous sommes fermes."]
+
+    if coords == (5, 5):
+        if len(stat[7]) >= 3: return [0, "Vous ne pouvez pas apprendre plus de sort, et je ne pratique pas les sorts d'oubli. Je crois qu'une librairie vers Alfheim le fait gratuitement."]
+
+        if stat[9] == -1 or data[0]["main"] == stat[9]:
+            stat[9] = data[0]["main"]
+            return [0, "Merath, je vend les sorts les plus puissants de tout l'Yggdrasil ! Quel sort voulez-vous ?\n{}".format(formated_spells), n]
 
         else:
-            for i in range(1, 5):
+            for i in range(1, n + 1):
                 if data[0]["main"] == stat[9] + i:
                     stat[9] = -1
-                    if stat[1] < spells_sale[i - 1][1] * 10: return [-i, "Vous n'avez pas les moyens, desole."]
+                    if stat[1] < 50: return [-i, "Vous n'avez pas les moyens, desolee."]
 
                     spell_id = -1
                     for sp_id in range(len(stat[7])):
@@ -316,150 +371,18 @@ def h_24_npc(data, stat):
                     else:
                         stat[7][spell_id] = spells_sale[i - 1]
 
-                    return [-i, "[DIOMWAR OUVRIT UN LIVRE RELIE DE CUIR NOIR, ET TRACA DU DOIGT DES SIGNES CABALISTIQUES SUR LE SOL. LES RUNES BRILLERENT PUISSAMMENT AVANT DE S'ETEINDRE.]", 0, (1, -spells_sale[i - 1][1] * 10)]
-
-
-# - - - Midgard - - - #
-def midgard_po(coords):
-    # ? : (29, 9)
-    # ? : (53, 24)
-    # ? : (66, 45)
-    # ? : (52, 79)
-    pass
-
-def midgard_npc(data, stat):
-    # * : (67, 46)
-    # * : (39, 49)
-    # * : (66, 56)
-    # * : (68, 71)
-    # * : (8, 59)
-    # * : (94, 85)
-    # * : (51, 60)
-    coords = data[2], data[3]
-    
-    # Charrette
-    elif coords == (39, 49):
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Vanaheim\n2. Asgard\n3. Nidavellir\n4. Niflheim", 4]
-
-        else:
-            destinations = ("Vanaheim", "Asgard", "Nidavellir", "Niflheim")
-            dest_coords = ((1, 54, 29), (0, 126, 71), (6, 93, 8), (4, 78, 19))
-            for i in range(1, 5):
-                if data[0]["main"] == stat[9] + i:
-                    stat[9] = -1
-                    if stat[1] < 5: return [-i, "Je ne travaille pas gratuitement."]
-                    else:
-                        data[1], data[2], data[3] = dest_coords[i - 1][0], dest_coords[i - 1][1], dest_coords[i - 1][2]
-                        return [-i, "C'est parti pour {} !".format(destinations[i - 1]), 0, (1, -5), (4, 60)]  
-
-
-def h_25_npc(data, stat):
-    pass
-
-
-def h_26_npc(data, stat):
-    # * : (17, 7)
-    # * : (22, 7)
-    # * : (17, 8)
-    # * : (27, 8)
-    # * : (27, 6)
-    coords = data[2], data[3]
-    
-
-    # Rosahil Green
-    if coords == (27, 6):
-        if stat[4] >= 1320 or stat[4] <= 340: return [0, "Je suis desolee, nous sommes fermes. Revenez plus tard !"]
-
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Rosahil Green, tenanciere de cette auberge. Vous desirez quelque chose ?\n1.De quoi manger s'il vous plait. [-5 PO]\n2.Je voudrais une chambre pour la nuit. [-10 PO]", 2]
-        else:
-            event, choice = shop_interaction(data, stat, 2,
-                (5, [-1, "Et voila pour vous ! [ROSAHIL POSA UNE ASSIETTE DE RAGOUT CHAUD DEVANT VOUS.]", 0, (0, 5), (1, -5)], [-1, "Reviens quand tu auras assez de pieces d'or."]),
-                (10, [-2, "Suivez-moi, je vais vous montrer votre chambre. [VOUS SUIVEZ ROSAHIL DANS L'AUBERGE, LA NUIT PASSA.]", 0, (0, 10), (1, -10), (4, 480)], [-2, "Je suis desolee, tu n'as pas assez !"]))
-
-            if choice == 2 and 360 < stat[4] < 1140: return [-2, "Il est trop tot, revenez vers 19h."]
-            else: return event
-
-    else: return [0, "Ui hips ?"]
-
-
-def h_27_npc(data, stat):
-    pass
-
-
-def h_28_npc(data, stat):
-    # * : (27, 6)
-    pass
-
-# - - - Niflheim - - - #
-def niflheim_po(coords):
-    # ? : (88, 32)
-    pass
-
-def niflheim_npc(data, stat):
-    # * : (95, 30)
-    # * : (57, 31)
-    # * : (39, 60)
-    # * : (108, 67)
-    pass
-
-
-def h_29_npc(data, stat):
-    # * : (5, 5)
-
-    coords = data[2], data[3]
-
-    spells_sale = ((0, 5), (1, 5), (2, 5), (3, 5), (4, 5))
-
-    if not (480 <= stat[4] <= 1140): return [0, "Je suis desolee, nous sommes fermes."]
-
-    if coords == (5, 5):
-        if len(stat[7]) >= 3: return [0, "Vous ne pouvez pas apprendre plus de sort, et je ne pratique pas les sorts d'oubli. Je crois qu'une librairie vers Alfheim le fait gratuitement."]
-
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Merath, je vend les sorts les plus puissants de tout l'Yggdrasil ! Quel sort voulez-vous ?\n1. Soin V\n2. Flammes V\n3. Givre V\n4. Etincelles V\n4. Fatigue V", 4]
-
-        else:
-            for i in range(1, 5):
-                if data[0]["main"] == stat[9] + i:
-                    stat[9] = -1
-                    if stat[1] < 50: return [-i, "Vous n'avez pas les moyens, desolee."]
-
-                    spell_id = -1
-                    for sp_id, sp in range(len(stat[7])):
-                        sp = stat[7][sp_id]
-                        if spells_sale[i - 1][0] == sp[0]:
-                            if spells_sale[i - 1][1] <= sp[1]: return [-i, "Vous connaissez deja ce sort."]
-                            else:
-                                spell_id = sp_id
-                                break
-
-                    if spell_id == -1:
-                        stat[7].append(spells_sale[i - 1])
-                    else:
-                        stat[7][spell_id] = spells_sale[i - 1]
-
                     return [-i, "[MERATH SE RETOURNA ET S'EMPARA D'UN GRIMOIRE. ELLE L'OUVRIT ET LUT A HAUTE VOIX. UNE LOURDE TORPEUR S'ABBATIT SUR VOUS. QUAND VOUS REPRENEZ PLEINEMENT CONSCIENCE, LE SORT EST GRAVE DANS VOTRE MEMOIRE.]", 0, (1, -50)]
 
 
-def h_30_npc(data, stat):
-    # * : (37, 4)
-    # * : (17, 6)
+def h_30_npc(data, stat, entites, identifiant):
     pass
 
 
 # - - - Jotunheim - - - #
-def jotunheim_po(coords):
-    # ? : (60, 57)
-    # ? : (23, 70)
-    # ? : (60, 86)
+def jotunheim_po(coords, identifiant):
     pass
 
-def jotunheim_npc(data, stat):
+def jotunheim_npc(data, stat, entites, identifiant):
     # * : (25; 10)
     # * : (39; 20)
     # * : (3; 28)
@@ -476,39 +399,30 @@ def jotunheim_npc(data, stat):
     pass
 
 
-def h_31_npc(data, stat):
-    # * : (28, 4)
+def h_31_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_32_npc(data, stat):
-    # * : (28, 6)
+def h_32_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_33_npc(data, stat):
-    # * : (48, 5)
-    # * : (24, 7)
+def h_33_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_34_npc(data, stat):
-    # * : (26, 6)
+def h_34_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_35_npc(data, stat):
-    # * : (17, 5)
+def h_35_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_36_npc(data, stat):
-    # * : (11, 3)
-    # * : (27, 10)
-    # * : (9, 12)
+def h_36_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
     
-    if coords == (27, 10):
+    if identifiant == "jotunheim_aubergiste":
         if not (300 <= stat[4] <= 1380): return [0, "Je suis desole, nous somme ferme la nuit."]
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
@@ -525,12 +439,10 @@ def h_36_npc(data, stat):
 
 
 # - - - Nidavellir - - - #
-def nidavellir_po(coords):
-    # ? : (65, 7)
-    # ? : (66, 58)
+def nidavellir_po(coords, identifiant):
     pass
 
-def nidavellir_npc(data, stat):
+def nidavellir_npc(data, stat, entites, identifiant):
     # * : (49, 21)
     # * : (25, 31)
     # * : (74, 46)
@@ -539,15 +451,10 @@ def nidavellir_npc(data, stat):
     pass
 
 
-def h_37_npc(data, stat):
-    # * : (2, 1)
-    # * : (26, 1)
-    # * : (10, 5)
-    # * : (27, 8)
-    # * : (3, 10)
+def h_37_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
-    if coords == (2, 1):
+    if identifiant == "Muin":
         if not (340 <= stat[4] <= 1380): return [0, "Nous sommes ouverts de 5 heures a 23."]
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
@@ -566,35 +473,33 @@ def h_37_npc(data, stat):
     return [0, "Hmm ?"]
 
 
-def h_38_npc(data, stat):
-    # * : (12, 3)
-    # * : (19, 7)
+def h_38_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_39_npc(data, stat):
-    # * : (9, 2)
-    # * : (9, 4)
+def h_39_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
-    if not (480 <= stat[4] <= 1140): return [0, "La forge de Nivallir est ouverte de 8 heures a 18 heures."]
+    if not (480 <= stat[4] <= 1140): return [0, "La forge de Nidavellir est ouverte de 8 heures a 18 heures."]
 
     if coords == (9, 2):
-
         if stat[3][0]: return [0, "Vous avez deja une arme. Allez voir mon confrere si vous voulez la vendre et revenez me voir."]
 
-        elif stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Bienvenue a la forge de Nidavellir ! Vous desirez une piece particulière ?\n1. Un marteau [-20 PO]\n2. Une masse [-30 PO]\n3. Un fleau [-40 PO]\n4. Une hache [-50 PO]", 4]
+        weapons_sale = []
+        formated_wpn = ""
+        while len(weapons_sale) < 4:
+            wpn = randint(1, len(weapons) - 1)
+            if not wpn in weapons_sale:
+                weapons_sale.append(wpn)
+                formated_wpn += "{0}. {1} [-{2} PO]\n".format(len(weapons_sale), weapons[wpn], 10 * wpn)
 
-        else:
-            weapons = ("UN MARTEAU", "UNE MASSE", "UN FLEAU", "UNE HACHE")
-            for i in range(1, 5):
-                if data[0]["main"] == stat[9] + i:
-                    stat[9] = -1
-                    if stat[1] < (i+1) * 10: return [-i, "Vous n'avez pas assez."]
-                    stat[3][0] = i + 1
-                    return [-i, "Tres bon choix ! [LE NAIN DECROCHA {} DU RATELIER ET VOUS TENDIT L'ARME.]".format(weapons[i - 1]), 0, (1, -(i+1) * 10)]
+        wpn_choice = print_text("Bienvenue a la forge de Nidavellir ! Vous desirez une piece particulière ?\n{}".format(formated_wpn), 1, 4, 0)
+        if not wpn_choice: return [0, "Hmm ?"]
+    
+        wpn = weapons_sale[wpn_choice - 1]
+        if stat[1] < 10 * wpn: return [0, "Vous n'avez pas assez."]
+        stat[3][0] = wpn
+        return [0, "Tres bon choix ! [LE NAIN DECROCHA L'ARME DU RATELIER ET VOUS LA TENDIT.]", 0, (1, -10 * wpn)]
 
     if coords == (9, 4):
         if stat[3][0] == 0: return [0, "Vous n'avez pas d'arme a me vendre. Allez voir mon collegue pour en acheter une."]
@@ -614,42 +519,36 @@ def h_39_npc(data, stat):
             return [-2, "A votre guise, revenez quand vous voulez !"]
 
 
-def h_40_npc(data, stat):
-    # * : (14, 5)
+def h_40_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_41_npc(data, stat):
-    # * : (12, 2)
-    # * : (10, 8)
+def h_41_npc(data, stat, entites, identifiant):
     pass
 
 
 # - - - Muspellheim - - - #
-def muspellheim_po(coords):
-    # ? (66, 8)
-    # ? : (64, 97)
+def muspellheim_po(coords, identifiant):
     pass
 
-
-def muspellheim_npc(data, stat):
+def muspellheim_npc(data, stat, entites, identifiant):
     # * : (20, 12)
     # * : (78, 14)
     # * : (54, 80)
     # * : (59, 91)
     # * : (39, 94)
     # * : (29, 113)
-    pass
-
-
-def h_42_npc(data, stat):
-    # * : (11, 5)
-    # * : (6, 7)
-    # * : (31, 9)
-    # * : (2, 11)
+    
     coords = data[2], data[3]
 
-    if coords == (6, 7):
+    if coords == (39, 94):
+        if data[0]["main"] == 71: return [15, 20, 20, 15, 100], "Soldat Vane", 20, 2
+
+
+def h_42_npc(data, stat, entites, identifiant):
+    coords = data[2], data[3]
+
+    if identifiant == "muspellheim_aubergiste":
         if not (300 <= stat[4] <= 1380): return [0, "Nous sommes ouverts de 5 a 23 heures."]
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
@@ -663,15 +562,12 @@ def h_42_npc(data, stat):
         
             return event
 
-def h_43_npc(data, stat):
-    # * : (24, 4)
-    # * : (6, 5) 
-    # * : (13, 9)
+def h_43_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
     if not (480 <= stat[4] <= 1140): return [0, "L'armurerie est ouverte de 8 heures a 18 heures."]
 
-    if coords == (24, 4):
+    if identifiant == "Bertfrid":
         if stat[3][1]: return [0, "Vous portez deja une armure, allez voir mon confrere."]
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
@@ -704,22 +600,18 @@ def h_43_npc(data, stat):
             return [-2, "Revenez quand vous voulez !"]
 
     elif coords == (6, 5):
-        return [0, "Je ne suis qu'apprenti monseigneur. Adressez-vous plutot a Bertfrid."]
+        return [0, "Je ne suis qu'apprenti monseigneur. Adressez-vous plutot a Bertfrid. Vous la trouverez pres du four."]
 
 
-def h_44_npc(data, stat):
-    # * : (13, 2)
-    # * : (13, 20)
+def h_44_npc(data, stat, entites, identifiant):
     pass
 
 
 # - - - Svartalfheim - - - #
-def svartalfheim_po(coords):
-    # ? : (113, 37)
+def svartalfheim_po(coords, identifiant):
     pass
 
-
-def svartalfheim_npc(data, stat):
+def svartalfheim_npc(data, stat, entites, identifiant):
     # * : (10; 24)
     # * : (105; 46)
     # * : (22; 50)
@@ -728,23 +620,16 @@ def svartalfheim_npc(data, stat):
     # * : (121; 68)
     pass
 
-def h_45_npc(data, stat):
-    # * : (15, 4)
+def h_45_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_46_npc(data, stat):
-    # * : (13, 2)
-    # * : (13, 4)
+def h_46_npc(data, stat, entites, identifiant):
     pass
 
-def h_47_npc(data, stat):
-    # * : (3, 4)
-    # * : (15, 8)
+def h_47_npc(data, stat, entites, identifiant):
     pass
 
 
-def h_48_npc(data, stat):
-    # * : (34, 5)
-    # * : (29, 6)
+def h_48_npc(data, stat, entites, identifiant):
     pass
