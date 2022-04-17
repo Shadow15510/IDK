@@ -147,7 +147,7 @@ def fight(stat, opponent_stat, opponent_name):
                         print("{0}. {1} {2}".format(count + 1, spells[spell_id], spells_level[level - 1]))
                         count += 1
                     spell_choice = get_input()
-                    if spell_choice < 0 or spell_choice > 3: spell_choice = 0
+                    if spell_choice < 0 or spell_choice > len(stat[7]): spell_choice = 0
 
                 spell_choice -= 1
                 spell_id, level = stat[7][spell_choice][0], stat[7][spell_choice][1]
@@ -358,7 +358,7 @@ def spell(data, stat):
 
     print("<o> ============ <o>")
     spell_choice = get_input()
-    if not (1 <= spell_choice <= 3) or spell_choice > len(stat[7]): spell_choice = 0
+    if not (1 <= spell_choice <= len(stat[7])): spell_choice = 0
     if spell_choice:
         spell_choice -= 1
         spell_id, level = stat[7][spell_choice][0], stat[7][spell_choice][1]
