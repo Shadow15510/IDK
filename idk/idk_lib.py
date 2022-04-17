@@ -109,6 +109,13 @@ def routine(data, stat):
         stat[2][4] += 1
 
 
+def low_bar(data, stat):
+    h = stat[4] // 60
+    m = stat[4] % 60
+    if m < 10: m = "0" + str(m)
+    return "{0}h{1} | {2}PV ".format(h, m, stat[0])
+
+
 # Game mecanics
 def fight(stat, opponent_stat, opponent_name):
 
@@ -337,7 +344,9 @@ def sleep(data, stat):
 
 
 def spell(data, stat):
+    to_disp = "Magie : {} PM".format(stat[2][4])
     print("<o>    Sorts     <o>")
+    print(" |" + to_disp + " " * (16 - len(to_disp)) + "|")
     for i in range(3):
         if i < len(stat[7]):
             spell_id, level = stat[7][i]
@@ -349,7 +358,7 @@ def spell(data, stat):
 
     print("<o> ============ <o>")
     spell_choice = get_input()
-    if not (1 <= spell_choice <= 3): spell_choice = 0
+    if not (1 <= spell_choice <= 3) or spell_choice > len(stat[7]): spell_choice = 0
     if spell_choice:
         spell_choice -= 1
         spell_id, level = stat[7][spell_choice][0], stat[7][spell_choice][1]
