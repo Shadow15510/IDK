@@ -1,4 +1,8 @@
-def generateur_scenario(nom):
+#! /usr/bin/env python3
+
+from sys import argv
+
+def nouveau_scenario(nom):
     functions = (
         "asgard_po",
         "asgard_npc",
@@ -58,9 +62,10 @@ def generateur_scenario(nom):
         "h_47_npc",
         "h_48_npc")
 
-    default_content = f"""
+    default_content = """from idk_lib import *
+
 try:
-    import dlc_{nom} as dlc
+    import dlc_{0} as dlc
     spells = dlc.dlc_spells
     spells_level = dlc.dlc_spells_level
     spells_effect = dlc.dlc_spells_effect
@@ -125,31 +130,31 @@ def point_of_interest(data, stat, entities, identifiant):
 
 entities = asgard_entities + vanaheim_entities + alfheim_entities + midgard_entities + niflheim_entities + jotunheim_entities + nidavellir_entities + muspellheim_entities + svartalfheim_entities + dlc_entities
 
-print(center("{nom}", 21, " "))
-print("Entrez '' pour\nune nouvelle partie.")
-events = {"*": npc, "?": point_of_interest}
-keys = {4: display_stat, 7: spell, 8: misc_stat, 6: inventory, 9: sleep, "s": quick_save}
+print(center("{0}", 21, " "))
+print("Entrez '{0}()' pour\\nune nouvelle partie.")
+events = {{"*": npc, "?": point_of_interest}}
+keys = {{4: display_stat, 7: spell, 8: misc_stat, 6: inventory, 9: sleep, "s": quick_save}}
 
 
-def {nom}(save_code=None):
+def {0}(save_code=None):
     # stat = [0 - PV, 1 - pièces d'or, 2 - [vitesse, agilité, attaque, defense, magie], 3 - [arme, armure], 4 - ticks, 5 - nom, 6 - classe, 7 - sorts connus : (id, level), 8 - sous-quêtes terminées]
     if not save_code:
         stat = init_stat()
         name = stat[5]
-        data = [{"main": 0}, 3, 44, 66]
+        data = [{{"main": 0}}, 3, 44, 66]
 
         print_text("introduction")
     else:
         stat, data = decode_save(save_code)
 
     idk_game = Asci(maps, entities, events, keys)
-    stat, data = idk_game.mainloop(1, stat, data, routine=routine, door="^_", walkable=".,`' ", exit_key="q")
+    stat, data = idk_game.mainloop(1, stat, data, routine=routine, low_bar=low_bar, door="^_", walkable=".,`' ", exit_key="q")
     if stat[9] != -1: data[0]["main"] -= stat[9]
 
     if data[0]["main"] == 1:
         print_text("conclusion")
     else:
-        print("{nom}(\"\{\}\")".format(encode_save(data, stat[:-1])))
+        print("{0}(\\"{{}}\\")".format(encode_save(data, stat[:-1])))
 
 
 # Scenario
@@ -159,5 +164,16 @@ def shop_interaction(data, stat, nb_choice, *events):
             stat[9] = -1
             if stat[1] < events[choice][0]: return events[choice][2], choice + 1
             else: return events[choice][1], choice + 1
-            """
+""".format(nom)
 
+    for fn in functions:
+        if fn.endswith("_po"):
+            default_content += f"\n\n\n# - - - {fn[:-3].title()} - - - #\ndef {fn}(coords, identifiant):\n    pass"
+        else:
+            default_content += f"\n\n\ndef {fn}(data, stat, entites, identifiant):\n    pass"
+
+    with open(f"{nom}.py", "w") as file:
+        file.write(default_content)
+
+
+nouveau_scenario(argv[1])
