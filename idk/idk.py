@@ -577,11 +577,11 @@ def h_24_npc(data, stat, entites, identifiant):
                     break
 
         if spell_id == -1:
-            stat[7].append(spells_sale[i])
+            stat[7].append(spell_sel)
         else:
-            stat[7][spell_id] = spells_sale[i]
+            stat[7][spell_id] = spell_sel
 
-        return [0, "[DIOMWAR OUVRIT UN LIVRE RELIE DE CUIR NOIR, ET TRACA DU DOIGT DES SIGNES CABALISTIQUES SUR LE SOL. LES RUNES BRILLERENT PUISSAMMENT AVANT DE S'ETEINDRE.]", 0, (1, -10 * spells_sel[1])]                
+        return [0, "[DIOMWAR OUVRIT UN LIVRE RELIE DE CUIR NOIR, ET TRACA DU DOIGT DES SIGNES CABALISTIQUES SUR LE SOL. LES RUNES BRILLERENT PUISSAMMENT AVANT DE S'ETEINDRE.]", 0, (1, -10 * spell_sel[1])]                
 
 
 # - - - Midgard - - - #
@@ -977,7 +977,7 @@ def h_39_npc(data, stat, entites, identifiant):
         stat[3][0] = wpn
         return [0, "Tres bon choix ! [LE NAIN DECROCHA L'ARME DU RATELIER ET VOUS LA TENDIT.]", 0, (1, -10 * wpn)]
 
-    if coords == (9, 4):
+    elif coords == (9, 4):
         if stat[3][0] == 0: return [0, "Vous n'avez pas d'arme a me vendre. Allez voir mon collegue pour en acheter une."]
 
         if stat[9] == -1 or data[0]["main"] == stat[9]:
