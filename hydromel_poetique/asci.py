@@ -1,4 +1,4 @@
-# Asci (1.8.3)
+# Asci (1.8.2)
 
 class Asci:
     def __init__(self, maps, entities, events_mapping, keys_mapping, behaviors=None, screen_width=21, screen_height=7):
@@ -182,7 +182,7 @@ class Asci:
             data_copy = self.data[:]
             for entity in self.current_map.entities.values():
                 self._behaviors[entity.behavior](entity, data_copy, self.stat, self.screen, walkable)
-                if entity.map_id == self.data[1] and (0 <= entity.pos_x - self.data[2] + self.screen.pos_player[0] < self.screen.screen_width) and (0 <= entity.pos_y - self.data[3] + self.screen.pos_player[1] < self.screen.screen_height):
+                if entity.map_id == self.data[1] and (0 <= entity.pos_x - self.data[2] + 10 < self.screen.screen_width) and (0 <= entity.pos_y - self.data[3] + 3 < self.screen.screen_height):
                     self.screen.set_cell(entity.pos_x, entity.pos_y, entity.symbol)
 
             self.screen.set_cell(self.data[2], self.data[3], player)
@@ -221,7 +221,6 @@ class Screen:
         # Screen configuration
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.pos_player = (screen_width // 2, screen_height // 2)
         self._on_screen = [[" " for _ in range(screen_width)] for _ in range(screen_height)]
         self._asci_data = []
 
@@ -237,7 +236,7 @@ class Screen:
         self.map_height = len(self._world)
 
     def set_screen(self):
-        x = self._asci_data[2] - self.pos_player[0] ; y = self._asci_data[3] - self.pos_player[1]
+        x = self._asci_data[2] - 10 ; y = self._asci_data[3] - 3
         for x_map in range(x, x + self.screen_width):
             for y_map in range(y, y + self.screen_height):
                 self._on_screen[y_map - y][x_map - x] = " "
@@ -260,7 +259,7 @@ class Screen:
         print("\n" * self.screen_height)
 
     def display_text(self, string):
-        paragraphs = [i for i in text_formater(string, self.screen_width, self.screen_height) if i]
+        paragraphs = [i for i in text_formater(string) if i]
         nb_par = len(paragraphs)
         for index in range(nb_par):
             self.clear()
@@ -269,18 +268,17 @@ class Screen:
             else: input()
     
     def set_cell(self, x, y, value):
-        x = x - (self._asci_data[2] - self.pos_player[0])
-        y = y - (self._asci_data[3] - self.pos_player[1])
+        x = x - (self._asci_data[2] - 10)
+        y = y - (self._asci_data[3] - 3)
         if 0 <= x < self.screen_width and 0 <= y < self.screen_height:
             self._on_screen[y][x] = value
 
     def get_cell(self, x, y):
-        x = x - (self._asci_data[2] - self.pos_player[0])
-        y = y - (self._asci_data[3] - self.pos_player[1])
+        x = x - (self._asci_data[2] - 10)
+        y = y - (self._asci_data[3] - 3)
         if 0 <= x < self.screen_width and 0 <= y < self.screen_height:
             return self._on_screen[y][x]
         else: return " "
-
 
 class Event:
     def __init__(self, xp, text, answer=0, *stat):
@@ -388,8 +386,8 @@ def get_multi_move(key):
 
 
 # Extra functions
-def print_text(text, min_value=0, max_value=0, default_value=0, screen_width=21, screen_height=7):
-    paragraphs = [i for i in text_formater(text, screen_width, screen_height) if i]
+def print_text(text, min_value=0, max_value=0, default_value=0):
+    paragraphs = [i for i in text_formater(text) if i]
     nb = len(paragraphs)
     for index in range(nb):
         print("\n" * 7)
