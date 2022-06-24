@@ -132,7 +132,7 @@ h_24 = (r"""
 
 alfheim_entities = (
     [0, '?', 2, 34, 20, 'stand by'],
-    ["alfeim_charretier", '*', 2, 23, 17, 'stand by'],
+    [0, '*', 2, 23, 17, 'stand by'],
     [0, '*', 2, 11, 4, 'stand by'],
     [0, '*', 2, 46, 6, 'stand by'],
     [0, '*', 2, 27, 54, 'stand by'],

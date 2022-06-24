@@ -340,7 +340,7 @@ def vanaheim_npc(data, stat, entites, identifiant):
 
         else: return [0, "Riethas, simple paysan. Que Nerthus vous garde !"]
 
-    if coords == (41, 45):
+    elif coords == (41, 45):
         if "riethas" in data[0]:
             if data[0]["riethas"] == 5: return [20, 20, 20, 20, 100], "Kamuel", 50, 1, "riethas"
             else: return "riethas", {
@@ -349,7 +349,7 @@ def vanaheim_npc(data, stat, entites, identifiant):
                 4: [2, "Bien sur, voila. [+50 PO]", 0, (1, 50)],
             }
 
-    if identifiant == "vanaheim_charretier":
+    elif coords == (45, 39):
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Midgard\n2. Jotunheim\n3. Alfheim", 3]
@@ -490,7 +490,8 @@ def alfheim_npc(data, stat, entites, identifiant):
     # * : (46; 6)
     # * : (23; 17)
     # * : (27; 54)
-    if identifiant == "alfheim_charretier":
+    coords = data[2], data[3]
+    if coords == (23, 17):
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Midgard\n2. Asgard\n3. Vanaheim\n4. Svartalfheim", 4]
@@ -670,7 +671,7 @@ def midgard_npc(data, stat, entites, identifiant):
                 55: [-4, "C'est bien, passez. [ALORS QUE VOUS PASSIEZ A COTE DE IROB, UNE VIVE DOULEUR VOUS PRIT L'ABDOMEN, LE SANG ET LES CHAIRS SE REPANDIRENT SUR VOS MAINS ET VOTRE INCOMPREHENSION.]"],
         }
 
-    elif identifiant == "midgard_charretier":
+    elif coords == (39, 49):
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Vanaheim\n2. Asgard\n3. Nidavellir\n4. Niflheim", 4]
