@@ -1,6 +1,5 @@
-from asci import Asci, print_text
+from asci import Asci, print_text, center, enumerate
 from random import randint, choice
-from math import floor, ceil
 
 from asgard import *
 from vanaheim import *
@@ -38,6 +37,129 @@ spells_level = ("I", "II", "III", "IV", "V")
 spells_effect = ((4, 1, True), (4, -1, False), (4, -1, False), (4, -1, False), (0, -1, False)) # (capacity, factor, True on player; False on opponent)
 weapons = ("<aucune>", "Dague", "Marteau", "Masse", "Fleau", "Hache", "Epee", "Espadon", "Hache double")
 armors = ("<aucune>", "Rondache", "Pavois", "Cote de maille", "Broigne", "Harnois")
+
+
+# Shop functions
+def inn_interaction(data, stat, nb_choice, text, *events):
+    choice = print_text(text, 1, nb_choice, 0) - 1
+    if choice == -1: return [0, None], choice
+    if stat[1] < events[choice][0]: return events[choice][2], choice + 1
+    else: return events[choice][1], choice + 1
+
+
+def spell_selection(text, spells_to_display):
+    message = text + "\n" + "\n".join(["{0}. {1} {2}".format(nb + 1, spells[spells_to_display[nb][0]], spells_level[spells_to_display[nb][1] - 1]) for nb in range(len(spells_to_display))])
+    return print_text(message, 1, len(spells_to_display), 0) - 1
+
+
+def spell_purchase(data, stat, text, spell_purchased, already_known, not_enough_money, too_many_spell):
+    spells_sale = []
+    while len(spells_sale) < 3:
+        sp_id = randint(0, len(spells) - 1)
+        sp_lvl = randint(1, len(spells_level))
+
+        check = True
+        for sp in spells_sale:
+            if sp == (sp_id, sp_lvl):
+                check = False
+                break
+
+        if check: spells_sale.append((sp_id, sp_lvl))
+
+    choice = spell_selection(text, spells_sale)
+    if choice == -1: return [0, ""]
+    spell_selected = spells_sale[choice]
+
+    if stat[1] < 10 * spell_selected[1]: return [0, not_enough_money]
+
+    for spell in stat[7]:
+        if spell_selected[0] == spell[0]:
+            if spell_selected[1] <= spell[1]: return [0, already_known]
+            else: stat[7].remove(spell)
+
+    if len(stat[7]) >= 3: return [0, too_many_spell] 
+    
+    stat[7].append(spell_selected)
+    return [0, spell_purchased, 0, (1, -10 * spell_selected[1])]
+
+
+def spell_deletion(data, stat, text, spell_deleted, no_spell_known, health_cost, not_enough_health=""):
+    if not stat[7]: return [0, no_spell_known]
+    choice = spell_selection(text, stat[7])
+    if choice == -1: return [0, ""]
+
+    if stat[0] <= health_cost: return [0, not_enough_health]
+    stat[7].remove(stat[7][choice])
+    return [0, spell_deleted, 0, (0, -health_cost)]
+
+
+def weapon_selection(text, weapons_to_display):
+    message = text + "\n" + "\n".join(["{0}. {1} [-{2} PO]".format(i + 1, weapons[wpn_index], 10 * wpn_index) for i, wpn_index in enumerate(weapons_to_display)])
+    return print_text(message, 1, len(weapons_to_display), 0) - 1
+
+
+def weapon_purchase(data, stat, text, weapon_purchased, already_have_one, not_enough_money):
+    if stat[3][0]: return [0, already_have_one]
+
+    weapons_sale = []
+    while len(weapons_sale) < 3:
+        wpn_id = randint(1, len(weapons) - 1)
+        if not wpn_id in weapons_sale: weapons_sale.append(wpn_id)
+
+    choice = weapon_selection(text, weapons_sale)
+    if choice == -1: return [0, ""]
+
+    weapon_selected = weapons_sale[choice]
+    if stat[1] < 10 * weapon_selected: return [0, not_enough_money]
+    stat[3][0] = weapon_selected
+    return [0, weapon_purchased, 0, (1, -10 * weapon_selected)]
+    
+
+def weapon_sale(data, stat, text, weapon_sold, sale_aborted, no_weapon_owned, price):
+    if not stat[3][0]: return [0, no_weapon_owned]
+
+    choice = print_text(text + "\n1. Oui\n2. Non", 1, 2, 0)
+    
+    if choice == 0: return [0, ""]
+    elif choice == 1:
+        stat[3][0] = 0
+        return [0, weapon_sold, 0, (1, price)]
+    else: return [0, sale_aborted]
+
+
+def armor_selection(text, armors_to_display):
+    message = text + "\n" + "\n".join(["{0}. {1} [-{2} PO]".format(i + 1, armors[arm_index], 10 * arm_index) for i, arm_index in enumerate(armors_to_display)])
+    return print_text(message, 1, len(armors_to_display), 0) - 1
+
+
+def armor_purchase(data, stat, text, armor_purchased, already_have_one, not_enough_money):
+    if stat[3][1]: return [0, already_have_one]
+
+    armors_sale = []
+    while len(armors_sale) < 3:
+        arm_id = randint(1, len(armors) - 1)
+        if not arm_id in armors_sale: armors_sale.append(arm_id)
+
+    choice = armor_selection(text, armors_sale)
+    if choice == -1: return [0, ""]
+
+    armor_selected = armors_sale[choice]
+    if stat[1] < 10 * armor_selected: return [0, not_enough_money]
+    stat[3][1] = armor_selected
+    return [0, armor_purchased, 0, (1, -10 * armor_selected)]
+
+
+def armor_sale(data, stat, text, armor_sold, sale_aborted, no_armor_owned, price):
+    if not stat[3][1]: return [0, no_armor_owned]
+
+    choice = print_text(text + "\n1. Oui\n2. Non", 1, 2, 0)
+    
+    if choice == 0: return [0, ""]
+    elif choice == 1:
+        stat[3][1] = 0
+        return [0, armor_sold, 0, (1, price)]
+    else: return [0, sale_aborted]
+
 
 # Asci functions
 def npc_core(event_fn, data, stat, entities, identifiant):
@@ -265,7 +387,7 @@ def fight(stat, opponent_stat, opponent_name):
 def misc_stat(data, stat):
     if data[1] < 9: place = ("Asgard", "Vanaheim", "Alfheim", "Midgard", "Niflheim", "Jotunheim", "Nidavellir", "Muspellheim", "Svartalfheim")[data[1]]
     elif data[1] == 27: place = "chez vous"
-    else: place =  "interieur"
+    else: place = "interieur"
     money, ticks, player_class = stat[1], stat[4], stat[6]
     
     hours = ticks // 60
@@ -312,14 +434,14 @@ def display_stat(data, stat):
 
 def inventory(data, stat):
     weapon = weapons[stat[3][0]]
-    shield = armors[stat[3][1]]
+    armor = armors[stat[3][1]]
 
     weapon = " |" + weapon + " " * (17 - len(weapon)) + "|"
-    shield = " |" + shield + " " * (17 - len(shield)) + "|"
+    armor = " |" + armor + " " * (17 - len(armor)) + "|"
 
     print("<o>  Inventaire   <o>")
     print(" |- Arme :         |\n{}".format(weapon))
-    print(" |- Armure :       |\n{}".format(shield))
+    print(" |- Armure :       |\n{}".format(armor))
     print("<o> ============= <o>")
     input()
 
@@ -402,13 +524,6 @@ def get_input(string=">"):
         return int(string)
     except:
         return 0
-
-
-def center(string, total_length, symbol):
-    left = floor((total_length - len(string)) / 2)
-    right = ceil((total_length - len(string)) / 2)
-
-    return left * symbol + string + right * symbol
 
 
 def stat_test(stat, test_id):
