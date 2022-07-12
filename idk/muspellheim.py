@@ -211,7 +211,7 @@ muspellheim_entities = (
     [0, '*', 42, 11, 5, 'stand by'],
     [0, '*', 42, 2, 11, 'stand by'],
     [0, '*', 42, 31, 9, 'stand by'],
-    ["Berfrid", '*', 43, 24, 4, 'stand by'],
+    ["Bertfrid", '*', 43, 24, 4, 'stand by'],
     [0, '*', 43, 13, 9, 'stand by'],
     [0, '*', 43, 6, 5, 'stand by'],
     [0, '*', 44, 13, 20, 'stand by'],

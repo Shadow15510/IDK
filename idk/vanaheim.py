@@ -101,7 +101,7 @@ h_22 = (r"""
 vanaheim_entities = (
     [0, '?', 1, 42, 20, 'stand by'],
     [0, '?', 1, 26, 29, 'stand by'],
-    ["vanaheim_charretier", '*', 1, 45, 39, 'stand by'],
+    [0, '*', 1, 45, 39, 'stand by'],
     [0, '*', 1, 31, 12, 'stand by'],
     [0, '*', 1, 41, 45, 'stand by'],
     [0, '*', 1, 52, 22, 'stand by'],

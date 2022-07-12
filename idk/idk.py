@@ -100,13 +100,6 @@ def idk(save_code=None):
 
 
 # Scenario
-def shop_interaction(data, stat, nb_choice, *events):
-    for choice in range(nb_choice):
-        if data[0]["main"] == stat[9] + choice + 1:
-            stat[9] = -1
-            if stat[1] < events[choice][0]: return events[choice][2], choice + 1
-            else: return events[choice][1], choice + 1
-
 
 # - - - Asgard - - - #
 def asgard_po(coords, identifiant):
@@ -340,7 +333,7 @@ def vanaheim_npc(data, stat, entites, identifiant):
 
         else: return [0, "Riethas, simple paysan. Que Nerthus vous garde !"]
 
-    if coords == (41, 45):
+    elif coords == (41, 45):
         if "riethas" in data[0]:
             if data[0]["riethas"] == 5: return [20, 20, 20, 20, 100], "Kamuel", 50, 1, "riethas"
             else: return "riethas", {
@@ -349,7 +342,7 @@ def vanaheim_npc(data, stat, entites, identifiant):
                 4: [2, "Bien sur, voila. [+50 PO]", 0, (1, 50)],
             }
 
-    if identifiant == "vanaheim_charretier":
+    elif coords == (45, 39):
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Midgard\n2. Jotunheim\n3. Alfheim", 3]
@@ -370,16 +363,10 @@ def h_21_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
 
     if identifiant == "vanaheim_aubergiste":
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Cher client bonjour ! Que puis-je faire pour vous ?\n1. Manger [5 PO]\n2. Boire [2 PO]\n3. Dormir [10 PO]", 3]
-        else:
-            event, _ = shop_interaction(data, stat, 3,
-                (5, [-1, "Et un plat chaud, un ! [VOUS VOUS ASSEYEZ DEVANT UN TRANCHOIR DE PAIN ET UNE ASSIETTE DE SOUPE EPAISSE.]", 0, (0, 5), (1, -5)], [-1, "Tsst, quand on ne peut pas payer, on ne rentre pas."]),
-                (2, [-2, "Et voila ! [L'AUBERGISTE PLACA DEVANT VOUS UNE CHOPE DE BIERE]", 0, (0, 2), (1, -2)], [-2, "La maison ne fait pas credit."]),
-                (10, [-3, "Votre chambre est a l'etage.\n[VOUS MONTEZ A L'ETAGE ET VOUS ENDORMEZ SANS DIFFICULTES.]", 0, (0, 10), (1, -10), (4, 480)], [-3, "Allez donc voir ailleurs."]))
-
-            return event
+        return inn_interaction(data, stat, 3, "Cher client bonjour ! Que puis-je faire pour vous ?\n1. Manger [5 PO]\n2. Boire [2 PO]\n3. Dormir [10 PO]",
+            (5, [0, "Et un plat chaud, un ! [VOUS VOUS ASSEYEZ DEVANT UN TRANCHOIR DE PAIN ET UNE ASSIETTE DE SOUPE EPAISSE.]", 0, (0, 5), (1, -5)], [0, "Tsst, quand on ne peut pas payer, on ne rentre pas."]),
+            (2, [0, "Et voila ! [L'AUBERGISTE PLACA DEVANT VOUS UNE CHOPE DE BIERE]", 0, (0, 2), (1, -2)], [0, "La maison ne fait pas credit."]),
+            (10, [0, "Votre chambre est a l'etage.\n[VOUS MONTEZ A L'ETAGE ET VOUS ENDORMEZ SANS DIFFICULTES.]", 0, (0, 10), (1, -10), (4, 480)], [0, "Allez donc voir ailleurs."]))[0]
     
     # Utarg
     elif coords == (21, 6): return {
@@ -490,7 +477,8 @@ def alfheim_npc(data, stat, entites, identifiant):
     # * : (46; 6)
     # * : (23; 17)
     # * : (27; 54)
-    if identifiant == "alfheim_charretier":
+    coords = data[2], data[3]
+    if coords == (23, 17):
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Midgard\n2. Asgard\n3. Vanaheim\n4. Svartalfheim", 4]
@@ -527,62 +515,21 @@ def h_24_npc(data, stat, entites, identifiant):
     if not (480 <= stat[4] <= 1140): return [0, "Excusez-moi, nous sommes fermes."]
 
     if coords == (12, 3):
-        if not stat[7]: return [0, "Je ne peux pas vous faire oublier ce que vous ne connaissez pas."]
+        health_cost = (20 * stat[0]) // 100
+        return spell_deletion(data, stat,
+            "Quel sort souhaitez-vous oublier ?",
+            "Asseyez-vous, je vais vous faire oublier ce sort. [UN PUISSANT MAL DE TETE VOUS PRIT, LES MURS SEMBLERENT TANGUER TANDIS QUE VOTRE VUE DEVINT FLOUE. LE VERTIGE S'ESTOMPA PROGRESSIVEMENT.] Et voila ! [-{} PV]".format(health_cost),
+            "Je ne peux pas vous faire oublier ce que vous ne connaissez pas.",
+            health_cost)
 
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Quel sort souhaitez-vous oublier ?\n" + "\n".join(["{0}. {1} {2}".format(nb + 1, spells[stat[7][nb][0]], spells_level[stat[7][nb][1] - 1]) for nb in range(len(stat[7]))]), len(stat[7])]
-
-        else:
-            for i in range(1, len(stat[7]) + 1):
-                if data[0]["main"] == stat[9] + i:
-                    stat[9] = -1
-                    stat[7].pop(i - 1)
-                    pts = (20 * stat[0]) // 100
-                    return [-i, "Asseyez-vous, je vais vous faire oublier ce sort. [UN PUISSANT MAL DE TETE VOUS PRIT, LES MURS SEMBLERENT TANGUER TANDIS QUE VOTRE VUE DEVINT FLOUE. LE VERTIGE S'ESTOMPA PROGRESSIVEMENT.] Et voila ! [-{} PV]".format(pts), 0, (0, -pts)]
-
-    if coords == (36, 12):         
-        if len(stat[7]) >= 3: return [0, "Je suis desole, vous ne pouvez pas apprendre plus de trois sorts."]
-
-        spells_sale = []
-        formated_spells = ""
-        while len(spells_sale) < 3:
-            sp_id = randint(0, len(spells) - 1)
-            sp_lvl = randint(1, len(spells_level))
-
-            check = True
-            for sp in spells_sale:
-                if sp[0] == sp_id and sp[1] == sp_lvl:
-                    check = False
-                    break
-
-            if check:
-                spells_sale.append((sp_id, sp_lvl))
-                formated_spells += "{0}. {1} {2}\n".format(len(spells_sale), spells[sp_id], spells_level[sp_lvl - 1])
-
-        spell_choice = print_text("Diomwar, pour vous servir. Quel sort voulez-vous acheter ?\n{}".format(formated_spells), 1, 3, 0)
-
-        if not spell_choice: return [0, "Hmm ?"]
-
-        spell_sel = spells_sale[spell_choice - 1]
-        if stat[1] < 10 * spell_sel[1]: return [0, "Vous n'avez pas les moyens, desole."]
-
-        spell_id = -1
-        for sp_id in range(len(stat[7])):
-            sp = stat[7][sp_id]
-            if spell_sel[0] == sp[0]:
-                if spells_sel[1] <= sp[1]: return [0, "Vous connaissez deja ce sort."]
-                else:
-                    spell_id = sp_id
-                    break
-
-        if spell_id == -1:
-            stat[7].append(spell_sel)
-        else:
-            stat[7][spell_id] = spell_sel
-
-        return [0, "[DIOMWAR OUVRIT UN LIVRE RELIE DE CUIR NOIR, ET TRACA DU DOIGT DES SIGNES CABALISTIQUES SUR LE SOL. LES RUNES BRILLERENT PUISSAMMENT AVANT DE S'ETEINDRE.]", 0, (1, -10 * spell_sel[1])]                
-
+    if coords == (36, 12):
+        return spell_purchase(data, stat,
+            "Diomwar, pour vous servir. Quel sort voulez-vous acheter ?",
+            "[DIOMWAR OUVRIT UN LIVRE RELIE DE CUIR NOIR, ET TRACA DU DOIGT DES SIGNES CABALISTIQUES SUR LE SOL. LES RUNES BRILLERENT PUISSAMMENT AVANT DE S'ETEINDRE.]",
+            "Vous connaissez deja ce sort.",
+            "Vous n'avez pas les moyens, desole.",
+            "Je suis desole, vous ne pouvez pas apprendre plus de trois sorts.")         
+        
 
 # - - - Midgard - - - #
 def midgard_po(coords, identifiant):
@@ -670,7 +617,7 @@ def midgard_npc(data, stat, entites, identifiant):
                 55: [-4, "C'est bien, passez. [ALORS QUE VOUS PASSIEZ A COTE DE IROB, UNE VIVE DOULEUR VOUS PRIT L'ABDOMEN, LE SANG ET LES CHAIRS SE REPANDIRENT SUR VOS MAINS ET VOTRE INCOMPREHENSION.]"],
         }
 
-    elif identifiant == "midgard_charretier":
+    elif coords == (39, 49):
         if stat[9] == -1 or data[0]["main"] == stat[9]:
             stat[9] = data[0]["main"]
             return [0, "[LE CONDUCTEUR DE LA CHARRETTE SE TOURNA VERS VOUS] Ou voulez-vous aller ? Je vous emmene pour 5 pieces.\n1. Vanaheim\n2. Asgard\n3. Nidavellir\n4. Niflheim", 4]
@@ -701,15 +648,12 @@ def h_26_npc(data, stat, entites, identifiant):
     if identifiant == "Rosahil Green":
         if stat[4] >= 1320 or stat[4] <= 340: return [0, "Je suis desolee, nous sommes fermes. Revenez plus tard !"]
 
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Rosahil Green, tenanciere de cette auberge. Vous desirez quelque chose ?\n1.De quoi manger s'il vous plait. [-5 PO]\n2.Je voudrais une chambre pour la nuit. [-10 PO]", 2]
         else:
-            event, choice = shop_interaction(data, stat, 2,
-                (5, [-1, "Et voila pour vous ! [ROSAHIL POSA UNE ASSIETTE DE RAGOUT CHAUD DEVANT VOUS.]", 0, (0, 5), (1, -5)], [-1, "Reviens quand tu auras assez de pieces d'or."]),
-                (10, [-2, "Suivez-moi, je vais vous montrer votre chambre. [VOUS SUIVEZ ROSAHIL DANS L'AUBERGE, LA NUIT PASSA.]", 0, (0, 10), (1, -10), (4, 480)], [-2, "Je suis desolee, tu n'as pas assez !"]))
+            event, choice = inn_interaction(data, stat, 2, "Rosahil Green, tenanciere de cette auberge. Vous desirez quelque chose ?\n1.De quoi manger s'il vous plait. [-5 PO]\n2.Je voudrais une chambre pour la nuit. [-10 PO]",
+                (5, [0, "Et voila pour vous ! [ROSAHIL POSA UNE ASSIETTE DE RAGOUT CHAUD DEVANT VOUS.]", 0, (0, 5), (1, -5)], [0, "Reviens quand tu auras assez de pieces d'or."]),
+                (10, [0, "Suivez-moi, je vais vous montrer votre chambre. [VOUS SUIVEZ ROSAHIL DANS L'AUBERGE, LA NUIT PASSA.]", 0, (0, 10), (1, -10), (4, 480)], [0, "Je suis desolee, tu n'as pas assez !"]))
 
-            if choice == 2 and 360 < stat[4] < 1140: return [-2, "Il est trop tot, revenez vers 19h."]
+            if choice == 2 and 360 < stat[4] < 1140: return [0, "Il est trop tot, revenez vers 19h."]
             else: return event
 
     elif coords == (17, 7):
@@ -813,7 +757,7 @@ def h_30_npc(data, stat, entites, identifiant):
     if identifiant == "Hel": return {
         "base": [0, "Hel, deesse de la mort, tu veux quelque chose ?"],
 
-        35: [2, "Une guerre contre les Vanes ? Les guerriers du Valhalla vont enfin sortir affronter ceux du Folkvangr. Je m'occupe du Valhalla, retourne voir Odin. Voici quelques pieces pour ta commission. [+10 PO]", 0, (1, 10)],
+        35: [2, "Une guerre contre les Vanes ? Les guerriers du Valhalla vont enfin sortir affronter ceux du Folkvangr. Je m'en occupe, retourne voir Odin. Voici quelques pieces pour ta commission. [+10 PO]", 0, (1, 10)],
     }
 
 
@@ -892,17 +836,12 @@ def h_36_npc(data, stat, entites, identifiant):
     if identifiant == "jotunheim_aubergiste":
         if not (300 <= stat[4] <= 1380): return [0, "Je suis desole, nous somme ferme la nuit."]
 
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Vous voulez quelque-chose ?\n1. Je mangerai bien un truc [-4 PO]\n2. Il vous reste une chambre ? [-12 PO]", 2]
-
-        else:
-            event, choice = shop_interaction(data, stat, 2,
-                (4, [-1, "Et voila ! [LE TAVERNIER POSA UNE ASSIETTE FUMANTE DEVANT VOUS ET UN VERRE DE VIN]", 0, (0, 5), (1, -4)], [-1, "Reviens quand tu auras de quoi me payer."]),
-                (12, [-2, "Oui, au premier etage, au bout du couloir sur votre droite. [VOUS SUIVEZ LES INDICATIONS DU TAVERNIER ET TROUVEZ VOTRE CHAMBRE. VOUS SOMBREZ DANS LES BRAS DE NOTT.]", 0, (0, 15), (1, -12), (4, 480)], [-2, "Tu n'as pas assez."]))
-        
-            if choice == 2 and 360 < stat[4] < 1140: return [-2, "Il est trop tot, reviens vers 19h."]
-            else: return event
+        event, choice = inn_interaction(data, stat, 2, "Vous voulez quelque-chose ?\n1. Je mangerai bien un truc [-4 PO]\n2. Il vous reste une chambre ? [-12 PO]", 
+            (4, [0, "Et voila ! [LE TAVERNIER POSA UNE ASSIETTE FUMANTE DEVANT VOUS ET UN VERRE DE VIN]", 0, (0, 5), (1, -4)], [0, "Reviens quand tu auras de quoi me payer."]),
+            (12, [0, "Oui, au premier etage, au bout du couloir sur votre droite. [VOUS SUIVEZ LES INDICATIONS DU TAVERNIER ET TROUVEZ VOTRE CHAMBRE. VOUS SOMBREZ DANS LES BRAS DE NOTT.]", 0, (0, 15), (1, -12), (4, 480)], [0, "Tu n'as pas assez."]))
+    
+        if choice == 2 and 360 < stat[4] < 1120: return [-2, "Il est trop tot, reviens vers 19h."]
+        else: return event
 
 
 # - - - Nidavellir - - - #
@@ -933,18 +872,13 @@ def h_37_npc(data, stat, entites, identifiant):
     if identifiant == "Muin":
         if not (340 <= stat[4] <= 1380): return [0, "Nous sommes ouverts de 5 heures a 23."]
 
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Bonjour, Muin pour vous servir.\n1. Bonjour je voudrais manger. [-5 PO]\n2. Vous reste-t-il des chambres ? [-15 PO]\n3. A boire ! [-3 PO]", 3]
-
-        else:
-            event, choice = shop_interaction(data, stat, 3,
-                (5, [-1, "Pas de probleme ! [MUIN REVINT QUELQUES MINUTES PLUS TARD, ET POSA UNE ASSIETTE FUMANTE DEVANT VOUS.]", 0, (0, 5), (1, -5)], [-1, "Hey la ! Reviens quand tu pourras me payer."]),
-                (15, [-2, "Bien sur ! Suivez-moi. [VOUS SUIVEZ MUIN DANS UNE PIECE TROGLODYTE MUNIE D'UN LIT ET D'UN COFFRE. VOUS VOUS ENDORMEZ RAPIDEMENT.]", 0, (0, 15), (1, -15), (4, 480)], [-2, "Desole, je n'ai plus une seule chambre de libre."]),
-                (3, [-3, "[MUIN POSA UNE CHOPPE DE BIERE MOUSSEUSE DEVANT VOUS.]", 0, (0, 3), (1, -3)], [-3, "Allez donc voir un autre etablissement, nous ne servons pas gratuitement."]))
-            
-            if choice == 2 and 360 < stat[4] < 1140: return [-2, "Une chambre !? Il n'est que {} heures. Reviens dans la soiree.".format(stat[4] // 60)]
-            else: return event
+        event, choice = inn_interaction(data, stat, 3, "Bonjour, Muin pour vous servir.\n1. Bonjour je voudrais manger. [-5 PO]\n2. Vous reste-t-il des chambres ? [-15 PO]\n3. A boire ! [-3 PO]",
+            (5, [0, "Pas de probleme ! [MUIN REVINT QUELQUES MINUTES PLUS TARD, ET POSA UNE ASSIETTE FUMANTE DEVANT VOUS.]", 0, (0, 5), (1, -5)], [0, "Hey la ! Reviens quand tu pourras me payer."]),
+            (15, [0, "Bien sur ! Suivez-moi. [VOUS SUIVEZ MUIN DANS UNE PIECE TROGLODYTE MUNIE D'UN LIT ET D'UN COFFRE. VOUS VOUS ENDORMEZ RAPIDEMENT.]", 0, (0, 15), (1, -15), (4, 480)], [0, "Desole, je n'ai plus une seule chambre de libre."]),
+            (3, [0, "[MUIN POSA UNE CHOPPE DE BIERE MOUSSEUSE DEVANT VOUS.]", 0, (0, 3), (1, -3)], [0, "Allez donc voir un autre etablissement, nous ne servons pas gratuitement."]))
+        
+        if choice == 2 and 360 < stat[4] < 1140: return [-2, "Une chambre !? Il n'est que {} heures. Reviens dans la soiree.".format(stat[4] // 60)]
+        else: return event
 
     return [0, "Hmm ?"]
 
@@ -959,40 +893,20 @@ def h_39_npc(data, stat, entites, identifiant):
     if not (480 <= stat[4] <= 1140): return [0, "La forge de Nidavellir est ouverte de 8 heures a 18 heures."]
 
     if coords == (9, 2):
-        if stat[3][0]: return [0, "Vous avez deja une arme. Allez voir mon confrere si vous voulez la vendre et revenez me voir."]
-
-        weapons_sale = []
-        formated_wpn = ""
-        while len(weapons_sale) < 4:
-            wpn = randint(1, len(weapons) - 1)
-            if not wpn in weapons_sale:
-                weapons_sale.append(wpn)
-                formated_wpn += "{0}. {1} [-{2} PO]\n".format(len(weapons_sale), weapons[wpn], 10 * wpn)
-
-        wpn_choice = print_text("Bienvenue a la forge de Nidavellir ! Vous desirez une piece particuliere ?\n{}".format(formated_wpn), 1, 4, 0)
-        if not wpn_choice: return [0, "Hmm ?"]
-    
-        wpn = weapons_sale[wpn_choice - 1]
-        if stat[1] < 10 * wpn: return [0, "Vous n'avez pas assez."]
-        stat[3][0] = wpn
-        return [0, "Tres bon choix ! [LE NAIN DECROCHA L'ARME DU RATELIER ET VOUS LA TENDIT.]", 0, (1, -10 * wpn)]
+        return weapon_purchase(data, stat, 
+            "Bienvenue a la forge de Nidavellir ! Vous desirez une piece particuliere ?",
+            "Tres bon choix ! [LE NAIN DECROCHA L'ARME DU RATELIER ET VOUS LA TENDIT.]",
+            "Vous avez deja une arme. Allez voir mon confrere si vous voulez la vendre et revenez me voir.",
+            "Vous n'avez pas assez.")
 
     elif coords == (9, 4):
-        if stat[3][0] == 0: return [0, "Vous n'avez pas d'arme a me vendre. Allez voir mon collegue pour en acheter une."]
-
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Bienvenue dans notre forge. Vous souhaitez me vendre votre arme ?\n1. Oui\n2. Non", 2]
-
-        elif data[0]["main"] == stat[9] + 1:
-            stat[9] = -1
-            cost = stat[3][0] * 8
-            stat[3][0] = 0
-            return [-1, "Marche conclu ! [+{} PO]".format(cost), 0, (1, cost)]
-
-        elif data[0]["main"] == stat[9] + 2:
-            stat[9] = -1
-            return [-2, "A votre guise, revenez quand vous voulez !"]
+        price = 8 * stat[3][0]
+        return weapon_sale(data, stat,
+            "Bienvenue dans notre forge. Vous souhaitez me vendre votre arme ?",
+            "Marche conclu ! [+{} PO]".format(price),
+            "A votre guise, revenez quand vous voulez !",
+            "Vous n'avez pas d'arme a me vendre. Allez voir mon collegue pour en acheter une.",
+            price)
 
 
 def h_40_npc(data, stat, entites, identifiant):
@@ -1029,16 +943,10 @@ def h_42_npc(data, stat, entites, identifiant):
     if identifiant == "muspellheim_aubergiste":
         if not (300 <= stat[4] <= 1380): return [0, "Nous sommes ouverts de 5 a 23 heures."]
 
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Besoin de quelque chose messire ?\n1. Hum, oui, j'aimerais manger. [-5 PO]\n2. Je voudrais dormir [-10 PO]", 2]
+        return inn_interaction(data, stat, 2, "Besoin de quelque chose messire ?\n1. Hum, oui, j'aimerais manger. [-5 PO]\n2. Je voudrais dormir [-10 PO]",
+            (5, [0, "Et voila pour vous !", 0, (0, 5), (1, -5)], [0, "Je regrette, vous n'avez pas assez."]),
+            (10, [0, "Bien sur, si vous voulez bien me suivre. [VOUS VOUS ALLONGEZ SUR LE LIT ET VOUS ENDORMEZ RAPIDEMENT.]", 0, (0, 10), (1, -10), (4, 480)], [0, "Nous ne pouvons pas nous permettre de faire credit."]))[0]
 
-        else:
-            event, _ = shop_interaction(data, stat, 2, 
-                (5, [-1, "Et voila pour vous !", 0, (0, 5), (1, -5)], [-1, "Je regrette, vous n'avez pas assez."]),
-                (10, [-2, "Bien sur, si vous voulez bien me suivre. [VOUS VOUS ALLONGEZ SUR LE LIT ET VOUS ENDORMEZ RAPIDEMENT.]", 0, (0, 10), (1, -10), (4, 480)], [-2, "Nous ne pouvons pas nous permettre de faire credit."]))
-        
-            return event
 
 def h_43_npc(data, stat, entites, identifiant):
     coords = data[2], data[3]
@@ -1046,36 +954,20 @@ def h_43_npc(data, stat, entites, identifiant):
     if not (480 <= stat[4] <= 1140): return [0, "L'armurerie est ouverte de 8 heures a 18 heures."]
 
     if identifiant == "Bertfrid":
-        if stat[3][1]: return [0, "Vous portez deja une armure, allez voir mon confrere."]
-
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Bienvenue, dans mon armurerie ! Je suis Bertfrid, besoin d'une armure ?\n1. Oui, d'une rondache. [-10 PO]\n2. d'un pavois [-20 PO]\n3. d'une cotte de mailles [-30 PO]\n4. d'une broigne [-40 PO]\n5. d'un harnois [-50 PO]", 5]
-
-        else:
-            shields = ("UNE RONDACHE", "UN PAVOIS", "UNE COTTE DE MAILLES", "UNE BROIGNE", "UN HARNOIS")
-            for i in range(1, 6):
-                if data[0]["main"] == stat[9] + i:
-                    stat[9] = -1
-                    if stat[1] < i * 10: return [-i, "Vous n'avez pas assez."]
-                    stat[3][1] = i
-                    return [-i, "C'est un bon achat. [BERTFRID DECROCHA {}]".format(shields[i - 1]), 0, (1, -i * 10)]
+        return armor_purchase(data, stat,
+            "Bienvenue, dans mon armurerie ! Je suis Bertfrid, vous cherchez quoi exactement ?",
+            "C'est un bon achat. [BERTFRID DECROCHA LA PIECE D'ARMURE ET VOUS LA TENDIT.]",
+            "Vous portez deja une armure, allez voir mon confrere.",
+            "Vous n'avez pas assez.")
 
     elif coords == (13, 9):
-        if stat[3][1] == 0: return [0, "J'achete, je ne vend pas ! Allez voir Bertfrid du cote du four a metaux, elle vous renseignera"]
-
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Vous voulez vendre votre piece d'armure ?\n1. Oui\n2. Non", 2]
-
-        elif data[0]["main"] == stat[9] + 1:
-            stat[9] = -1
-            cost = stat[3][1] * 8
-            return [-1, "C'est une affaire ! [+{} PO]".format(cost), 0, (1, cost)]
-
-        elif data[0]["main"] == stat[9] + 2:
-            stat[9] = -1
-            return [-2, "Revenez quand vous voulez !"]
+        price = 8 * stat[3][1]
+        return armor_sale(data, stat,
+            "Vous voulez vendre votre piece d'armure pour {} PO ?".format(price),
+            "C'est une affaire ! [+{} PO]".format(price),
+            "Revenez quand vous vous serez decide !",
+            "J'achete, je ne vend pas ! Allez voir Bertfrid du cote du four a metaux, elle vous renseignera.",
+            price)
 
     elif coords == (6, 5):
         return [0, "Je ne suis qu'apprenti monseigneur. Adressez-vous plutot a Bertfrid. Vous la trouverez pres du four."]
@@ -1108,21 +1000,16 @@ def svartalfheim_npc(data, stat, entites, identifiant):
     if coords == (120, 49) or coords == (104, 30):
         if not (360 <= stat[4] <= 1200): return [0, "Hmm, hein ? Quoi ? Zavez pas vu l'heure ??"]
 
-        if stat[9] == -1 or data[0]["main"] == stat[9]:
-            stat[9] = data[0]["main"]
-            return [0, "Hey, toi ! Tu veux traverser ?\n1. Traverser [2 PO]\n2. Ne pas traverser", 2]
+        choice = print_text("Hey, toi ! Tu veux traverser ?\n1. Traverser [2 PO]\n2. Ne pas traverser", 1, 2, 0)
         
-        elif data[0]["main"] == stat[9] + 1:
-            stat[9] = -1
-            if stat[1] < 2: return [-1, "Reviens quand tu auras de quoi me payer."]
+        if choice == 1:
+            if stat[1] < 2: return [0, "Reviens quand tu auras de quoi me payer."]
             
             if coords == (104, 30): data[2], data[3] = 119, 49
             else: data[2], data[3] = 103, 30
-            
-            return [-1, "C'est parti !", 0, (1, -2)]
+            return [0, "C'est parti !", 0, (1, -2)]
 
-        elif data[0]["main"] == stat[9] + 2:
-            stat[9] = -1
+        else:
             return [0, "Reviens quand tu voudras traverser."]
 
     elif coords == (10, 24):

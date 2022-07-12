@@ -197,7 +197,7 @@ midgard_entities = (
     [0, '?', 3, 53, 24, 'stand by'],
     [0, '?', 3, 66, 45, 'stand by'],
     [0, '?', 3, 52, 79, 'stand by'],
-    ["midgard_charretier", '*', 3, 39, 49, 'stand by'],
+    [0, '*', 3, 39, 49, 'stand by'],
     [0, '*', 3, 8, 59, 'stand by'],
     [0, '*', 3, 66, 56, "stand by"],
     [0, '*', 3, 67, 46, 'stand by'],
