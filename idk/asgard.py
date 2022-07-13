@@ -420,7 +420,7 @@ asgard_entities = (
     [0, '*', 13, 21, 8, 'stand by'],
     [0, '*', 14, 26, 2, 'stand by'],
     ["Vidar", '*', 15, 10, 6, 'stand by'],
-    [0, '*', 16, 50, 14, 'stand by'],
+    ["Baldr", '*', 16, 50, 14, 'stand by'],
     [0, '*', 17, 36, 14, 'stand by'],
     [0, '*', 18, 30, 9, 'stand by'],
     [0, '*', 19, 28, 7, 'stand by'],

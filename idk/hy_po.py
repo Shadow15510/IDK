@@ -41,7 +41,7 @@ def npc(data, stat, entities, identifiant):
         event = dlc.dlc_npc(data, stat, entities, identifiant)
         if event: return "dlc", event
 
-    elif identifiant == "Kvasir": return kvasir(data, stat)
+    elif identifiant == "Kvasir": return kvasir(data, stat, entites)
 
     return npc_core(npc_data[data[1]], data, stat, entities, identifiant)
 
@@ -66,7 +66,7 @@ def point_of_interest(data, stat, entities, identifiant):
     else: return event
 
 
-entities = asgard_entities + vanaheim_entities + alfheim_entities + midgard_entities + niflheim_entities + jotunheim_entities + nidavellir_entities + muspellheim_entities + svartalfheim_entities + dlc_entities + (["Kvasir", "*", 3, 45, 66, "follow"], )
+entities = asgard_entities + vanaheim_entities + alfheim_entities + midgard_entities + niflheim_entities + jotunheim_entities + nidavellir_entities + muspellheim_entities + svartalfheim_entities + dlc_entities + (["Kvasir", "*", 3, 46, 66, "follow"], )
 
 print(center("L'Hydromel poetique", 21, " "))
 print()
@@ -87,7 +87,7 @@ def hy_po(save_code=None):
         stat, data = decode_save(save_code)
 
     idk_game = Asci(maps, entities, events, keys)
-    stat, data = idk_game.mainloop(1, stat, data, routine=routine, low_bar=low_bar, door="^_", walkable=".,`' ", exit_key="q")
+    stat, data = idk_game.mainloop(100, stat, data, routine=routine, low_bar=low_bar, door="^_", walkable=".,`' ", exit_key="q")
     if stat[9] != -1: data[0]["main"] -= stat[9]
 
     if data[0]["main"] == 1:
@@ -96,10 +96,14 @@ def hy_po(save_code=None):
         print("hy_po(\"{}\")".format(encode_save(data, stat[:-1])))
 
 
-def kvasir(data, stat):
+def kvasir(data, stat, entites):
     return {
-        "base": [0, "Je suis Kvasir"],
+        "base": [0, "Je suis Kvasir."],
+        0: [1, "Baldr m'a confie etre preoccupe par de recents reves premonitoires. Nous devrions aller le voir."],
+        1: [0, "Nous devrions aller voir Baldr. Il habite dans le Breidablik, a Asgard."],
+        2: [0, "Je vais rester ici pour veiller sur Baldr, va chercher Freyja et reviens vite !"]
     }
+
 
 # - - - Asgard - - - #
 def asgard_po(coords, identifiant):
@@ -139,7 +143,15 @@ def h_15_npc(data, stat, entites, identifiant):
 
 
 def h_16_npc(data, stat, entites, identifiant):
-    pass
+    if identifiant == "Baldr":
+        if data[0] == 2: entites["Kvasir"].change_behavior("stand by")
+        return {
+            "base": [0, "Baldr, fils d'Odin et de Frigg. Dieu de la lumiere, de la jeunesse, de l'amour et de la beaute."],
+            1: [0, "Ah ! Vous voila enfin ! Depuis quelques temps, je fais des reves etranges dans lesquels je me vois mourir. Maintenant, j'ai meme peur de sortir du Breidablik !\n1. Nous pouvons vous aider ?", 1],
+            2: [0, "Si vous pouviez demander de l'aide à Freyja, je vous en serais reconnaissant.\n1. En quoi Freyja peut vous aider ?\n2. Ou pouvons-nous la trouver ?", 2],
+                3: [-1, "Freyja pratique le Seidr, et, avec Odin, elle est la meilleure seidr de tout l'Yggdrasil. Avant que tu ne me demandes, le Seidr est une forme de magie divinatoire. Nous autres, Dieux, la pratiquons et pour certains avec beaucoup de puissance. Mais les humains peuvent aussi en faire."],
+                4: [-2, "Habituellement, elle reside dans son palais a Vanaheim, mais depuis la treve et en signe de paix, tu la trouvera peut-etre au Folkvangr."]
+        }
 
 
 def h_17_npc(data, stat, entites, identifiant):
