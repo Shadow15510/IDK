@@ -21,6 +21,7 @@ maps = (
     nidavellir,
     muspellheim,
     svartalfheim,
+    
     h_9, h_10, h_11, h_12, h_13, h_14, h_15, h_16, h_17, h_18, h_19, h_20,
     h_21, h_22,
     h_23, h_24,
@@ -29,8 +30,11 @@ maps = (
     h_31, h_32, h_33, h_34, h_35, h_36,
     h_37, h_38, h_39, h_40, h_41,
     h_42, h_43, h_44,
-    h_45, h_46, h_47, h_48
-    )
+    h_45, h_46, h_47, h_48,
+
+    h_49, h_50, h_51, h_52, h_53, h_54,
+
+)
 
 spells = ("Soin", "Flammes", "Givre", "Etincelles", "Fatigue")
 spells_level = ("I", "II", "III", "IV", "V")
@@ -166,8 +170,8 @@ def npc_core(event_fn, data, stat, entities, identifiant):
     event = event_fn(data, stat, entities, identifiant)
 
     if not event:
-        msg = ("Hmm ?", "Besoin de quelque chose ?", "Vous cherchez quelqu'un ?", "Vous etes... ?", "Oui ?", "He ! Regarde ou tu vas.")
-        sel_choice = print_text("{0}\n1. Attaquer\n2. Voler\n3. Ne rien faire".format(choice(msg)), 1, 3, 3)
+        msg = ("Hmm ?", "Besoin de quelque chose ?", "Vous cherchez quelqu'un ?", "Vous etes... ?", "Oui ?", "He ! Regarde ou tu vas.", "Un probleme ?")
+        sel_choice = print_text("{0}\n1. Attaquer\n2. Voler".format(choice(msg)), 1, 2, 0)
 
         if sel_choice == 1:
             opponent_stat = [randint(5, stat[2][i] + 5) for i in range(4)]
@@ -181,7 +185,7 @@ def npc_core(event_fn, data, stat, entities, identifiant):
             else:
                 return [0, "Votre victime vous a vu et vous a mis une raclee.", 0, (0, -10)]
 
-        elif sel_choice == 3:
+        else:
             return None
 
     elif type(event) == tuple and len(event) > 2:
@@ -235,8 +239,6 @@ def routine(data, stat):
     if stat[2][4] < stat[0] // 2 and not (stat[4] % 30):
         stat[2][4] += 1
     if stat[2][4] > 99: stat[2][4] = 99 
-
-
 
 
 def low_bar(data, stat):
@@ -323,8 +325,7 @@ def fight(stat, opponent_stat, opponent_name):
 
         print_text(msg)
 
-    # opponent_stat = [vitesse, agilité, attaque, défense, vie]
-    # player_stat = [vitesse, agilité, attaque, défense, vie]
+    # *_stat = [vitesse, agilité, attaque, défense, vie]
     player_stat = [stat[2][0], stat[2][1], stat[2][2] + stat[3][0] * 5, stat[2][3] + stat[3][1] * 5, stat[0]]
 
     end = False
@@ -513,7 +514,7 @@ def spell(data, stat):
 
 def quick_save(data, stat):
     data_copy = data[:]
-    stat_copy = stat[:-1]
+    stat_copy = stat[:]
     print_text("\"{}\"".format(encode_save(data_copy, stat_copy)))
 
 
@@ -583,7 +584,7 @@ def decode_save(save_code):
     encoded_stat = stat.split(",")
     encoded_data = data.split(",")
 
-    encoded_stat = [encoded_stat[0], encoded_stat[1], encoded_stat[2: 7], encoded_stat[7: 9], encoded_stat[9], 0, encoded_stat[11], encoded_stat[12: -1], encoded_stat[-1], -1]
+    encoded_stat = [encoded_stat[0], encoded_stat[1], encoded_stat[2: 7], encoded_stat[7: 9], encoded_stat[9], 0, encoded_stat[11], encoded_stat[12: -2], encoded_stat[-2], encoded_stat[-1]]
     
     if encoded_stat[7] == ["0"]:
         encoded_stat[7] = []
