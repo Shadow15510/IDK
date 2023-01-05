@@ -20,6 +20,7 @@ def nouveau_scenario(nom):
         "h_20_npc",
         "vanaheim_po",
         "vanaheim_npc",
+        "h_21_npc",
         "h_22_npc",
         "alfheim_po",
         "alfheim_npc",

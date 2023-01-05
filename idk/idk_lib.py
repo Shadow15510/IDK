@@ -1,5 +1,7 @@
 from asci import Asci, print_text, center, enumerate
+import asci
 from random import randint, choice
+from math import floor
 
 from asgard import *
 from vanaheim import *
@@ -21,20 +23,27 @@ maps = (
     nidavellir,
     muspellheim,
     svartalfheim,
-    h_9, h_10, h_11, h_12, h_13, h_14, h_15, h_16, h_17, h_18, h_19, h_20,
-    h_21, h_22,
-    h_23, h_24,
+    
+    h_9, h_10, h_11, h_12, h_13, h_14, h_15, h_16, h_17, h_18, h_19, h_20, # asgard's houses
+    h_21, h_22, # vanaheim's houses
+    h_23, h_24, # alfheim's houses
     h_25, h_26, h_27, h_28,
     h_29, h_30,
     h_31, h_32, h_33, h_34, h_35, h_36,
     h_37, h_38, h_39, h_40, h_41,
     h_42, h_43, h_44,
-    h_45, h_46, h_47, h_48
-    )
+    h_45, h_46, h_47, h_48,
 
-spells = ("Soin", "Flammes", "Givre", "Etincelles", "Fatigue")
+    h_49, h_50, h_51, h_52, h_53, h_54, # vanaheim's extra houses
+    h_55, h_56, h_57, h_58, h_59, h_60, h_61, h_62, h_63, h_64, h_65, h_66, h_67, h_68, h_69, h_70, h_71, h_72, h_73, h_74, h_75, h_76, h_77, h_78, h_79, h_80, h_81, # alfheim's extra house
+    h_82, h_83, h_84, h_85, h_86, h_87, h_88, h_89, h_90, h_91, h_92, h_93, h_94, h_95, h_96, h_97, # midgard's extra houses
+    h_98, h_99, h_100, h_101, h_102, h_103, h_104, h_105, h_106, h_107, h_108, h_109, h_110, # niflheim's extra houses
+    
+
+)
+
+spells = (("Soin", 4, 1, True), ("Flammes", 4, -1, False), ("Givre", 4, -1, False), ("Etincelles", 4, -1, False), ("Fatigue", 0, -1, False)) # (capacity, factor, True on player; False on opponent)
 spells_level = ("I", "II", "III", "IV", "V")
-spells_effect = ((4, 1, True), (4, -1, False), (4, -1, False), (4, -1, False), (0, -1, False)) # (capacity, factor, True on player; False on opponent)
 weapons = ("<aucune>", "Dague", "Marteau", "Masse", "Fleau", "Hache", "Epee", "Espadon", "Hache double")
 armors = ("<aucune>", "Rondache", "Pavois", "Cote de maille", "Broigne", "Harnois")
 
@@ -48,7 +57,7 @@ def inn_interaction(data, stat, nb_choice, text, *events):
 
 
 def spell_selection(text, spells_to_display):
-    message = text + "\n" + "\n".join(["{0}. {1} {2}".format(nb + 1, spells[spells_to_display[nb][0]], spells_level[spells_to_display[nb][1] - 1]) for nb in range(len(spells_to_display))])
+    message = text + "\n" + "\n".join(["{0}. {1} {2}".format(nb + 1, spells[spells_to_display[nb][0]][0], spells_level[spells_to_display[nb][1] - 1]) for nb in range(len(spells_to_display))])
     return print_text(message, 1, len(spells_to_display), 0) - 1
 
 
@@ -166,8 +175,8 @@ def npc_core(event_fn, data, stat, entities, identifiant):
     event = event_fn(data, stat, entities, identifiant)
 
     if not event:
-        msg = ("Hmm ?", "Besoin de quelque chose ?", "Vous cherchez quelqu'un ?", "Vous etes... ?", "Oui ?", "He ! Regarde ou tu vas.")
-        sel_choice = print_text("{0}\n1. Attaquer\n2. Voler\n3. Ne rien faire".format(choice(msg)), 1, 3, 3)
+        msg = ("Hmm ?", "Besoin de quelque chose ?", "Vous cherchez quelqu'un ?", "Vous etes... ?", "Oui ?", "He ! Regarde ou tu vas.", "Un probleme ?")
+        sel_choice = print_text("{0}\n1. Attaquer\n2. Voler".format(choice(msg)), 1, 2, 0)
 
         if sel_choice == 1:
             opponent_stat = [randint(5, stat[2][i] + 5) for i in range(4)]
@@ -181,7 +190,7 @@ def npc_core(event_fn, data, stat, entities, identifiant):
             else:
                 return [0, "Votre victime vous a vu et vous a mis une raclee.", 0, (0, -10)]
 
-        elif sel_choice == 3:
+        else:
             return None
 
     elif type(event) == tuple and len(event) > 2:
@@ -237,8 +246,6 @@ def routine(data, stat):
     if stat[2][4] > 99: stat[2][4] = 99 
 
 
-
-
 def low_bar(data, stat):
     h = stat[4] // 60
     m = stat[4] % 60
@@ -274,7 +281,7 @@ def fight(stat, opponent_stat, opponent_name):
                     print("\n" * 6 + "Sort(s) connu(s) :")
                     count = 0
                     for spell_id, level in stat[7]:
-                        print("{0}. {1} {2}".format(count + 1, spells[spell_id], spells_level[level - 1]))
+                        print("{0}. {1} {2}".format(count + 1, spells[spell_id][0], spells_level[level - 1]))
                         count += 1
                     spell_choice = get_input()
                     if spell_choice < 0 or spell_choice > len(stat[7]): spell_choice = 0
@@ -283,11 +290,11 @@ def fight(stat, opponent_stat, opponent_name):
                 spell_id, level = stat[7][spell_choice][0], stat[7][spell_choice][1]
 
                 if stat[2][4] >= level * 10:
-                    msg += "\nVous lancez {0} de niveau {1} [-{2} PM].".format(spells[spell_id], spells_level[level - 1], level * 10)
+                    msg += "\nVous lancez {0} de niveau {1} [-{2} PM].".format(spells[spell_id][0], spells_level[level - 1], level * 10)
                     stat[2][4] -= level * 10
                     pts = 12 * level + randint(-5, 5)
 
-                    capacity, factor, apply_on_player = spells_effect[spell_id]
+                    capacity, factor, apply_on_player = spells[spell_id][1:]
 
                     if apply_on_player:
                         player_stat[capacity] += factor * pts
@@ -323,8 +330,7 @@ def fight(stat, opponent_stat, opponent_name):
 
         print_text(msg)
 
-    # opponent_stat = [vitesse, agilité, attaque, défense, vie]
-    # player_stat = [vitesse, agilité, attaque, défense, vie]
+    # *_stat = [vitesse, agilité, attaque, défense, vie]
     player_stat = [stat[2][0], stat[2][1], stat[2][2] + stat[3][0] * 5, stat[2][3] + stat[3][1] * 5, stat[0]]
 
     end = False
@@ -369,7 +375,7 @@ def fight(stat, opponent_stat, opponent_name):
         # Fight
         if player > opponent:
             end = player_turn()
-            if end: return 2
+            if end: return 2, player_stat[4]
             if opponent_stat[4] <= 0: return 0, player_stat[4]
             opponent_turn()
         
@@ -481,7 +487,7 @@ def spell(data, stat):
         if i < len(stat[7]):
             spell_id, level = stat[7][i]
             if spell_id >= 0:
-                to_disp = "{0} {1}".format(spells[spell_id], spells_level[level - 1])
+                to_disp = "{0} {1}".format(spells[spell_id][0], spells_level[level - 1])
                 print(" |{}.".format(i + 1) + to_disp + " " * (14 - len(to_disp)) + "|")
         else:
             print(" |<aucun>         |")
@@ -492,7 +498,7 @@ def spell(data, stat):
     if spell_choice:
         spell_choice -= 1
         spell_id, level = stat[7][spell_choice][0], stat[7][spell_choice][1]
-        capacity, factor, apply_on_player = spells_effect[spell_id]
+        spell_name, capacity, factor, apply_on_player = spells[spell_id]
 
         if not apply_on_player:
             print_text("Vous ne pouvez pas lancer ce sort.")
@@ -502,18 +508,20 @@ def spell(data, stat):
             stat[2][4] -= level * 10
             pts = 12 * level + randint(-5, 5)
             
-            if capacity == 4:
+            if capacity == 4: # Health
                 stat[0] += factor * pts
             else:
                 stat[2][capacity] += factor * pts
-            print_text("Vous lancez {0} de niveau {1} [-{2} PM] et {3} {4} points de {5}".format(spells[spell_id], spells_level[level - 1], level * 10, ("perdez", "gagnez")[factor > 0], pts, ("vitesse", "agilité", "attaque", "défense", "vie")[capacity]))
+            cost = level * 10
+            if stat[6] == 3: cost = level * 8
+            print_text("Vous lancez {0} de niveau {1} [-{2} PM] et {3} {4} points de {5}".format(spell_name, spells_level[level - 1], level * 10, ("perdez", "gagnez")[factor > 0], pts, ("vitesse", "agilité", "attaque", "défense", "vie")[capacity]))
             
         else:
             print_text("Vous n'avez plus assez de points de Magie.")
 
 def quick_save(data, stat):
     data_copy = data[:]
-    stat_copy = stat[:-1]
+    stat_copy = stat[:]
     print_text("\"{}\"".format(encode_save(data_copy, stat_copy)))
 
 
@@ -546,17 +554,22 @@ def init_stat():
     if player_class == 1:
         stat = [6, 6, 10, 6, 6]
     elif player_class == 2:
-        stat = [6, 10, 6, 6, 6] 
+        stat = [6, 20, 6, 6, 6] 
     elif player_class == 3:
-        stat = [6, 6, 6, 10, 6]
+        stat = [6, 6, 6, 20, 6]
     elif player_class == 4:
-        stat = [6, 6, 6, 6, 20]
+        stat = [6, 6, 6, 6, 12]
     elif player_class == 5:
         stat = [10, 6, 6, 6, 6]
 
     stat = [100, 10, stat, [0, 0], 360, name, player_class - 1, [], 1, -1]
-    if player_class == 4:
+
+    if player_class == 1:
+        stat[3][1] = 1
+    elif player_class == 4:
         stat[7].append((1, 1))
+    elif player_class == 5:
+        stat[3][0] = 1
 
     return stat
 
@@ -583,7 +596,7 @@ def decode_save(save_code):
     encoded_stat = stat.split(",")
     encoded_data = data.split(",")
 
-    encoded_stat = [encoded_stat[0], encoded_stat[1], encoded_stat[2: 7], encoded_stat[7: 9], encoded_stat[9], 0, encoded_stat[11], encoded_stat[12: -1], encoded_stat[-1], -1]
+    encoded_stat = [encoded_stat[0], encoded_stat[1], encoded_stat[2: 7], encoded_stat[7: 9], encoded_stat[9], 0, encoded_stat[11], encoded_stat[12: -2], encoded_stat[-2], encoded_stat[-1]]
     
     if encoded_stat[7] == ["0"]:
         encoded_stat[7] = []

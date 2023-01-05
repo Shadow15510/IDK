@@ -1,18 +1,5 @@
 from idk_lib import *
 
-try:
-    import dlc_idk as dlc
-    spells = dlc.dlc_spells
-    spells_level = dlc.dlc_spells_level
-    spells_effect = dlc.dlc_spells_effect
-    weapons = dlc.dlc_weapons
-    armors = dlc.dlc_armors
-    dlc_entities = dlc.dlc_entities
-except:
-    dlc = None
-    dlc_entities = ()
-
-
 
 # Game
 def npc(data, stat, entities, identifiant):    
@@ -35,11 +22,6 @@ def npc(data, stat, entities, identifiant):
     h_37_npc, h_38_npc, h_39_npc, h_40_npc, h_41_npc,
     h_42_npc, h_43_npc, h_44_npc,
     h_45_npc, h_46_npc, h_47_npc, h_48_npc)
-
-
-    if dlc:
-        event = dlc.dlc_npc(data, stat, entities, identifiant)
-        if event: return "dlc", event
 
     return npc_core(npc_data[data[1]], data, stat, entities, identifiant)
 
@@ -64,14 +46,34 @@ def point_of_interest(data, stat, entities, identifiant):
     else: return event
 
 
-entities = asgard_entities + vanaheim_entities + alfheim_entities + midgard_entities + niflheim_entities + jotunheim_entities + nidavellir_entities + muspellheim_entities + svartalfheim_entities + dlc_entities
+poi = (
+    [0, '?', 0, 120, 26, 'stand by'],
+    [0, '?', 0, 51, 55, 'stand by'],
+    [0, '?', 1, 42, 20, 'stand by'],
+    [0, '?', 2, 34, 20, 'stand by'],
+    [0, '?', 3, 29, 9, 'stand by'],
+    [0, '?', 3, 53, 24, 'stand by'],
+    [0, '?', 3, 66, 45, 'stand by'],
+    [0, '?', 3, 52, 79, 'stand by'],
+    [0, '?', 4, 88, 32, 'stand by'],
+    [0, '?', 5, 60, 57, 'stand by'],
+    [0, '?', 5, 23, 70, 'stand by'],
+    [0, '?', 5, 60, 86, 'stand by'],
+    [0, '?', 6, 65, 7, 'stand by'],
+    [0, '?', 6, 66, 58, 'stand by'],
+    [0, '?', 7, 66, 8, 'stand by'],
+    [0, '?', 7, 65, 97, 'stand by'],
+    [0, '?', 8, 113, 37, 'stand by']
+    )
+
+entities = asgard_entities + vanaheim_entities + alfheim_entities + midgard_entities + niflheim_entities + jotunheim_entities + nidavellir_entities + muspellheim_entities + svartalfheim_entities + poi
 
 print(center("Island of the Dead", 21, " "))
 print(center("*  Kings  *", 21, " "))
 print("---------------------")
-if dlc: print(center("DLC : {}".format(dlc.dlc_title), 21, " "))
-else: print()
+print()
 print("Entrez 'idk()' pour\nune nouvelle partie.")
+
 events = {"*": npc, "?": point_of_interest}
 keys = {4: display_stat, 7: spell, 8: misc_stat, 6: inventory, 9: sleep, "s": quick_save}
 
