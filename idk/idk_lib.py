@@ -375,7 +375,7 @@ def fight(stat, opponent_stat, opponent_name):
         # Fight
         if player > opponent:
             end = player_turn()
-            if end: return 2
+            if end: return 2, player_stat[4]
             if opponent_stat[4] <= 0: return 0, player_stat[4]
             opponent_turn()
         
