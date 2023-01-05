@@ -42,7 +42,7 @@ def convert_to_string(filename, doors, entities):
         file.write(f"{output_filename} = (r\"\"\"\n{output[:-1]}\"\"\",\n{doors_coords}\n)\n\n{output_filename}_entities = {entities_data}")
 
 
-filename, doors, misc = argv[1], "", ""
+filename, doors, entities = argv[1], "", ""
 for arg in argv[2:]:
     if arg.startswith("door"):
         doors = arg.split("=", 1)[1]
