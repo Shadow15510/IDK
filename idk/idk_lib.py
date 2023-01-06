@@ -57,7 +57,7 @@ def inn_interaction(data, stat, nb_choice, text, *events):
 
 
 def spell_selection(text, spells_to_display):
-    message = text + "\n" + "\n".join(["{0}. {1} {2}".format(nb + 1, spells[spells_to_display[nb][0]][0], spells_level[spells_to_display[nb][1] - 1]) for nb in range(len(spells_to_display))])
+    message = text + "\n" + "\n".join(["{0}. {1} {2}".format(nb + 1, spells[sp_id][0], spells_level[sp_lvl - 1]) for sp_id, sp_lvl in spells_to_display])
     return print_text(message, 1, len(spells_to_display), 0) - 1
 
 

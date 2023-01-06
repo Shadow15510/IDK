@@ -98,7 +98,7 @@ def idk(save_code=None):
         print_text("Ainsi s'acheva la premiere guerre du monde. Les Ases garderent la tete de Mimir pour ses conseils avises, mais il n'y eu jamais de represailles. Les Ases et les Vanes se melerent ne formant ainsi qu'une seule et meme grande famille.")
     
     else:
-        print("idk(\"{}\")".format(encode_save(data, stat[:-1])))
+        print("idk(\"{}\")".format(encode_save(data, stat)))
 
 
 # Scenario
@@ -718,7 +718,7 @@ def h_29_npc(data, stat, entites, identifiant):
     spells_sale = [(i, len(spells_level)) for i in range(n)]
     formated_spells = ""
     for sp in range(n):
-        formated_spells += "{0}. {1} {2}\n".format(sp + 1, spells[spells_sale[sp][0]], spells_level[spells_sale[sp][1] - 1])
+        formated_spells += "{0}. {1} {2}\n".format(sp + 1, spells[spells_sale[sp][0]][0], spells_level[spells_sale[sp][1] - 1])
 
     if not (480 <= stat[4] <= 1140): return [0, "Je suis desolee, nous sommes fermes."]
 
